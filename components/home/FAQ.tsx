@@ -6,7 +6,7 @@ const faqData = [
   {
     num: "01",
     question: "What is the shelf life of AetherAvia products?",
-    answer: "Our formulations are crafted in small batches using raw, potent botanicals. To maintain the integrity of these artisanal blends, we recommend utilizing them within 12 months of opening. Store in a cool, dry place away from direct sunlight."
+    answer: "Our formulations are crafted in small batches using raw, potent botanicals. To maintain the integrity of these artisanal blends, we recommend utilizing them within 24 months of opening. Store in a cool, dry place away from direct sunlight."
   },
   {
     num: "02",
@@ -95,9 +95,9 @@ export default function FAQ() {
           <div className="relative">
             <div className="bg-surface-container-high w-full aspect-[4/5] rounded-lg overflow-hidden shadow-sm">
               <img 
-                alt="Artisanal clay pots and fresh sandalwood sticks" 
+                alt="Artisanal burning candles with natural herbs" 
                 className="w-full h-full object-cover opacity-90 mix-blend-multiply" 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWj_gyBFX7jwujzY3WBQGc7inGam6YkBv_u5onlftBUcD6ubX5wb4oUn29bP29D59-rp0nhoj9vfwH4zs4xQbyo_R-ZBH0Y55yR6DYjjxqnoVIZgprcsVg85NTD1FSZHsQVKUxLByJ-CLMaSe4j7V_0EDDN19yYbiFSS_FiU_-HP2-KCXuATQqJxDs5LKgBWa9DFI-yP5o1NF1HtdNl-xMz7nuqz_dsPLZO-edIAzHZk6ukhIdOdxTrhBj2YFYaWBUp6yV9vYobIS3"
+                src="/images/artisanal-candles.png"
               />
             </div>
             <div className="absolute -bottom-8 -right-8 bg-surface-container-lowest p-8 shadow-sm max-w-[240px]">
