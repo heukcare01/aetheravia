@@ -1,6 +1,6 @@
-# 🚀 Vercel Deployment Guide — AetherAvia Store
+# 🚀 Vercel Deployment Guide — Aethravia Store
 
-This guide describes how to deploy the **AetherAvia Store** Next.js app to **Vercel**.
+This guide describes how to deploy the **Aethravia Store** Next.js app to **Vercel**.
 
 ---
 
@@ -28,7 +28,7 @@ graph TD
 ## 1) Import Repository into Vercel
 
 1. Go to [vercel.com](https://vercel.com) → **Add New Project**
-2. Import from GitHub: `heukcare01/aetheravia`
+2. Import from GitHub: `heukcare01/aethravia`
 3. Framework: **Next.js** (auto-detected)
 4. Do NOT change the build command — leave as default (`npm run build`)
 
@@ -42,14 +42,14 @@ Go to: **Project → Settings → Environment Variables**
 
 | Variable | Value |
 |----------|-------|
-| `MONGODB_URI` | `mongodb+srv://heukcare_db_user:...@cluster0.bghvakr.mongodb.net/aetheravia` |
+| `MONGODB_URI` | `mongodb+srv://heukcare_db_user:...@cluster0.bghvakr.mongodb.net/aethravia` |
 | `NEXTAUTH_SECRET` | A strong random 32+ char secret (generate via `openssl rand -base64 32`) |
 
 ### Authentication
 
 | Variable | Value |
 |----------|-------|
-| `NEXTAUTH_URL` | Your production URL e.g. `https://aetheravia.vercel.app` |
+| `NEXTAUTH_URL` | Your production URL e.g. `https://aethravia.vercel.app` |
 | `GOOGLE_CLIENT_ID` | From Google Cloud Console |
 | `GOOGLE_CLIENT_SECRET` | From Google Cloud Console |
 
@@ -73,9 +73,9 @@ Go to: **Project → Settings → Environment Variables**
 
 | Variable | Value |
 |----------|-------|
-| `NEXT_PUBLIC_BRAND_NAME` | `AetherAvia` |
+| `NEXT_PUBLIC_BRAND_NAME` | `Aethravia` |
 | `NEXT_PUBLIC_BRAND_TAGLINE` | `Embrace the earth, unveil your personality` |
-| `NEXT_PUBLIC_SUPPORT_EMAIL` | `support@aetheravia.com` |
+| `NEXT_PUBLIC_SUPPORT_EMAIL` | `support@aethravia.com` |
 | `NEXT_PUBLIC_SUPPORT_PHONE` | Your support number |
 
 ---

@@ -3,7 +3,7 @@ import Orders from './Orders';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Basic Orders - AetherAvia Admin',
+  title: 'Basic Orders - Aethravia Admin',
 };
 
 const AdminOrdersPage = () => {

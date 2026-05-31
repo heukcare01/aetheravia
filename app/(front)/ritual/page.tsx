@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Rituals | AetherAvia Artisanal Heritage',
+  title: 'Rituals | Aethravia Artisanal Heritage',
   description: 'Explore the artisanal heritage and our ritual guides.',
 };
 

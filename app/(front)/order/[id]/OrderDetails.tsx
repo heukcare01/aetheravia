@@ -69,7 +69,7 @@ const OrderDetails = ({ orderId, razorpayKeyId }: IOrderDetails) => {
         key: razorpayKeyId,
         amount: razorpayOrder.amount,
         currency: razorpayOrder.currency,
-        name: 'AetherAvia',
+        name: 'Aethravia',
         description: `Order Manifest #${orderId.slice(-6)}`,
         order_id: razorpayOrder.id,
         handler: async (response: any) => {

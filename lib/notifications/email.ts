@@ -179,7 +179,7 @@ This code will expire in 10 minutes.
 <body>
   <div class="container">
     <div class="header">
-      <h1>AetherAvia</h1>
+      <h1>Aethravia</h1>
     </div>
     <div class="content">
       <div class="welcome-text">Begin Your Ritual</div>
@@ -192,7 +192,7 @@ This code will expire in 10 minutes.
       <div class="expiry">This code will expire in 15 minutes.</div>
     </div>
     <div class="footer">
-      © ${new Date().getFullYear()} AetherAvia Artisanal Collective. Handcrafted Heritage.
+      © ${new Date().getFullYear()} Aethravia Artisanal Collective. Handcrafted Heritage.
     </div>
   </div>
 </body>
@@ -200,14 +200,14 @@ This code will expire in 10 minutes.
     `;
 
     const text = `
-AetherAvia - Begin Your Ritual
+Aethravia - Begin Your Ritual
 
 Please use the following code to complete your registration:
 ${otp}
 
 This code will expire in 15 minutes.
 
-© ${new Date().getFullYear()} AetherAvia Artisanal Collective.
+© ${new Date().getFullYear()} Aethravia Artisanal Collective.
     `;
 
     const mailOptions = {

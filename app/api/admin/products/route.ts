@@ -32,7 +32,7 @@ export const POST = auth(async (req: any) => {
     image: '/images/products/placeholder.jpg',
     price: 1,
     category: 'Body Care',
-    brand: 'AetherAvia',
+    brand: 'Aethravia',
     countInStock: 0,
     description: 'A newly archived treasure awaiting its description.',
     rating: 0,

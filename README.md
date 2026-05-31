@@ -1,8 +1,8 @@
-# AetherAvia Store 🛒✨
+# Aethravia Store 🛒✨
 
-![AetherAvia Storefront Placeholder](https://via.placeholder.com/1200x400?text=AetherAvia+Store)
+![Aethravia Storefront Placeholder](https://via.placeholder.com/1200x400?text=Aethravia+Store)
 
-AetherAvia is a premium, full-stack e-commerce platform built with modern web technologies, focusing on cutting-edge security, dynamic personalized user experiences, and high performance.
+Aethravia is a premium, full-stack e-commerce platform built with modern web technologies, focusing on cutting-edge security, dynamic personalized user experiences, and high performance.
 
 ## 🚀 Tech Stack
 
@@ -34,8 +34,8 @@ AetherAvia is a premium, full-stack e-commerce platform built with modern web te
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/heukcare01/aetheravia.git
-cd aetheravia
+git clone https://github.com/heukcare01/aethravia.git
+cd aethravia
 ```
 
 ### 2. Install Dependencies
@@ -87,4 +87,4 @@ Navigate to [http://localhost:3000](http://localhost:3000) to see your app runni
 ## 📜 License
 This project is proprietary and confidential.
 
-*Maintained by the AetherAvia Engineering Team.*
+*Maintained by the Aethravia Engineering Team.*

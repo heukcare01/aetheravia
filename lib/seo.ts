@@ -7,9 +7,9 @@ export const siteConfig = {
   url: process.env.NEXT_PUBLIC_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'),
   ogImage: `${process.env.NEXT_PUBLIC_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')}/images/og-image.png`,
   links: {
-    twitter: 'https://twitter.com/AetherAvia',
-    instagram: 'https://instagram.com/AetherAvia',
-    facebook: 'https://facebook.com/AetherAvia',
+    twitter: 'https://twitter.com/Aethravia',
+    instagram: 'https://instagram.com/Aethravia',
+    facebook: 'https://facebook.com/Aethravia',
   },
 };
 
@@ -68,7 +68,7 @@ export function constructMetadata({
       title,
       description,
       images: [image],
-      creator: '@AetherAvia',
+      creator: '@Aethravia',
     },
     icons,
     metadataBase: new URL(siteConfig.url),
@@ -114,7 +114,7 @@ export function getOrganizationSchema() {
     contactPoint: {
       '@type': 'ContactPoint',
       telephone: process.env.NEXT_PUBLIC_SUPPORT_PHONE || '+91-9876543210',
-      email: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || 'curators@AetherAvia.com',
+      email: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || 'curators@Aethravia.com',
       contactType: 'Customer Service',
       availableLanguage: ['English', 'Hindi'],
       areaServed: 'IN',

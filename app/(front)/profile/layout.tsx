@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Profile - AetherAvia',
-  description: 'Manage your AetherAvia account profile, orders, and preferences',
+  title: 'Profile - Aethravia',
+  description: 'Manage your Aethravia account profile, orders, and preferences',
 };
 
 export default function ProfileLayout({

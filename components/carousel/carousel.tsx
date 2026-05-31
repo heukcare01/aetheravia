@@ -30,13 +30,13 @@ const Carousel = async () => {
           key: 'banner3',
           href: '/shop',
           src: '/images/banner/banner3.jpg',
-          alt: 'AetherAvia - Premium Skincare Experience',
+          alt: 'Aethravia - Premium Skincare Experience',
         },
         {
           key: 'banner0',
           href: '/shop',
           src: '/images/banner/banner0.jpg',
-          alt: 'AetherAvia - Natural Skincare Collection',
+          alt: 'Aethravia - Natural Skincare Collection',
         },
         {
           key: 'banner1',

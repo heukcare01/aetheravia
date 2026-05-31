@@ -49,7 +49,7 @@ const Header = () => {
               <div className="relative w-8 h-8 sm:w-10 sm:h-10">
                 <Image
                   src="/images/logo_mark.png"
-                  alt="AetherAvia Logo"
+                  alt="Aethravia Logo"
                   fill
                   sizes="(max-width: 640px) 32px, 40px"
                   className="object-contain"

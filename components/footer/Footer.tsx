@@ -21,19 +21,19 @@ const Footer = () => {
               <div className="relative w-12 h-12">
                 <Image
                   src="/images/logo_mark.png"
-                  alt="AetherAvia Logo"
+                  alt="Aethravia Logo"
                   fill
                   sizes="48px"
                   className="object-contain"
                 />
               </div>
-              <span className="text-2xl font-serif italic text-primary">AetherAvia</span>
+              <span className="text-2xl font-serif italic text-primary">Aethravia</span>
             </Link>
 
             <div className="space-y-4">
               <h2 className="text-xl font-serif tracking-tight text-primary">Our Heritage</h2>
               <p className="text-sm font-medium leading-relaxed text-secondary opacity-90">
-                AetherAvia is built on the ancient wisdom of Multani Mitti, Chandan, and Reetha. 
+                Aethravia is built on the ancient wisdom of Multani Mitti, Chandan, and Reetha. 
                 Inspired by the earth, crafted for the soul.
               </p>
             </div>
@@ -41,7 +41,7 @@ const Footer = () => {
             {/* Social Area */}
             <div className="flex items-center space-x-6 pt-4">
               <a 
-                href="https://www.instagram.com/AetherAvia/?hl=en" 
+                href="https://www.instagram.com/Aethravia/?hl=en" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-secondary hover:text-primary transition-colors flex items-center space-x-2 group"
@@ -114,7 +114,7 @@ const Footer = () => {
         <div className="mt-20 pt-10 border-t border-primary/10">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0 text-center md:text-left">
             <p className="text-[10px] font-medium text-secondary/60 tracking-wider">
-              © {currentYear} AetherAvia ARTISANAL HERITAGE. ALL RIGHTS RESERVED.
+              © {currentYear} Aethravia ARTISANAL HERITAGE. ALL RIGHTS RESERVED.
             </p>
             
             <div className="flex items-center space-x-10">
