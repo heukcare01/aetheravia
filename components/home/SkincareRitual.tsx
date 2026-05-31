@@ -34,7 +34,7 @@ export default function SkincareRitual() {
           <div className="absolute -top-10 -left-10 w-48 h-48 bg-primary/5 rounded-full blur-3xl" />
           <div className="relative z-10 rounded-lg shadow-2xl overflow-hidden group">
             <Image 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyelmvp6jX7ygHNkfdighXwQQLBbqn1iwQZSllzqgEzVLhDh3rkQ5nay_Owesji7XE0R2x-wL0Kt2oJI_NTUra4-tBNPxhJedZ5WlW3etwzVw1XocYGOc8d9kqxTtisSSG2q_YxQxWxpVJhvnRUE2EgPL8ICf1iBnLI7vpWdlwrmj8QlNaceYXL1CeR-l2hZqcaJeBxctfPUsR_HU_oTMoBTFWGjHxCtTSyL2mtmlHu3oLbhHFUPbtct9eLSoc6x_ctr4fla26E2Mf"
+              src="/images/ritual-woman.png"
               alt="Artisanal Skincare Ritual"
               width={800}
               height={1000}

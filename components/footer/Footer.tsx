@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Instagram, Share2, Globe, ArrowRight } from 'lucide-react';
-import { brandEmail } from '@/lib/brand';
+import { brandEmail, companyName, shopAddress, manufacturerAddress } from '@/lib/brand';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -107,6 +107,19 @@ const Footer = () => {
               <Link href="/faq" className="text-sm font-medium text-secondary hover:text-primary transition-colors uppercase tracking-widest text-[11px]">FAQ</Link>
               <Link href={`mailto:${brandEmail}`} className="pt-2 text-xs font-bold text-primary underline underline-offset-4">{brandEmail}</Link>
             </nav>
+          </div>
+        </div>
+
+        {/* Company & Address Information */}
+        <div className="mt-16 pt-10 border-t border-primary/10 grid grid-cols-1 md:grid-cols-2 gap-8 text-secondary/80 text-xs leading-relaxed">
+          <div>
+            <h4 className="font-bold text-primary mb-2 uppercase tracking-wider text-[10px]">Head Office</h4>
+            <p className="font-medium">{companyName}</p>
+            <p>{shopAddress}</p>
+          </div>
+          <div>
+            <h4 className="font-bold text-primary mb-2 uppercase tracking-wider text-[10px]">Manufacturer</h4>
+            <p>{manufacturerAddress}</p>
           </div>
         </div>
 

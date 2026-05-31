@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import React from 'react';
 import ContactFAQ from './ContactFAQ';
 import ContactForm from './ContactForm';
-import { brandEmail, shopAddress, supportPhone } from '@/lib/brand';
+import { brandEmail, shopAddress, supportPhone, businessHours } from '@/lib/brand';
 
 export const metadata: Metadata = {
   title: 'Contact Us | Aethravia',
@@ -64,8 +64,7 @@ export default function ContactPage() {
               <span className="material-symbols-outlined">schedule</span>
             </div>
             <h3 className="text-xl font-headline text-primary mb-2">Business Hours</h3>
-            <p className="text-secondary font-body text-sm mb-4 relative z-10 bg-transparent">Weekdays: 09:00 - 18:00</p>
-            <p className="text-on-surface font-semibold font-body">Weekends: 10:00 - 16:00</p>
+            <p className="text-secondary font-body text-sm mb-4 relative z-10 bg-transparent">{businessHours}</p>
           </div>
         </div>
       </section>
