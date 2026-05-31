@@ -13,7 +13,6 @@ export const config = {
   debug: process.env.AUTH_DEBUG === 'true',
   secret: process.env.NEXTAUTH_SECRET,
   basePath: '/api/auth',
-  // Add explicit URL configuration for Render
   ...(process.env.NEXTAUTH_URL && { url: process.env.NEXTAUTH_URL }),
   providers: [
     // Only register Google provider if credentials are configured
