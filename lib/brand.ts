@@ -9,5 +9,5 @@ export const brandSlug = brandName.toLowerCase().replace(/[^a-z0-9]+/gi, '').tri
 export const brandEmail = process.env.NEXT_PUBLIC_SUPPORT_EMAIL || 'curators@AetherAvia.com';
 
 export const storeName = process.env.STORE_NAME || 'AetherAvia Store';
-export const supportPhone = process.env.NEXT_PUBLIC_SUPPORT_PHONE || '';
+export const supportPhone = process.env.NEXT_PUBLIC_SUPPORT_PHONE || '+91-9045429750';
 

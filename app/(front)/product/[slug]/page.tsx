@@ -88,7 +88,7 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
     name: product.name,
     description: product.description,
     image: /^(\/|https?:)/.test(product.image) ? product.image : `${process.env.NEXT_PUBLIC_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')}${product.image}`,
-    sku: product._id.toString(),
+    sku: product._id?.toString() || product.slug,
     offers: {
       '@type': 'Offer',
       price: product.price,

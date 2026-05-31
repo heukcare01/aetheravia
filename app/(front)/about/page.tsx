@@ -197,14 +197,14 @@ export default function AboutPage() {
               </div>
             </div>
             
-            {/* Co-Founder: Vikram Rathore */}
+            {/* Co-Founder: Prajjwal */}
             <div className="flex flex-col lg:flex-row-reverse gap-20 items-center">
               <div className="lg:w-1/3 relative">
                 <div className="aspect-[3/4] overflow-hidden rounded-lg">
                   <img 
                     className="w-full h-full object-cover grayscale brightness-90 contrast-110" 
-                    alt="Professional studio portrait of Vikram Rathore, co-founder of AetherAvia, in a neutral earthy linen shirt with a warm, confident expression." 
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9tw_ZtPUCzn7MonlKY_B4WdwHml_HBvdfW9RDq7BXMxNOFL0hhvSjNZVBSGioh-4ONANd5IIxJVJ7gwDK0goZ8YMBga292pupawMFbVWnj7MT08q95x0A73bWboc4jk8XlG7kPSnCm7golwmU9TCt8jwINuLL-e43M6PJu60uJnLBltoWM2IPCPwfi2J8vF0mXEQnU5MoaTh1IRsVG3cIMmrF4MWJmwDizPykKGAkMKfrDN5jSVY68prq_6S_oUMqX8f-_H_FFwuI"
+                    alt="Professional studio portrait of Prajjwal, co-founder of AetherAvia, in a neutral earthy linen shirt with a warm, confident expression." 
+                    src="/prajjwal-co-founder.jpeg"
                   />
                 </div>
                 <div className="absolute -bottom-8 -left-8 bg-secondary text-on-primary p-8 rounded-lg shadow-xl hidden sm:block">
@@ -217,7 +217,7 @@ export default function AboutPage() {
                   "Our goal was never to replicate the past, but to refine it. By applying the rigor of modern science to heritage ingredients, we ensure that the wisdom of the ancients meets the expectations of the future."
                 </blockquote>
                 <div className="lg:flex lg:flex-col lg:items-end">
-                  <p className="font-bold font-body text-on-surface tracking-widest uppercase">Vikram Rathore</p>
+                  <p className="font-bold font-body text-on-surface tracking-widest uppercase">Prajjwal</p>
                   <p className="font-body text-on-surface-variant text-sm mt-1">Co-Founder & Head of Innovation</p>
                 </div>
               </div>
