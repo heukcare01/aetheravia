@@ -192,7 +192,7 @@ export default function AboutPage() {
                 </blockquote>
                 <div>
                   <p className="font-bold font-body text-on-surface tracking-widest uppercase">Arpita Kashyap</p>
-                  <p className="font-body text-on-surface-variant text-sm mt-1">Founder & Chief Formulation Officer</p>
+                  <p className="font-body text-on-surface-variant text-sm mt-1">Founder</p>
                 </div>
               </div>
             </div>
@@ -218,7 +218,7 @@ export default function AboutPage() {
                 </blockquote>
                 <div className="lg:flex lg:flex-col lg:items-end">
                   <p className="font-bold font-body text-on-surface tracking-widest uppercase">Prajjwal Kashyap</p>
-                  <p className="font-body text-on-surface-variant text-sm mt-1">Co-Founder & Head of Innovation</p>
+                  <p className="font-body text-on-surface-variant text-sm mt-1">Co-Founder</p>
                 </div>
               </div>
             </div>
