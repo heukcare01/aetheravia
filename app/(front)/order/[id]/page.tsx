@@ -11,7 +11,7 @@ const OrderDetailsPage = async ({ params }: { params: Promise<{ id: string }> })
   const { id } = await params;
   return (
     <OrderDetails
-      razorpayKeyId={process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_'}
+      razorpayKeyId={process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID as string}
       orderId={id}
     />
   );

@@ -93,7 +93,7 @@ class WebSocketManager {
       path: '/api/socket',
       addTrailingSlash: false,
       cors: {
-        origin: process.env.NEXTAUTH_URL || "http://localhost:3000",
+        origin: process.env.NEXTAUTH_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"),
         methods: ["GET", "POST"],
         credentials: true,
       },
