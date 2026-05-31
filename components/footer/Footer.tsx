@@ -20,7 +20,7 @@ const Footer = () => {
             <Link href="/" className="flex items-center space-x-3 group">
               <div className="relative w-12 h-12">
                 <Image
-                  src="/images/logo_mark.png"
+                  src="/images/icon-192.png"
                   alt="Aethravia Logo"
                   fill
                   sizes="48px"
