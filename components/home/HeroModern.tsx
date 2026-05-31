@@ -50,7 +50,7 @@ export default function HeroModern() {
             href="/shop"
             className="inline-block px-8 py-4 md:px-10 md:py-5 bg-primary text-white font-label text-sm uppercase tracking-widest rounded-lg transition-all hover:bg-primary-container shadow-lg hover:shadow-xl transform hover:-translate-y-1"
           >
-            Dive Into the Earth's Wisdom
+            Dive Inti the Earth's Wisdom
           </Link>
         </motion.div>
       </div>
