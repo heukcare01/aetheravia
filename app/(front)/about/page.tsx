@@ -203,7 +203,7 @@ export default function AboutPage() {
                 <div className="aspect-[3/4] overflow-hidden rounded-lg">
                   <img 
                     className="w-full h-full object-cover grayscale brightness-90 contrast-110" 
-                    alt="Professional studio portrait of Prajjwal, co-founder of AetherAvia, in a neutral earthy linen shirt with a warm, confident expression." 
+                    alt="Professional studio portrait of Prajjwal Kashyap, co-founder of AetherAvia, in a neutral earthy linen shirt with a warm, confident expression." 
                     src="/prajjwal-co-founder.jpeg"
                   />
                 </div>
@@ -217,7 +217,7 @@ export default function AboutPage() {
                   "Our goal was never to replicate the past, but to refine it. By applying the rigor of modern science to heritage ingredients, we ensure that the wisdom of the ancients meets the expectations of the future."
                 </blockquote>
                 <div className="lg:flex lg:flex-col lg:items-end">
-                  <p className="font-bold font-body text-on-surface tracking-widest uppercase">Prajjwal</p>
+                  <p className="font-bold font-body text-on-surface tracking-widest uppercase">Prajjwal Kashyap</p>
                   <p className="font-body text-on-surface-variant text-sm mt-1">Co-Founder & Head of Innovation</p>
                 </div>
               </div>
