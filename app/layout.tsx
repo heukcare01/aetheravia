@@ -34,6 +34,8 @@ export const viewport = {
   themeColor: '#000000',
 };
 
+import { Analytics } from "@vercel/analytics/next";
+
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const organizationSchema = getOrganizationSchema();
   
@@ -53,6 +55,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             {children}
           </ErrorBoundary>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
