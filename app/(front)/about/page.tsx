@@ -178,7 +178,7 @@ export default function AboutPage() {
                   <img 
                     className="w-full h-full object-cover grayscale brightness-90 contrast-110" 
                     alt="Professional and serene portrait of Arpita Kashyap, founder of AetherAvia, in a modern artisanal studio" 
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDA256z3YpgCPE4vHYl-mI5eA55gL5MuODVlIFm43YcYcmtxEMToMFouCu0w0cyoGSYCgcFpAqK73T8u1q0yTl3ANhEL-H6ZadWVIcZtQlJMrZF6dgS7uhahLsMMdmwfXyO4QVo-0hsbIdvPB9E0aC5nsWWzkr4lI6H8Q_0X0XHaCYs2AOrlsyHBJlIOTw96KOGHjmbxDXFiVZ3sgV0QSg-CWiqcVZ-4pS7DhC66C4CdzWxfD2aShZbnHPPbRChEPLl3tFQQ6ZqAiwI"
+                    src="/founder-arpita.jpeg"
                   />
                 </div>
                 <div className="absolute -bottom-8 -right-8 bg-primary text-on-primary p-8 rounded-lg shadow-xl hidden sm:block">
