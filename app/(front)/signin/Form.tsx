@@ -316,7 +316,7 @@ const Form = () => {
           <Link className="text-secondary hover:text-primary transition-colors" href="/terms">Terms</Link>
         </div>
         <div className="text-[#a09e9a]">
-          © 2024 AetherAvia. Handcrafted Heritage.
+          © {new Date().getFullYear()} AetherAvia. Handcrafted Heritage.
         </div>
       </footer>
     </div>

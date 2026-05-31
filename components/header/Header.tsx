@@ -8,6 +8,7 @@ import { Menu as MenuIcon, X } from 'lucide-react';
 import Menu from './Menu';
 import SearchInline from './SearchInline';
 import useLayoutService from '@/lib/hooks/useLayout';
+import { brandName } from '@/lib/brand';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -56,7 +57,7 @@ const Header = () => {
                 />
               </div>
               <span className='hidden sm:inline-block text-lg sm:text-2xl font-black tracking-tighter uppercase text-primary hover:opacity-80 transition-opacity whitespace-nowrap'>
-                AetherAvia
+                {brandName}
               </span>
             </Link>
           </div>

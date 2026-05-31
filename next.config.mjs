@@ -2,8 +2,6 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Output configuration for Render
-  output: 'standalone',
   staticPageGenerationTimeout: 600,
   
   // Handle large external packages like mongoose
