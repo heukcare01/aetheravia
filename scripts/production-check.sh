@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# AetherAvia Production Readiness Checker
-# Run this script before deploying to production
+# Aethravia Production Readiness Checker
+# -----------------------------------------------------------------------------
 
-echo "🔍 AetherAvia Production Readiness Check"
+echo "🔍 Aethravia Production Readiness Check"
 echo "======================================"
 
 # Color codes for output
