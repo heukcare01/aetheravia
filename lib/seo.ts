@@ -5,7 +5,7 @@ export const siteConfig = {
   name: brandName,
   description: brandTagline,
   url: process.env.NEXT_PUBLIC_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'),
-  ogImage: `${process.env.NEXT_PUBLIC_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')}/images/og-image.jpg`,
+  ogImage: `${process.env.NEXT_PUBLIC_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')}/images/og-image.png`,
   links: {
     twitter: 'https://twitter.com/AetherAvia',
     instagram: 'https://instagram.com/AetherAvia',
