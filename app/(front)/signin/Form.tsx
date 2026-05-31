@@ -92,8 +92,7 @@ const Form = () => {
       );
     } else if (result?.ok) {
       toast.success('Login successful! Welcome back.', { id: 'signin-success' });
-      router.refresh();
-      router.push(callbackUrl);
+      window.location.href = callbackUrl;
     }
   };
 
