@@ -92,7 +92,8 @@ const Form = () => {
       );
     } else if (result?.ok) {
       toast.success('Login successful! Welcome back.', { id: 'signin-success' });
-      window.location.href = callbackUrl;
+      router.refresh();
+      router.push(callbackUrl);
     }
   };
 
@@ -110,26 +111,15 @@ const Form = () => {
       {/* Main Content Canvas */}
       <main className="flex-grow flex flex-col md:flex-row w-full overflow-hidden">
         {/* Editorial Image Side */}
-        <div className="hidden md:flex md:w-1/2 h-[calc(100vh-100px)] sticky top-0 bg-surface-container overflow-hidden">
-          <div className="relative w-full h-full p-12 lg:p-20 flex items-center justify-center">
-            {/* Asymmetric Image Layout */}
-            <div className="relative w-full h-full">
-              <Image 
-                className="w-full h-full object-cover rounded shadow-sm grayscale-[20%]" 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYPGw_IvTtJyadjquc80iyRZtUZk-KYwK8xYFlnXifY4-cIEuZR_4c5VV63RbRXWe6VCQuxdSPlZwxQKVadMgXVvUbRD-MewRYgY1E-IrBp0karW0U2Nb_Kr5vZfBAQoIvxfsFPbD6hFanKS6H8VTbeYHBCYr765-E1yV5AAW1OmsFy7qO1qrMCta4-RU3c5rxjTDlnZKKB9cMEHItLQdY51J9MvHbyKlyajebezGZ21kHV5-JvIWes6EbHDvJJlm_0YocVD7A54eL"
-                alt="Artisanal textures"
-                fill
-                priority
-                sizes="50vw"
-              />
-              {/* Overlapping Caption Element */}
-              <div className="absolute -bottom-4 -left-4 bg-surface-container-lowest p-6 max-w-xs shadow-xl rounded border border-outline-variant/10 z-20">
-                <p className="font-headline italic text-primary text-xl leading-relaxed">
-                  A synergy of Heritage: Multani Mitti, Chandan, and Reetha blended for timeless skin.
-                </p>
-              </div>
-            </div>
-          </div>
+        <div className="hidden md:flex md:w-1/2 h-[calc(100vh-100px)] sticky top-0 bg-[#ebe8e2] overflow-hidden">
+          <Image 
+            className="w-full h-full object-cover object-top" 
+            src="/images/synergy.jpeg"
+            alt="A synergy of Heritage"
+            width={1200}
+            height={1500}
+            priority
+          />
         </div>
 
         {/* Login Form Side */}
@@ -316,7 +306,7 @@ const Form = () => {
           <Link className="text-secondary hover:text-primary transition-colors" href="/terms">Terms</Link>
         </div>
         <div className="text-[#a09e9a]">
-          © {new Date().getFullYear()} Aethravia. Handcrafted Heritage.
+          © 2024 Aethravia. Handcrafted Heritage.
         </div>
       </footer>
     </div>

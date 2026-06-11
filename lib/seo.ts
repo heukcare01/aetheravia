@@ -4,11 +4,11 @@ import { brandName, brandTagline, shopAddress } from './brand';
 export const siteConfig = {
   name: brandName,
   description: brandTagline,
-  url: process.env.NEXT_PUBLIC_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'),
-  ogImage: `${process.env.NEXT_PUBLIC_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')}/images/og-image.png`,
+  url: process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000',
+  ogImage: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/images/og-image.jpg`,
   links: {
     twitter: 'https://twitter.com/Aethravia',
-    instagram: 'https://instagram.com/Aethravia',
+    instagram: 'https://instagram.com/_aethravia',
     facebook: 'https://facebook.com/Aethravia',
   },
 };
@@ -114,7 +114,7 @@ export function getOrganizationSchema() {
     contactPoint: {
       '@type': 'ContactPoint',
       telephone: process.env.NEXT_PUBLIC_SUPPORT_PHONE || '+91-9876543210',
-      email: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || 'curators@Aethravia.com',
+      email: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || 'aethravia@gmail.com',
       contactType: 'Customer Service',
       availableLanguage: ['English', 'Hindi'],
       areaServed: 'IN',

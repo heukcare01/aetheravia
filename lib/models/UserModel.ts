@@ -119,7 +119,7 @@ const UserSchema = new mongoose.Schema(
       ],
       default: [],
     },
-    loyaltyTier: { type: String, default: 'Bronze' },
+    loyaltyTier: { type: String, default: 'Novice' },
     personalization: {
       type: {
         segments: { type: [String], default: [] },

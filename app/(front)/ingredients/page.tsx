@@ -30,7 +30,7 @@ export default function IngredientsPage() {
           <div className="relative">
             <img 
               className="w-full h-[500px] object-cover rounded-lg shadow-2xl grayscale-[20%] sepia-[10%]" 
-              alt="Close-up artistic shot of raw sandalwood blocks and clay powder on a textured linen surface with soft cinematic shadows" 
+              alt="Close-up artistic shot of raw botanical ingredients on a textured linen surface with soft cinematic shadows" 
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNJh12BRNuGlUXpffhs4KbarCQcNgct0j2q6CPdyTIS4bzAArjt-qpAcxxjSmMtW9gDAOsc0YO3VaScHhaiSumdG7SlcfCpdgoocKG_j_oivJIXdiTd_vk4qmpG8QMfYjWFPDdMqn9_ck4SieGx-TZeTSEr_N9esaNUL6MU1237-GTH5RQi1w7EY24X3ExVeuQt68JS_RB6KcS2nZQKnLs9rXRgxV2VMHt-T4vrpakUQXNorMmRklk_gMoQN4oJ_EpNstjolFptWIE"
             />
             <div className="absolute -bottom-8 -left-8 p-6 bg-surface-container-lowest shadow-xl max-w-xs rounded-lg">
@@ -50,14 +50,14 @@ export default function IngredientsPage() {
             </div>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-12">
+          <div className="grid md:grid-cols-2 max-w-4xl mx-auto gap-12">
             {/* Multani Mitti */}
             <div className="group">
               <div className="mb-6 overflow-hidden rounded-lg">
                 <img 
                   className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition-transform duration-700" 
                   alt="Artisanal bowls of finely ground ochre-colored clay powder with dried botanical leaves scattered around" 
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJs6gkQ_c3Og5k4PePlN6rzeH1JyPF6kJAOFXwS6kNTEgvOh56FXRgL-NPpqZc4bzy8Fsnra3B-1goyGJpB0kK45lK6uQwDH7v9mUg6MuVz87PTY1IQSnsFTHdImtjLW_BQnRyvI5nQL7sMWSjyRaBJQiQPGe0_AnV7quNJbnydWb2MKO09dbqE-q5E3ogtFM-Q2JAcG89ggMG1zuClw6D82h3StH3m5b8v51n5prG2k74rspKbPTiVieH7s8FsbzIjPVL5YWqaedk"
+                  src="/images/multani-pic-new.jpg"
                 />
               </div>
               <div className="flex items-center gap-3 mb-3">
@@ -66,24 +66,6 @@ export default function IngredientsPage() {
               </div>
               <h3 className="text-2xl font-headline text-primary mb-3">Multani Mitti</h3>
               <p className="text-on-surface-variant text-base leading-relaxed mb-4 font-body">Also known as Fuller's Earth, this deep-cleansing clay draws out impurities while preserving natural moisture.</p>
-              <hr className="border-outline-variant/30" />
-            </div>
-            
-            {/* Chandan */}
-            <div className="group mt-12 md:mt-24">
-              <div className="mb-6 overflow-hidden rounded-lg">
-                <img 
-                  className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition-transform duration-700" 
-                  alt="Cross-section of high-quality sandalwood logs showcasing the dense heartwood and rich texture" 
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUdLsqzynGUpEez1ry3TArrBFrSYAK3cJcyI_P3WAOsRS1zoxfLafhG5N4s3p4aTuwd27gEiEXb-3mWYLKXvUvykmEcJk8xN02tCsKjYU4sR0-xqW3xM51Wm2btxiR0PiLAXb-rTIzpB_4p43cmgg6Yh83H11I5SNAez8brpLQoSZB9Q-6DrVHxFBYHRHHr10UYcDbgc7VzjABzqQjduUAKxMrt10FkFRLtO31bZ92UwgIHBiwKIomGsBtIMT_Px30VPFACi_SIj4o"
-                />
-              </div>
-              <div className="flex items-center gap-3 mb-3">
-                <span className="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest font-body">Soothing</span>
-                <span className="text-xs text-outline font-medium tracking-wide font-body">Sourced: Mysore</span>
-              </div>
-              <h3 className="text-2xl font-headline text-primary mb-3">Chandan</h3>
-              <p className="text-on-surface-variant text-base leading-relaxed mb-4 font-body">Sandalwood paste provides a cooling sensation that calms inflammation and reduces pigmentation naturally.</p>
               <hr className="border-outline-variant/30" />
             </div>
             
@@ -105,6 +87,16 @@ export default function IngredientsPage() {
               <hr className="border-outline-variant/30" />
             </div>
           </div>
+
+          <div className="max-w-3xl mx-auto mt-24 text-center">
+            <h3 className="text-3xl font-headline text-primary mb-6">Why We Chose These Ingredients</h3>
+            <p className="text-on-surface-variant text-lg leading-relaxed font-body mb-6">
+              At Aethravia, every ingredient is selected with intention. While modern skincare often relies on trending actives, we turned to nature's time-tested remedies. Reetha and Multani Mitti were chosen for their remarkable ability to cleanse deeply, absorb excess oil, help reduce body odor, and support the skin's natural radiance.
+            </p>
+            <p className="text-on-surface-variant text-lg leading-relaxed font-body">
+              What makes this combination special is the harmony between these two traditional ingredients—working together to purify, refresh, and restore the skin naturally. This thoughtful pairing reflects our commitment to creating skincare that is both effective and rooted in nature.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -124,8 +116,8 @@ export default function IngredientsPage() {
             </div>
             <div className="p-8 bg-surface-container-lowest border border-outline-variant/20 flex flex-col items-center text-center rounded-lg shadow-sm">
               <span className="material-symbols-outlined text-error mb-4 text-4xl">close</span>
-              <h4 className="font-headline text-xl text-on-surface mb-2">Sulfates</h4>
-              <p className="text-sm font-body text-on-surface-variant">No harsh foaming agents</p>
+              <h4 className="font-headline text-xl text-on-surface mb-2">Harsh Chemicals</h4>
+              <p className="text-sm font-body text-on-surface-variant">Gentle care inspired by nature</p>
             </div>
             <div className="p-8 bg-surface-container-lowest border border-outline-variant/20 flex flex-col items-center text-center rounded-lg shadow-sm">
               <span className="material-symbols-outlined text-error mb-4 text-4xl">close</span>
@@ -144,32 +136,32 @@ export default function IngredientsPage() {
       {/* Our Craftsmanship Process */}
       <section className="py-24 bg-surface-container-highest">
         <div className="max-w-7xl mx-auto px-8">
-          <h2 className="text-4xl md:text-5xl font-headline mb-16 text-center text-on-surface">The Path to Purity</h2>
+          <h2 className="text-4xl md:text-5xl font-headline mb-16 text-center text-on-surface">The Art of Aethravia</h2>
           
           <div className="relative flex flex-col md:flex-row gap-12">
             <div className="flex-1 relative bg-surface-container-low p-8 rounded-lg shadow-sm mt-8 md:mt-0">
               <div className="text-6xl font-headline text-outline-variant/30 absolute -top-8 -left-4 font-bold">01</div>
               <span className="material-symbols-outlined text-primary mb-4 text-4xl">eco</span>
               <h3 className="text-2xl font-headline mb-3 text-on-surface">Sourcing</h3>
-              <p className="text-base text-on-surface-variant leading-relaxed font-body">Direct relationships with organic farmers across the Indian subcontinent ensures the highest grade of raw materials.</p>
+              <p className="text-base text-on-surface-variant leading-relaxed font-body">We begin with nature's finest ingredients, including Multani Mitti and Reetha, carefully selected from trusted Indian sources known for their purity and heritage.</p>
             </div>
             <div className="flex-1 relative bg-surface-container-low p-8 rounded-lg shadow-sm mt-8 md:mt-0">
               <div className="text-6xl font-headline text-outline-variant/30 absolute -top-8 -left-4 font-bold">02</div>
               <span className="material-symbols-outlined text-primary mb-4 text-4xl">science</span>
               <h3 className="text-2xl font-headline mb-3 text-on-surface">Formulation</h3>
-              <p className="text-base text-on-surface-variant leading-relaxed font-body">Bridging Ayurvedic wisdom with modern chemistry to create stable, effective, and sensory-rich skin treatments.</p>
+              <p className="text-base text-on-surface-variant leading-relaxed font-body">Every formula is thoughtfully crafted to combine traditional botanical wisdom with modern skincare science, creating gentle yet effective daily rituals.</p>
             </div>
             <div className="flex-1 relative bg-surface-container-low p-8 rounded-lg shadow-sm mt-8 md:mt-0">
               <div className="text-6xl font-headline text-outline-variant/30 absolute -top-8 -left-4 font-bold">03</div>
               <span className="material-symbols-outlined text-primary mb-4 text-4xl">verified</span>
               <h3 className="text-2xl font-headline mb-3 text-on-surface">Testing</h3>
-              <p className="text-base text-on-surface-variant leading-relaxed font-body">Each batch undergoes dermatological scrutiny and small-batch efficacy testing before ever reaching the jar.</p>
+              <p className="text-base text-on-surface-variant leading-relaxed font-body">Each batch undergoes quality and stability checks to ensure consistency, safety, and a luxurious experience in every use.</p>
             </div>
             <div className="flex-1 relative bg-surface-container-low p-8 rounded-lg shadow-sm mt-8 md:mt-0">
               <div className="text-6xl font-headline text-outline-variant/30 absolute -top-8 -left-4 font-bold">04</div>
               <span className="material-symbols-outlined text-primary mb-4 text-4xl">inventory_2</span>
               <h3 className="text-2xl font-headline mb-3 text-on-surface">Packaging</h3>
-              <p className="text-base text-on-surface-variant leading-relaxed font-body">Hand-packed in sustainable glass and recycled cardstock to minimize our environmental footprint.</p>
+              <p className="text-base text-on-surface-variant leading-relaxed font-body">Our products are carefully packed in recyclable bottles and tubes, designed to protect freshness while reducing environmental impact.</p>
             </div>
           </div>
         </div>
@@ -197,43 +189,6 @@ export default function IngredientsPage() {
         </div>
       </section>
 
-      {/* Quality Assurance Promise */}
-      <section className="py-24 px-8 bg-surface">
-        <div className="max-w-4xl mx-auto bg-primary text-on-primary p-12 md:p-24 rounded-2xl relative overflow-hidden shadow-xl">
-          <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none">
-            <span className="material-symbols-outlined text-[10rem]">approval</span>
-          </div>
-          
-          <h2 className="text-4xl md:text-5xl font-headline mb-12 relative z-10">Quality Assurance Promise</h2>
-          
-          <div className="grid md:grid-cols-2 gap-8 relative z-10">
-            <ul className="space-y-6">
-              <li className="flex gap-4">
-                <span className="material-symbols-outlined text-secondary-fixed mt-1">done</span>
-                <span className="font-body text-base leading-relaxed opacity-90">Small-batch production to ensure every jar meets our exacting standards.</span>
-              </li>
-              <li className="flex gap-4">
-                <span className="material-symbols-outlined text-secondary-fixed mt-1">done</span>
-                <span className="font-body text-base leading-relaxed opacity-90">Climate-controlled manufacturing to preserve the bio-activity of botanicals.</span>
-              </li>
-            </ul>
-            <ul className="space-y-6">
-              <li className="flex gap-4">
-                <span className="material-symbols-outlined text-secondary-fixed mt-1">done</span>
-                <span className="font-body text-base leading-relaxed opacity-90">Full traceability of every single ingredient from seed to skin.</span>
-              </li>
-              <li className="flex gap-4">
-                <span className="material-symbols-outlined text-secondary-fixed mt-1">done</span>
-                <span className="font-body text-base leading-relaxed opacity-90">Zero-waste facility mandates across our entire formulation chain.</span>
-              </li>
-            </ul>
-          </div>
-          
-          <button className="relative z-10 mt-12 px-10 py-5 bg-on-primary text-primary font-bold font-label uppercase tracking-widest text-xs rounded shadow-lg hover:bg-surface transition-all active:scale-95 border-none cursor-pointer">
-            Read Our Ethics Manifesto
-          </button>
-        </div>
-      </section>
 
     </main>
   );

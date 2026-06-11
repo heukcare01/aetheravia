@@ -12,7 +12,7 @@ import TrustBar from '@/components/footer/TrustBar';
 
 export const metadata: Metadata = {
   title: 'Aethravia | Artisanal Heritage Body Care',
-  description: 'Grounded elegance for the modern heritage seeker. Discover artisanal skin rituals crafted from Multani Mitti, Sandalwood, and Reetha.',
+  description: 'Grounded elegance for the modern heritage seeker. Discover artisanal skin rituals crafted from Multani Mitti and Reetha.',
 };
 
 const HomePage = () => {
@@ -31,7 +31,6 @@ const HomePage = () => {
             layout="slider" 
             title="Signature" 
             highlight="Favorites" 
-            sort="topRated"
           />
         </Suspense>
 

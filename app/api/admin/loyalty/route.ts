@@ -14,7 +14,7 @@ export async function GET() {
     name: u.name,
     email: u.email,
     loyaltyPoints: (u as any).loyaltyPoints || 0,
-    loyaltyTier: (u as any).loyaltyTier || 'Bronze'
+    loyaltyTier: (u as any).loyaltyTier || 'Novice'
   })));
 }
 

@@ -1,13 +1,10 @@
 # Aethravia Production Readiness Checker (PowerShell)
-# Run this script before deploying to production on Windows environments
+# Run this script before deploying to production
 
 param(
     [switch]$Detailed = $false
 )
 
-$ErrorActionPreference = "Stop"
-
-Clear-Host
 Write-Host "🔍 Aethravia Production Readiness Check" -ForegroundColor Cyan
 Write-Host "======================================" -ForegroundColor Cyan
 

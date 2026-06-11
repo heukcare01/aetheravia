@@ -18,7 +18,7 @@ export default function AboutPage() {
       ></div>
 
       {/* 1. Hero Section */}
-      <section className="px-8 md:px-24 pt-0 pb-20 lg:pb-32 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <section className="px-8 md:px-24 py-12 lg:py-16 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         <div className="relative z-10 max-w-xl">
           <h1 className="font-headline text-5xl md:text-6xl lg:text-7xl text-primary leading-tight -tracking-[0.03em]">
             Our Story
@@ -29,37 +29,25 @@ export default function AboutPage() {
           <div className="mt-10 h-px w-24 bg-primary/30"></div>
         </div>
         
-        <div className="relative grid grid-cols-2 gap-4">
-          <div className="space-y-4">
-            <div className="relative aspect-[4/5] rounded-lg overflow-hidden translate-y-8 shadow-sm">
-              <img 
-                className="w-full h-full object-cover" 
-                alt="Close up of raw blocks of Multani Mitti clay with organic textures on a neutral stone background" 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8YBHIo6CQzqQt_KJAxL29Yk3q-E1yfbcO04zDH-T1vJpbPPFxmqbdqiyArK1O_0Ozf1ePi9ltyN39qjRP1WcQySUMRWycv7qSfyJ_cIpo5oXJOUeUaqMdjq8B810oSOuUL5yEg54FJijv-n3BAc9RSn-wYmlndGhBlY7vj4OJf611-DuUITkC7qsnrNAUYc0zyWiAx3mllYILIjX6wzC04S_sLmCNbFtyGef30VS_c3dfukDOVSbcZJAm7jUSZXSgcO2gMwro4QjH"
-              />
-              <div className="absolute bottom-4 left-4 text-on-primary bg-primary/20 backdrop-blur-sm px-3 py-1 text-xs uppercase tracking-widest rounded-sm">
-                Multani Mitti
-              </div>
-            </div>
-            <div className="relative aspect-square rounded-lg overflow-hidden shadow-sm">
-              <img 
-                className="w-full h-full object-cover" 
-                alt="Sun-dried Reetha soapnuts in a rustic wooden bowl with soft natural window light" 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8eWB785McbCCijXIJ998jpQ6a0YL7qFxZZOaF1S0FfVtYSiflkDE8fgpTq8KVwPbDLEDhy2F4hLJHDpEDsS8rih3B7hM0uumijYULGHkHsSXY6NqV6DeniJ2Dalg5aPNG3iF3lkPgEdOtoP9jUtp5ryCTk6h19fhS9kZpOEjzYp_8PcsXJvVIGlezWS90ah7nWxssCA6OfRA30MQD-Kda1yaQCIyx2IqbdI1RDUA7Bbo6xKahVC8qUK68KDTUWquZ9EGmHGndq0uF"
-              />
-              <div className="absolute bottom-4 left-4 text-on-primary bg-primary/20 backdrop-blur-sm px-3 py-1 text-xs uppercase tracking-widest rounded-sm">
-                Reetha
-              </div>
-            </div>
-          </div>
-          <div className="relative aspect-[3/4] rounded-lg overflow-hidden mt-20 shadow-sm">
+        <div className="relative grid grid-cols-2 gap-4 sm:gap-6 lg:gap-8 items-center w-full">
+          <div className="relative aspect-[3/4] rounded-lg overflow-hidden shadow-md">
             <img 
               className="w-full h-full object-cover" 
-              alt="Artisanal sandalwood sticks stacked neatly with fine powder on a clay surface" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKgxp3LqLzuVfyry3P3i6RnASnmIGUjpjw__UxcnGM00lTCvRTX31LUcMoYWlYpUrg1MyTMiGtKTgQDbAGIgyX_9fHq0rkekTrYEN_bt0WiQRaOKpzncEHzFI32nu5_t1VzlNXewiU3Dvkiolqba1tE17Xk0xouNmulhb04S-xwJASKQnY0Qzt216tuQdYa5tmJCmVF53oYLwOeLzPv5CFZ2IpOuxXZWqCzYbUMBKHxXueTiGmIW2c4JZEy9AL0NhMg2F07r3TCtsN"
+              alt="Close up of raw blocks of Multani Mitti clay with organic textures on a neutral stone background" 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8YBHIo6CQzqQt_KJAxL29Yk3q-E1yfbcO04zDH-T1vJpbPPFxmqbdqiyArK1O_0Ozf1ePi9ltyN39qjRP1WcQySUMRWycv7qSfyJ_cIpo5oXJOUeUaqMdjq8B810oSOuUL5yEg54FJijv-n3BAc9RSn-wYmlndGhBlY7vj4OJf611-DuUITkC7qsnrNAUYc0zyWiAx3mllYILIjX6wzC04S_sLmCNbFtyGef30VS_c3dfukDOVSbcZJAm7jUSZXSgcO2gMwro4QjH"
             />
-            <div className="absolute bottom-4 left-4 text-on-primary bg-primary/20 backdrop-blur-sm px-3 py-1 text-xs uppercase tracking-widest rounded-sm">
-              Chandan
+            <div className="absolute bottom-4 left-4 text-on-primary bg-primary/30 backdrop-blur-md px-3 py-1.5 text-[10px] sm:text-xs uppercase tracking-widest rounded-sm border border-white/10">
+              Multani Mitti
+            </div>
+          </div>
+          <div className="relative aspect-[3/4] rounded-lg overflow-hidden shadow-md">
+            <img 
+              className="w-full h-full object-cover" 
+              alt="Sun-dried Reetha soapnuts in a rustic wooden bowl with soft natural window light" 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8eWB785McbCCijXIJ998jpQ6a0YL7qFxZZOaF1S0FfVtYSiflkDE8fgpTq8KVwPbDLEDhy2F4hLJHDpEDsS8rih3B7hM0uumijYULGHkHsSXY6NqV6DeniJ2Dalg5aPNG3iF3lkPgEdOtoP9jUtp5ryCTk6h19fhS9kZpOEjzYp_8PcsXJvVIGlezWS90ah7nWxssCA6OfRA30MQD-Kda1yaQCIyx2IqbdI1RDUA7Bbo6xKahVC8qUK68KDTUWquZ9EGmHGndq0uF"
+            />
+            <div className="absolute bottom-4 left-4 text-on-primary bg-primary/30 backdrop-blur-md px-3 py-1.5 text-[10px] sm:text-xs uppercase tracking-widest rounded-sm border border-white/10">
+              Reetha
             </div>
           </div>
         </div>
@@ -72,8 +60,8 @@ export default function AboutPage() {
             <div className="absolute -top-6 -left-6 w-full h-full bg-surface-container-highest -z-10 rounded-lg"></div>
             <img 
               className="w-full aspect-[4/5] object-cover rounded shadow-2xl transition-transform duration-500 group-hover:-translate-y-2" 
-              alt="A weathered traditional mortar and pestle being used to grind botanical herbs, high-end editorial photography" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFfLmBkzA6y3ExVnvxkyFC6s_cs8n_sy-gyM-njsJD5Mnik5EijWvXlvwRPSASAlbuibtk_kAmhHkuiCImMnfaEF8qdLTBYz-Qt5PbPGu0J2L_7rUrIaYjI2Im06xB7QpMNUMpOjd3i7GosEfcbX26QqpaSMjp8Cuwpd6vW4uwigLZT0_w8lWALKPCtjA2PANKwS22fIFzXSTZJ_pvWvLAgmvJcXiyKCvyV7zdUgs-iZQITYxJcaK9VsyOYmdQHyr9te2NJF8-usuf"
+              alt="How Aethravia Began" 
+              src="/images/aethravia-began.jpeg"
             />
           </div>
           <div className="w-full md:w-1/2">
@@ -81,10 +69,7 @@ export default function AboutPage() {
             <h2 className="font-headline text-3xl md:text-4xl text-on-surface mb-6 leading-tight">How Aethravia Began</h2>
             <div className="space-y-5 text-on-surface-variant leading-loose text-base md:text-lg font-light font-body">
               <p>
-                It started not in a lab, but in the memory of a grandmother’s courtyard. Arpita Kashyap watched as the raw materials of the earth—clays, oils, and barks—were transformed into potent elixirs that outperformed anything on a modern shelf.
-              </p>
-              <p>
-                Aethravia was born from a singular question: why must we choose between the soul of tradition and the precision of modern clinical science? We set out to bridge this gap, ensuring that every drop of our formulations honors the heritage it claims while meeting the rigorous standards of modern dermatology.
+                Aethravia began with a simple yet relatable problem. Its founder, Arpita Kashyap, struggled with frequent sun tanning and often relied on traditional remedies like Multani Mitti. While these natural solutions were effective, they were not always practical for a busy lifestyle. This inspired a simple question: why not create skincare products that deliver the benefits of trusted natural ingredients in a convenient, ready-to-use form? What started as personal research and home-crafted formulations soon evolved into Aethravia—a brand committed to blending the wisdom of nature with everyday convenience.
               </p>
             </div>
           </div>
@@ -118,45 +103,45 @@ export default function AboutPage() {
       <section className="px-8 md:px-24 py-24 md:py-32 bg-surface-container-highest">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16 text-center">
-            <h2 className="font-headline text-3xl md:text-4xl text-on-surface mb-4">The Aethravia Standard</h2>
-            <p className="font-body text-secondary tracking-widest uppercase text-xs">Six pillars of artisanal excellence</p>
+            <h2 className="font-headline text-3xl md:text-4xl text-on-surface mb-4">Our Philosophy</h2>
+            <p className="font-body text-secondary tracking-widest uppercase text-xs">The Aethravia Standard</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-outline-variant/10">
             {/* Card 1 */}
             <div className="bg-surface-container-low p-12 transition-all hover:bg-surface-container-lowest">
-              <span className="material-symbols-outlined text-primary text-4xl mb-6">science</span>
-              <h3 className="font-headline text-2xl text-on-surface mb-4">Science-Driven</h3>
-              <p className="font-body text-on-surface-variant leading-relaxed">Formulations stabilized by modern molecular chemistry to ensure every active stays potent.</p>
+              <span className="material-symbols-outlined text-primary text-4xl mb-6">eco</span>
+              <h3 className="font-headline text-2xl text-on-surface mb-4">Small-Batch</h3>
+              <p className="font-body text-on-surface-variant leading-relaxed">Small-batch skincare made with intention.</p>
             </div>
             {/* Card 2 */}
             <div className="bg-surface-container-low p-12 transition-all hover:bg-surface-container-lowest">
-              <span className="material-symbols-outlined text-primary text-4xl mb-6">spa</span>
-              <h3 className="font-headline text-2xl text-on-surface mb-4">Active-Rich</h3>
-              <p className="font-body text-on-surface-variant leading-relaxed">We don't use "fairy dusting." Our botanical extracts are used at clinically effective concentrations.</p>
+              <span className="material-symbols-outlined text-primary text-4xl mb-6">science</span>
+              <h3 className="font-headline text-2xl text-on-surface mb-4">Safety First</h3>
+              <p className="font-body text-on-surface-variant leading-relaxed">Tested for safety, not trends.</p>
             </div>
             {/* Card 3 */}
             <div className="bg-surface-container-low p-12 transition-all hover:bg-surface-container-lowest">
-              <span className="material-symbols-outlined text-primary text-4xl mb-6">verified_user</span>
-              <h3 className="font-headline text-2xl text-on-surface mb-4">Derm-Tested</h3>
-              <p className="font-body text-on-surface-variant leading-relaxed">Hypoallergenic and rigorously tested on all skin types under dermatological supervision.</p>
+              <span className="material-symbols-outlined text-primary text-4xl mb-6">experiment</span>
+              <h3 className="font-headline text-2xl text-on-surface mb-4">Ingredient-Backed</h3>
+              <p className="font-body text-on-surface-variant leading-relaxed">Ingredient-backed formulations.</p>
             </div>
             {/* Card 4 */}
             <div className="bg-surface-container-low p-12 transition-all hover:bg-surface-container-lowest">
-              <span className="material-symbols-outlined text-primary text-4xl mb-6">cruelty_free</span>
-              <h3 className="font-headline text-2xl text-on-surface mb-4">Cruelty-Free</h3>
-              <p className="font-body text-on-surface-variant leading-relaxed">Compassion is our core ingredient. No animal testing, ever, at any stage of our process.</p>
+              <span className="material-symbols-outlined text-primary text-4xl mb-6">inventory_2</span>
+              <h3 className="font-headline text-2xl text-on-surface mb-4">Minimal Packaging</h3>
+              <p className="font-body text-on-surface-variant leading-relaxed">Thoughtful, minimal packaging.</p>
             </div>
             {/* Card 5 */}
             <div className="bg-surface-container-low p-12 transition-all hover:bg-surface-container-lowest">
-              <span className="material-symbols-outlined text-primary text-4xl mb-6">visibility</span>
-              <h3 className="font-headline text-2xl text-on-surface mb-4">Visible Results</h3>
-              <p className="font-body text-on-surface-variant leading-relaxed">Skin transformation you can see and feel within the first 14 days of ritual use.</p>
+              <span className="material-symbols-outlined text-primary text-4xl mb-6">health_and_safety</span>
+              <h3 className="font-headline text-2xl text-on-surface mb-4">Clean Beauty</h3>
+              <p className="font-body text-on-surface-variant leading-relaxed">No parabens. No false claims.</p>
             </div>
             {/* Card 6 */}
             <div className="bg-surface-container-low p-12 transition-all hover:bg-surface-container-lowest">
-              <span className="material-symbols-outlined text-primary text-4xl mb-6">potted_plant</span>
-              <h3 className="font-headline text-2xl text-on-surface mb-4">Ethically Crafted</h3>
-              <p className="font-body text-on-surface-variant leading-relaxed">Small-batch production ensuring fair wages for our harvesters and minimal waste.</p>
+              <span className="material-symbols-outlined text-primary text-4xl mb-6">favorite</span>
+              <h3 className="font-headline text-2xl text-on-surface mb-4">Honest Care</h3>
+              <p className="font-body text-on-surface-variant leading-relaxed">Honest care for real skin.</p>
             </div>
           </div>
         </div>
@@ -192,18 +177,18 @@ export default function AboutPage() {
                 </blockquote>
                 <div>
                   <p className="font-bold font-body text-on-surface tracking-widest uppercase">Arpita Kashyap</p>
-                  <p className="font-body text-on-surface-variant text-sm mt-1">Founder</p>
+                  <p className="font-body text-on-surface-variant text-sm mt-1">Founder & Chief Formulation Officer</p>
                 </div>
               </div>
             </div>
             
-            {/* Co-Founder: Prajjwal */}
+            {/* Co-Founder: Prajjwal Kashyap */}
             <div className="flex flex-col lg:flex-row-reverse gap-20 items-center">
               <div className="lg:w-1/3 relative">
                 <div className="aspect-[3/4] overflow-hidden rounded-lg">
                   <img 
                     className="w-full h-full object-cover grayscale brightness-90 contrast-110" 
-                    alt="Professional studio portrait of Prajjwal Kashyap, co-founder of Aethravia, in a neutral earthy linen shirt with a warm, confident expression." 
+                    alt="Professional studio portrait of Prajjwal Kashyap, co-founder of Aethravia, with a warm, confident expression." 
                     src="/prajjwal-co-founder.jpeg"
                   />
                 </div>
@@ -218,7 +203,7 @@ export default function AboutPage() {
                 </blockquote>
                 <div className="lg:flex lg:flex-col lg:items-end">
                   <p className="font-bold font-body text-on-surface tracking-widest uppercase">Prajjwal Kashyap</p>
-                  <p className="font-body text-on-surface-variant text-sm mt-1">Co-Founder</p>
+                  <p className="font-body text-on-surface-variant text-sm mt-1">Co-Founder & Head of Innovation</p>
                 </div>
               </div>
             </div>

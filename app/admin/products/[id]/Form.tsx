@@ -12,7 +12,6 @@ import { Product } from '@/lib/models/ProductModel';
 import { uploadToCloudinary } from '@/lib/cloudinaryUpload';
 import { formatId } from '@/lib/utils';
 
-// Extend product form data with new fields (sizes, images)
 interface ProductFormData {
   name: string;
   slug: string;
@@ -23,17 +22,13 @@ interface ProductFormData {
   brand: string;
   countInStock: number | string;
   description: string;
-  sizes: string[];
 }
 
-// Common size options (adjust as needed)
-const COMMON_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-
 export default function ProductEditForm({ productId }: { productId: string }) {
-  const { data: product, error } = useSWR<Product & { images?: string[]; sizes?: string[] }>(`/api/admin/products/${productId}`);
+  const { data: product, error } = useSWR<Product & { images?: string[] }>(`/api/admin/products/${productId}`);
+  const { data: categories } = useSWR<string[]>('/api/products/categories');
   const router = useRouter();
   const [isUploading, setIsUploading] = useState(false);
-  const [customSize, setCustomSize] = useState('');
   const [reviewImages, setReviewImages] = useState<string[]>([]);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
@@ -55,12 +50,11 @@ export default function ProductEditForm({ productId }: { productId: string }) {
 
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<ProductFormData>({
     defaultValues: {
-      name: '', slug: '', price: '', image: '', images: [], category: '', brand: '', countInStock: '', description: '', sizes: [],
+      name: '', slug: '', price: '', image: '', images: [], category: '', brand: '', countInStock: '', description: ''
     },
   });
 
   const images = watch('images');
-  const sizes = watch('sizes');
 
   // Populate form when product loads
   useEffect(() => {
@@ -74,24 +68,9 @@ export default function ProductEditForm({ productId }: { productId: string }) {
     setValue('countInStock', product.countInStock as any);
     setValue('description', product.description || '');
     setValue('images', product.images || (product.image ? [product.image] : []));
-    setValue('sizes', product.sizes || []);
   }, [product, setValue]);
 
-  const addOrRemoveSize = (size: string) => {
-    const current = sizes || [];
-    if (current.includes(size)) {
-      setValue('sizes', current.filter(s => s !== size));
-    } else {
-      setValue('sizes', [...current, size]);
-    }
-  };
 
-  const addCustomSize = () => {
-    const value = customSize.trim().toUpperCase();
-    if (!value) return;
-    if (!sizes.includes(value)) setValue('sizes', [...sizes, value]);
-    setCustomSize('');
-  };
 
   const removeImage = (url: string) => {
     const updated = images.filter(i => i !== url);
@@ -185,7 +164,29 @@ export default function ProductEditForm({ productId }: { productId: string }) {
               <Field id='name' label='Name' required />
               <Field id='slug' label='Slug' required />
               <Field id='brand' label='Brand' required />
-              <Field id='category' label='Category' required />
+              
+              <div className='space-y-1'>
+                <label className='text-xs font-semibold uppercase tracking-wide opacity-70' htmlFor='category'>Category</label>
+                <input
+                  id='category'
+                  list='category-options'
+                  {...register('category', { required: 'Category is required' })}
+                  className='input input-bordered input-sm w-full'
+                  placeholder='Select or type category'
+                  autoComplete='off'
+                />
+                <datalist id='category-options'>
+                  <option value='Signature'>Signature</option>
+                  <option value='Body Wash'>Body Wash</option>
+                  <option value='Face Wash'>Face Wash</option>
+                  <option value='Body Scrub'>Body Scrub</option>
+                  {categories?.filter(c => !['Signature', 'Body Wash', 'Face Wash', 'Body Scrub'].includes(c)).map(c => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </datalist>
+                {errors.category?.message && <p className='text-error text-xs'>{errors.category.message}</p>}
+              </div>
+
               <Field id='price' label='Price' type='number' required />
               <Field id='countInStock' label='Count In Stock' type='number' required />
             </div>
@@ -197,49 +198,6 @@ export default function ProductEditForm({ productId }: { productId: string }) {
           </div>
         </div>
 
-        {/* Sizes */}
-        <div className='card bg-base-100 shadow-sm'>
-          <div className='card-body p-5 space-y-4'>
-            <div className='flex items-center justify-between'>
-              <h2 className='font-semibold tracking-wide text-sm uppercase opacity-70'>Sizes</h2>
-              <div className='flex gap-2'>
-                <input
-                  type='text'
-                  placeholder='Custom size'
-                  value={customSize}
-                  onChange={e => setCustomSize(e.target.value)}
-                  className='input input-bordered input-xs'
-                  onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addCustomSize(); } }}
-                />
-                <button type='button' className='btn btn-xs' onClick={addCustomSize}>Add</button>
-              </div>
-            </div>
-            <div className='flex flex-wrap gap-2'>
-              {COMMON_SIZES.map(sz => {
-                const active = sizes.includes(sz);
-                return (
-                  <button
-                    key={sz}
-                    type='button'
-                    onClick={() => addOrRemoveSize(sz)}
-                    className={`badge badge-lg cursor-pointer select-none transition ${active ? 'badge-primary' : 'badge-outline'}`}
-                  >{sz}</button>
-                );
-              })}
-              {sizes.filter(s => !COMMON_SIZES.includes(s)).map(sz => (
-                <button
-                  key={sz}
-                  type='button'
-                  onClick={() => addOrRemoveSize(sz)}
-                  className='badge badge-lg badge-accent cursor-pointer'
-                  title='Custom size'
-                >{sz}</button>
-              ))}
-            </div>
-            <input type='hidden' {...register('sizes')} />
-            {sizes.length === 0 && <p className='text-[11px] opacity-70'>Select at least one size (optional but recommended).</p>}
-          </div>
-        </div>
 
         {/* Images / Gallery */}
         <div className='card bg-base-100 shadow-sm'>

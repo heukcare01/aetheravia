@@ -25,7 +25,6 @@ const ShopPage = async (props: {
 
   const featuredIngredients = [
     'Multani Mitti',
-    'Chandan (Sandalwood)',
     'Reetha (Soapnut)'
   ];
 
@@ -204,7 +203,7 @@ const ShopPage = async (props: {
               </div>
               
               <p className="text-lg text-secondary/70 leading-relaxed font-medium">
-                Every batch of our 'Essential Three' starts at the source. We partner with small-scale cultivators in Rajasthan for our Multani Mitti and ethically sourced Sandalwood from Mysore to ensure every drop carries the archive of our heritage.
+                Every batch of our 'Essential Two' starts at the source. We partner with small-scale cultivators in Rajasthan for our Multani Mitti and ethically sourced Reetha from the Himalayas to ensure every drop carries the archive of our heritage.
               </p>
 
               <div className="grid grid-cols-2 gap-10 pt-6">

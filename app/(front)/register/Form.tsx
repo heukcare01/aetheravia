@@ -131,7 +131,7 @@ const Form = () => {
             {/* Floating Text Box Overlay */}
             <div className="absolute bottom-8 left-8 max-w-[240px] p-5 bg-surface-container-lowest/80 backdrop-blur-xl border border-outline-variant/20 shadow-xl rounded-sm">
               <p className="text-primary italic text-[9px] mb-1 font-headline tracking-[0.2em] uppercase font-bold">The Alchemist's Blend</p>
-              <p className="text-on-surface text-base leading-relaxed font-headline">A synergy of Heritage: Multani Mitti, Chandan, and Reetha.</p>
+              <p className="text-on-surface text-base leading-relaxed font-headline">A synergy of Heritage: Multani Mitti and Reetha.</p>
             </div>
           </div>
         </section>

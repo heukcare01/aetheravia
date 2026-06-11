@@ -54,7 +54,7 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
 
   // A curated list of aesthetic complementary texture images
   const complementaryImages = [
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuBZjpRQ_TLEzEbLXhUI8jizKsyF_CVMSaJxlVGlLEoAX-uQcCw3l3llGXhXh7Yh5HrgccK6rmQ4n-HtB3N0k-ULsDV0c7jBrJx7p00hvGbKjSrxH4ig6FL5ctDt8O7vtJaB9DR3GlI_diNet7fyesaOJ5MUbRkCV5V86klMo14kaexcuO0atkojCqgg3u3Xg2sVe162K_7yswucOyWPLYQz2kAB0BT0JkeXa_53V6Fr-n7zVvHmkpmcHUNMuhzblxQqMliqBcN0BU9T", // Sandalwood log
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuBZjpRQ_TLEzEbLXhUI8jizKsyF_CVMSaJxlVGlLEoAX-uQcCw3l3llGXhXh7Yh5HrgccK6rmQ4n-HtB3N0k-ULsDV0c7jBrJx7p00hvGbKjSrxH4ig6FL5ctDt8O7vtJaB9DR3GlI_diNet7fyesaOJ5MUbRkCV5V86klMo14kaexcuO0atkojCqgg3u3Xg2sVe162K_7yswucOyWPLYQz2kAB0BT0JkeXa_53V6Fr-n7zVvHmkpmcHUNMuhzblxQqMliqBcN0BU9T", // Botanical log
     "https://lh3.googleusercontent.com/aida-public/AB6AXuBXQhijcmtPtMf8skYc0_3R0py0Ztzsu7U-7gYyYozfnJWbJ782GjNXZhuf8kU9DIiu91Zn1SjEg54kCjAcuTm5iQJQOKMsS5fhwjfObBmBviJOChb0YVH8VhABREKOpV26o-LUGQgaj-jnmdvwJxjXgTRSkphNeXEBhz4689nZtVO-EHZ7Fgcht1PQ1Xu5xYAqeyaYFNff7SFz7akIyoMmA1pGqhMwt9kavFSnvCLy9ZNhJ8VhMWLg4hNaJNJw5-60g0KRiLuA2Qfo", // Clay texture
     "https://lh3.googleusercontent.com/aida-public/AB6AXuATexIdksonwhogQUZmLLaNwoiJWqTCd7laB9bTaVBksXb-6twX9SSMXO89NyPvr6eOg7eXa8_4X9ZVH_wjapZ5mQhFo6GqZutv4lNQFnRr47G4K2-1qrl3mnem5iTr1WZunwusuupDI1urhf_XbHAl_Nh84Ose103uk6NqgBfkB-UQczvkqG5GuqyVeqJvphQPQxGxo8ylSNZpgM1OsHKQu3Qlu7s93SnOm7E1DrzbT55T5bNcFc4YuYDWXBmbtRbvO5nIWy8-TBX3", // Brass Bowl
     "https://lh3.googleusercontent.com/aida-public/AB6AXuCH8AX3rmkoojzeqfztDH33C-ozpMi8xQjEKjhtji4ruOcVsb0954dA2GzcdzSrw46FoznwjkYQZxwfDzwf4QR1UHwHCiW3tS109MOYGYhhgZgDkr23CBEtCAO5qH3esVdkE_Sr1MFgvW1Y-RaTZcYnD7z6zMWMKqNGH6g1l9KSDOISKVP8SBRSwIxD6y2Ul4BZTUJW_rvvdWaeuEQeB3ITG9URJYJq98lm5qkGV0X67XJ49vsGDAc1_E7N2Ty90IEzjdHaU_DvllbV", // Floral Water
@@ -82,64 +82,8 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
     relatedProducts = [];
   }
 
-  const productSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: product.name,
-    description: product.description,
-    image: /^(\/|https?:)/.test(product.image) ? product.image : `${process.env.NEXT_PUBLIC_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')}${product.image}`,
-    sku: product._id?.toString() || product.slug,
-    offers: {
-      '@type': 'Offer',
-      price: product.price,
-      priceCurrency: 'INR',
-      availability: product.countInStock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-      url: `${process.env.NEXT_PUBLIC_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')}/product/${product.slug}`
-    },
-    ...(product.rating && product.numReviews ? {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: product.rating,
-        reviewCount: product.numReviews,
-      }
-    } : {})
-  };
-
-  const breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: `${process.env.NEXT_PUBLIC_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')}`
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Shop',
-        item: `${process.env.NEXT_PUBLIC_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')}/shop`
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: product.name,
-        item: `${process.env.NEXT_PUBLIC_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')}/product/${product.slug}`
-      }
-    ]
-  };
-
   return (
     <div className="pt-8 md:pt-12 pb-12 overflow-x-hidden">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
       {/* Product Section */}
       <section className="max-w-screen-2xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-start">
         {/* Product Gallery (Interactive) */}
@@ -199,7 +143,7 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
 
           {/* Chips (Ingredients) */}
           <div className="flex flex-wrap gap-2 pt-4">
-            <span className="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-[11px] font-medium tracking-wide">Sandalwood</span>
+            <span className="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-[11px] font-medium tracking-wide">Rose Water</span>
             <span className="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-[11px] font-medium tracking-wide">Multani Mitti</span>
             <span className="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-[11px] font-medium tracking-wide">Soapnut</span>
             <span className="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-[11px] font-medium tracking-wide">Wild Honey</span>
@@ -261,7 +205,7 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
               <span className="material-symbols-outlined text-4xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>eco</span>
               <h4 className="font-headline text-3xl text-primary italic leading-tight">The Sustainable Standard</h4>
               <p className="text-on-surface-variant text-sm leading-relaxed">
-                Every bottle is infinitely recyclable glass, and every purchase contributes to sandalwood reforestation programs in the Western Ghats.
+                Every bottle is infinitely recyclable glass, and every purchase contributes to reforestation programs in the Western Ghats.
               </p>
               <Link href="/about" className="text-[10px] font-label uppercase tracking-widest text-primary underline underline-offset-8">Our Journey</Link>
             </div>

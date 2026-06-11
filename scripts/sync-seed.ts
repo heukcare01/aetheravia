@@ -171,8 +171,8 @@ async function main() {
     // 3. Sync Coupons (Example)
     console.log('🎫 Syncing Coupons...');
     const coupons = [
-      { code: 'WELCOME10', name: 'Welcome 10%', type: 'percentage', value: 10, expiryDate: new Date('2026-12-31'), status: 'active' },
-      { code: 'SKIN20', name: 'Skincare 20% Off', type: 'percentage', value: 20, expiryDate: new Date('2026-12-31'), status: 'active' }
+      { code: 'WELCOME10', name: 'Welcome 10%', type: 'percentage', value: 10, expiryDate: new Date('2025-12-31'), status: 'active' },
+      { code: 'SKIN20', name: 'Skincare 20% Off', type: 'percentage', value: 20, expiryDate: new Date('2025-12-31'), status: 'active' }
     ];
     for (const coupon of coupons) {
       await db.collection('coupons').updateOne(

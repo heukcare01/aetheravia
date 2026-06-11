@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import useSWR from 'swr';
+
 import { 
   Home, 
   ShoppingBag, 
@@ -37,13 +37,7 @@ const Sidebar = () => {
     toggleDrawer();
   };
 
-  const {
-    data: categories,
-    error,
-    isLoading,
-  } = useSWR('/api/products/categories');
 
-  if (error) return <div className="p-8 text-center text-red-500">Error loading categories</div>;
   
   const NavLink = ({ href, icon: Icon, children, isPrimary = false }: any) => (
     <Link 
@@ -94,36 +88,14 @@ const Sidebar = () => {
 
       <div className="flex-1 overflow-y-auto px-4 py-6 scrollbar-hide">
         {/* Primary Site Navigation */}
-        <SectionHeader>Ritual Navigation</SectionHeader>
+        <SectionHeader>Menu</SectionHeader>
         <div className="space-y-1">
           <NavLink href="/" icon={Home} isPrimary>Home</NavLink>
           <NavLink href="/shop" icon={ShoppingBag}>Shop</NavLink>
-          <NavLink href="/ritual" icon={Sparkles}>Our Rituals</NavLink>
-          <NavLink href="/ingredients" icon={Leaf}>Earthly Elements</NavLink>
-        </div>
-
-        {/* Discovery & Heritage */}
-        <SectionHeader>The Heritage</SectionHeader>
-        <div className="space-y-1">
-          <NavLink href="/about" icon={Info}>Our Journey</NavLink>
-          <NavLink href="/contact" icon={Phone}>Consultations</NavLink>
-        </div>
-
-        {/* Categories Section */}
-        <SectionHeader>Collections</SectionHeader>
-        <div className="grid grid-cols-1 gap-1">
-          {!isLoading && categories?.map((category: string) => (
-            <Link 
-              key={category} 
-              href={`/shop?category=${encodeURIComponent(category)}`} 
-              onClick={toggleDrawer}
-              className="flex items-center justify-between px-4 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:text-primary hover:bg-primary/5 transition-all group"
-            >
-              <span>{category}</span>
-              <div className="w-1.5 h-1.5 rounded-full bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </Link>
-          ))}
-          {isLoading && <div className="px-4 py-2 text-xs text-gray-400 animate-pulse">Sourcing collections...</div>}
+          <NavLink href="/about" icon={Info}>About</NavLink>
+          <NavLink href="/ritual" icon={Sparkles}>Rituals</NavLink>
+          <NavLink href="/ingredients" icon={Leaf}>Ingredients</NavLink>
+          <NavLink href="/contact" icon={Phone}>Contact</NavLink>
         </div>
 
         {/* Your Archive (Accounts) */}

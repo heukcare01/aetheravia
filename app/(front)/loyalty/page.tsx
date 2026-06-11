@@ -13,10 +13,10 @@ export default function LoyaltyPage() {
   const { data: loyaltyData, isLoading } = useSWR(session ? '/api/user/loyalty' : null, fetcher);
 
   const tiers = [
-    { name: 'Novice', range: '0 - 500', benefits: ['Standard support', 'Birthday gift'], color: 'bg-stone-200' },
-    { name: 'Seeker', range: '501 - 2000', benefits: ['5% off all orders', 'Early access to drops', 'Priority support'], color: 'bg-amber-100' },
-    { name: 'Keeper', range: '2001 - 5000', benefits: ['10% off all orders', 'Free express shipping', 'Exclusive ritual kits'], color: 'bg-primary/20' },
-    { name: 'Sage', range: '5001+', benefits: ['15% off all orders', 'Personal concierge', 'VIP heritage events'], color: 'bg-primary text-white' },
+    { name: 'Novice', range: '0 - 500', benefits: ['Welcome reward', 'Birthday surprise', 'Early product updates'], color: 'bg-stone-200' },
+    { name: 'Seeker', range: '501 - 2000', benefits: ['5% off future purchases', 'Early access to launches', 'Priority support'], color: 'bg-amber-100' },
+    { name: 'Keeper', range: '2001 - 5000', benefits: ['10% off purchases', 'Free shipping', 'Exclusive member offers'], color: 'bg-primary/20' },
+    { name: 'Sage', range: '5000+', benefits: ['15% off purchases', 'First access to limited editions', 'VIP community benefits'], color: 'bg-primary text-white' },
   ];
 
   return (
@@ -27,10 +27,9 @@ export default function LoyaltyPage() {
       <div className="max-w-7xl mx-auto px-4 relative z-10 pt-24">
         <div className="mb-20 text-center">
            <p className="text-[10px] font-bold uppercase tracking-[0.6em] text-primary mb-4">Heritage Rewards</p>
-           <h1 className="font-headline text-5xl md:text-8xl text-on-surface italic mb-8">The Vault of Aether</h1>
+           <h1 className="font-headline text-5xl md:text-8xl text-on-surface italic mb-8">The vault of Aethravia</h1>
            <p className="text-secondary font-body max-w-3xl mx-auto opacity-70 leading-relaxed text-lg">
-             Your journey with Aethravia is more than acquisition—it's an evolution. 
-             Every ritual you bring home earns you points in the Vault, unlocking exclusive access to ancient wisdom and artisanal treasures.
+             Earn points every time you shop, review, or engage with Aethravia. Redeem your points for exclusive rewards, early access, and member-only benefits.
            </p>
         </div>
 
@@ -118,7 +117,7 @@ export default function LoyaltyPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
           <div className="space-y-12">
             <div>
-              <h2 className="text-4xl font-headline text-primary italic mb-6">How to Accumulate Wisdom</h2>
+              <h2 className="text-4xl font-headline text-primary italic mb-6">Ways to Earn Points</h2>
               <p className="text-secondary opacity-70 leading-relaxed">
                 Points are earned through interaction with the heritage. 
                 For every ₹1 spent, you earn 1 Vault Point. You can also earn points through reviews and community engagement.
@@ -131,8 +130,8 @@ export default function LoyaltyPage() {
                   <Gift size={24} className="text-primary" strokeWidth={1.5} />
                 </div>
                 <div>
-                  <h4 className="font-bold text-primary text-sm uppercase tracking-widest mb-2">Acquisitions</h4>
-                  <p className="text-xs text-secondary opacity-60">Earn 1 point for every ₹1 spent on any ritual artifact.</p>
+                  <h4 className="font-bold text-primary text-sm uppercase tracking-widest mb-2">Shop</h4>
+                  <p className="text-xs text-secondary opacity-60">Earn 1 point for every ₹1 spent.</p>
                 </div>
               </div>
               <div className="flex gap-6">
@@ -140,8 +139,8 @@ export default function LoyaltyPage() {
                   <TrendingUp size={24} className="text-primary" strokeWidth={1.5} />
                 </div>
                 <div>
-                  <h4 className="font-bold text-primary text-sm uppercase tracking-widest mb-2">Chronicles</h4>
-                  <p className="text-xs text-secondary opacity-60">Submit a detailed review with images to earn 50 bonus points.</p>
+                  <h4 className="font-bold text-primary text-sm uppercase tracking-widest mb-2">Review</h4>
+                  <p className="text-xs text-secondary opacity-60">Earn 50 points for verified product reviews.</p>
                 </div>
               </div>
               <div className="flex gap-6">
@@ -149,8 +148,17 @@ export default function LoyaltyPage() {
                   <History size={24} className="text-primary" strokeWidth={1.5} />
                 </div>
                 <div>
-                  <h4 className="font-bold text-primary text-sm uppercase tracking-widest mb-2">Heritage Cycles</h4>
-                  <p className="text-xs text-secondary opacity-60">Earn bonus points for consistent monthly ritual refills.</p>
+                  <h4 className="font-bold text-primary text-sm uppercase tracking-widest mb-2">Referral</h4>
+                  <p className="text-xs text-secondary opacity-60">Earn 200 points when a friend places their first order.</p>
+                </div>
+              </div>
+              <div className="flex gap-6">
+                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
+                  <Sparkles size={24} className="text-primary" strokeWidth={1.5} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-primary text-sm uppercase tracking-widest mb-2">Birthday Reward</h4>
+                  <p className="text-xs text-secondary opacity-60">Receive bonus points on your birthday.</p>
                 </div>
               </div>
             </div>

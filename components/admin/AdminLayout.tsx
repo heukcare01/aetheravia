@@ -49,7 +49,6 @@ const AdminLayout = ({
       items: [
         { key: 'offers', label: 'Offers', href: '/admin/offers', icon: 'local_offer' },
         { key: 'coupons', label: 'Coupons', href: '/admin/coupons', icon: 'confirmation_number' },
-        { key: 'carousel', label: 'Banners', href: '/admin/carousel', icon: 'image' },
       ]
     },
     {

@@ -20,8 +20,18 @@ async function seed() {
     {
       name: 'Vitamin C Brightening Face Wash',
       slug: 'vitamin-c-brightening-face-wash',
+      price: 18.0,
+      brand: 'Aethravia',
       category: 'Face Wash',
       image: '/images/products/serum-bottle-with-yellow-background.jpg',
+      countInStock: 50,
+      description: 'Refreshing face wash that cleanses deeply and evens out skin tone.',
+      rating: 4.5,
+      numReviews: 24,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
       name: 'Gentle Exfoliating Gel',
       slug: 'gentle-exfoliating-gel',
       price: 15.5,

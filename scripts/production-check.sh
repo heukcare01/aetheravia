@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Aethravia Production Readiness Checker
-# -----------------------------------------------------------------------------
+# Run this script before deploying to production
 
 echo "🔍 Aethravia Production Readiness Check"
 echo "======================================"

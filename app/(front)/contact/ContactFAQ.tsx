@@ -5,19 +5,19 @@ import React, { useState } from 'react';
 const faqs = [
   {
     question: "How long does shipping typically take?",
-    answer: "Orders within India typically arrive within 3-5 business days. International shipping takes between 7-14 business days depending on customs processing."
+    answer: "We typically process orders within 24–48 hours. Once shipped, orders are usually delivered within 3–7 business days across India, depending on your location and courier availability."
   },
   {
-    question: "Are your ingredients ethically sourced?",
-    answer: "Yes, we work directly with artisanal farmers and cooperatives across the subcontinent to ensure fair trade practices, sustainable harvesting, and complete transparency."
+    question: "What makes your ingredients special?",
+    answer: "We carefully select ingredients that have been trusted in traditional skincare for generations. Reetha and Multani Mitti were chosen for their natural cleansing and purifying properties, helping us create formulations that are simple, effective, and rooted in nature."
   },
   {
-    question: "Can I get a personalized skin consultation?",
-    answer: "Absolutely. You can schedule a virtual consultation with one of our herbalists through the 'Ritual Consultation' option in the contact form."
+    question: "Need help selecting a product?",
+    answer: "We're here to help. Contact us through email or WhatsApp, and our team will assist you in choosing the product that best fits your skincare needs."
   },
   {
-    question: "What is your return policy for artisanal soaps?",
-    answer: "Due to the hygienic nature of our artisanal formulations, we only accept returns on unopened items within 14 days of receipt. Please contact our concierge for assistance."
+    question: "Can I return my AETHRAVIA products?",
+    answer: "For hygiene and safety reasons, AETHRAVIA accepts returns only on unopened and unused products within 14 days of delivery. In case of a damaged or incorrect item, our concierge team will be happy to assist you."
   }
 ];
 

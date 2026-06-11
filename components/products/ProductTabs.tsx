@@ -17,14 +17,14 @@ export default function ProductTabs({ description }: { description: string }) {
       id: 'ritual',
       label: 'The Ritual',
       title: 'Cleansing as Meditation',
-      content: 'Dispense a small amount onto your palm or a natural loofah. Massage onto damp skin in gentle circular motions, focusing on areas that hold tension. Inhale the grounding scent of sandalwood. Rinse with lukewarm water to reveal skin that feels soft, detoxified, and deeply nourished.',
+      content: 'Dispense a small amount onto your palm or a natural loofah. Massage onto damp skin in gentle circular motions, focusing on areas that hold tension. Inhale the grounding scent of the earth. Rinse with lukewarm water to reveal skin that feels soft, detoxified, and deeply nourished.',
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCRSmWpCzGLgiS4xXmXgcabj9yx-1jx55OCHnwhDI3KqgH2AC44z2R07FpIInuLyJ7I4r6s6JSVjFP_LXmVVWBNjVTxxt5nA5rD4S21VwQUkW8jdtrSvyrLHXPYxV639zShq0Z99BvF5UqyfftFQJGSkv4TBKKzzLLgNxevvtTYnsjff9KUK0MtUGHeWc1Sh_yMDO05HjHhBZmd9BVWQtvR47azLXZo3mNeIPaTGYd2EVsEV_ByExW58R37rG_PJLipBo71W9uwSoEF'
     },
     {
       id: 'ingredients',
       label: 'Ingredients',
       title: 'Nature’s Raw Potency',
-      content: 'Our formula is anchored by pure Sandalwood oil, known for its anti-inflammatory properties. We combine this with Multani Mitti (Fuller’s Earth) to draw out impurities, Reetha (Soapnut) for a gentle natural lather, and Wild Honey to lock in moisture. No synthetic fragrances, sulfates, or parabens.',
+      content: 'Our formula is anchored by Multani Mitti (Fuller’s Earth) to draw out impurities, and Reetha (Soapnut) for a gentle natural lather. We combine this with Wild Honey to lock in moisture, known for its anti-inflammatory properties. No synthetic fragrances, sulfates, or parabens.',
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBXQhijcmtPtMf8skYc0_3R0py0Ztzsu7U-7gYyYozfnJWbJ782GjNXZhuf8kU9DIiu91Zn1SjEg54kCjAcuTm5iQJQOKMsS5fhwjfObBmBviJOChb0YVH8VhABREKOpV26o-LUGQgaj-jnmdvwJxjXgTRSkphNeXEBhz4689nZtVO-EHZ7Fgcht1PQ1Xu5xYAqeyaYFNff7SFz7akIyoMmA1pGqhMwt9kavFSnvCLy9ZNhJ8VhMWLg4hNaJNJw5-60g0KRiLuA2Qfo'
     },
     {

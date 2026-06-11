@@ -75,8 +75,8 @@ export default function HelpPage() {
                 <Mail className="w-8 h-8 mx-auto text-green-100" />
               </div>
               <p className="font-semibold text-white mb-2">Email Support</p>
-              <a href="mailto:curators@Aethravia.com" className="text-green-100 hover:text-white">
-                curators@Aethravia.com
+              <a href="mailto:aethravia@gmail.com" className="text-green-100 hover:text-white">
+                aethravia@gmail.com
               </a>
             </div>
             

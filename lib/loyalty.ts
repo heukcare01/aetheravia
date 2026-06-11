@@ -6,17 +6,17 @@ export interface TierInfo {
 }
 
 export const TIER_SEQUENCE: TierInfo[] = [
-  { tier: 'Bronze', min: 0, max: 999, next: 'Silver' },
-  { tier: 'Silver', min: 1000, max: 2999, next: 'Gold' },
-  { tier: 'Gold', min: 3000, max: 9999, next: 'Platinum' },
-  { tier: 'Platinum', min: 10000, max: Infinity, next: null },
+  { tier: 'Novice', min: 0, max: 500, next: 'Seeker' },
+  { tier: 'Seeker', min: 501, max: 2000, next: 'Keeper' },
+  { tier: 'Keeper', min: 2001, max: 5000, next: 'Sage' },
+  { tier: 'Sage', min: 5001, max: Infinity, next: null },
 ];
 
 export function getTier(points: number): string {
   for (const t of TIER_SEQUENCE) {
     if (points >= t.min && points <= t.max) return t.tier;
   }
-  return 'Bronze';
+  return 'Novice';
 }
 
 export function getProgress(points: number) {

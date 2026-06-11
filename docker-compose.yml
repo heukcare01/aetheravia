@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  aethravia:
+    build: .
+    container_name: aethravia_web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production

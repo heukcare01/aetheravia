@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
   user.loyaltyHistory.push({ type: 'earn', points, description, orderId, date: new Date(), source, txnId });
 
   // Tier recompute (simple thresholds)
-  const oldTier = user.loyaltyTier || 'Bronze';
+  const oldTier = user.loyaltyTier || 'Novice';
   const { newTier, changed } = evaluateTierChange(oldTier, user.loyaltyPoints);
   user.loyaltyTier = newTier;
   await user.save();

@@ -52,13 +52,9 @@ if (!parsed.success) {
 
 const env = parsed.data;
 
-// Sensible defaults
-if (!env.NEXTAUTH_URL) {
-  if (process.env.VERCEL_URL) {
-    env.NEXTAUTH_URL = `https://${process.env.VERCEL_URL}`;
-  } else if (env.NODE_ENV !== 'production') {
-    env.NEXTAUTH_URL = 'http://localhost:3000';
-  }
+// Sensible defaults for local dev
+if (env.NODE_ENV !== 'production' && !env.NEXTAUTH_URL) {
+  env.NEXTAUTH_URL = 'http://localhost:3000';
 }
 
 export default env;

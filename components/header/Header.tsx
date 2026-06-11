@@ -8,7 +8,6 @@ import { Menu as MenuIcon, X } from 'lucide-react';
 import Menu from './Menu';
 import SearchInline from './SearchInline';
 import useLayoutService from '@/lib/hooks/useLayout';
-import { brandName } from '@/lib/brand';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -44,11 +43,11 @@ const Header = () => {
 
             <Link
               href='/'
-              className='flex items-center gap-2 group'
+              className='flex items-center group'
             >
               <div className="relative w-8 h-8 sm:w-10 sm:h-10">
                 <Image
-                  src="/images/icon-192.png"
+                  src="/images/logo.png"
                   alt="Aethravia Logo"
                   fill
                   sizes="(max-width: 640px) 32px, 40px"
@@ -56,9 +55,15 @@ const Header = () => {
                   priority
                 />
               </div>
-              <span className='hidden sm:inline-block text-lg sm:text-2xl font-black tracking-tighter uppercase text-primary hover:opacity-80 transition-opacity whitespace-nowrap'>
-                {brandName}
-              </span>
+              <div className="hidden sm:block relative h-6 w-32 sm:h-8 sm:w-40 hover:opacity-80 transition-opacity">
+                <Image
+                  src="/images/logo-text.png"
+                  alt="Aethravia Logo Text"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
             </Link>
           </div>
           

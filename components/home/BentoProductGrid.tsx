@@ -22,8 +22,8 @@ const products = [
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCX6msTGrtEwmE9h6SdvRJfV7UXtwGWAtFR2shpObXIe3PZvmCR6ZRCaSTv-XMDaCKpbG3XhQtaKLPcgD6WS3HD5rX2zDtajDxgYVf5KzmsdVddq8ilAoLocDvV4lOiMOhZVp568e-q10VVEnJgJcEyMzHbbDztg5_FScKNE0SswhZIXQhyZ1TwkiWqJNC9PaeuYjeWrvFk2y7rD-fMW7NqafZ5BqoHbsjK0ch9um6INou34jxycJRHqzliVJ1zDzLi8riJ8ITQlEkO'
   },
   {
-    id: 'chandan-mist',
-    name: 'Chandan Mist',
+    id: 'rose-mist',
+    name: 'Rose Mist',
     price: '₹1,200',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAq8MTpOfw3AgWQEiSXX7s7TxXJcSx43e9QTCRbAQbDRdd-tgYrt8h28rwAHtROcCcH3pnfYHququ0NlEiEqg3dJnSJbRVCLVkwZyqVI90Tab8bacTuFR_c4iMc6fLiXGJedeBAvsJwjBSdPz0eIutFdJUZEVUg6uXPtRXimgEutgCm_sIVQ-4lj6oYYUwJpvid1zk-utVXZa37R3SVQrOtjYSoIRUfEiR7b3woY_imExJTTrj8KHTfon62CFS8JIZGlWZW9fZSOKZ6',
     small: true

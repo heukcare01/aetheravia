@@ -16,29 +16,40 @@ const steps = [
   },
   {
     number: '03.',
-    title: 'Seal with Sandalwood',
-    description: 'Finish with the Chandan body oil to soothe the senses and lock in deep, earthy hydration.'
+    title: 'Seal with Moisture',
+    description: 'Finish with a restorative body oil to soothe the senses and lock in deep, earthy hydration.'
   }
 ];
 
 export default function SkincareRitual() {
   return (
     <section className="py-24 md:py-32 px-4 md:px-8 bg-surface">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12 lg:gap-20">
+      <div className="max-w-7xl mx-auto flex flex-col items-center gap-8 md:gap-12">
+        <div className="w-full">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-headline text-4xl md:text-5xl text-primary leading-tight text-center mb-0"
+          >
+            The Artisanal Body Ritual
+          </motion.h2>
+        </div>
+
         <motion.div 
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="w-full md:w-1/2 relative"
+          className="w-full relative"
         >
           <div className="absolute -top-10 -left-10 w-48 h-48 bg-primary/5 rounded-full blur-3xl" />
-          <div className="relative z-10 rounded-lg shadow-2xl overflow-hidden group">
+          <div className="relative z-10 rounded-2xl shadow-2xl overflow-hidden group">
             <Image 
-              src="/images/ritual-woman.png"
+              src="/images/3_step.jpeg"
               alt="Artisanal Skincare Ritual"
-              width={800}
-              height={1000}
-              className="w-full h-auto transition-transform duration-1000 group-hover:scale-105"
+              width={1600}
+              height={900}
+              className="w-full h-auto transition-transform duration-1000 group-hover:scale-105 object-cover"
             />
           </div>
           <motion.div 
@@ -53,38 +64,6 @@ export default function SkincareRitual() {
             </p>
           </motion.div>
         </motion.div>
-
-        <div className="w-full md:w-1/2 space-y-12">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="font-headline text-4xl md:text-5xl text-primary leading-tight"
-          >
-            The Artisanal <br /> Body Ritual
-          </motion.h2>
-
-          <div className="space-y-10">
-            {steps.map((step, idx) => (
-              <motion.div 
-                key={step.number}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.2 }}
-                className="flex gap-6"
-              >
-                <span className="font-headline text-3xl text-outline-variant/60">{step.number}</span>
-                <div>
-                  <h4 className="font-body font-bold text-xl text-secondary mb-2">{step.title}</h4>
-                  <p className="font-body text-surface-foreground/70 leading-relaxed">
-                    {step.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );

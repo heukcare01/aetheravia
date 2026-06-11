@@ -125,7 +125,28 @@ export const POST = auth(async (req: any) => {
 
     const { itemsPrice, taxPrice, shippingPrice, totalPrice } = calcPrices(dbOrderItems);
     
-    let finalTotalPrice = totalPrice;
+    // ----------------------------------------------------
+    // Loyalty Tier Discounts
+    // ----------------------------------------------------
+    const dbUser = await mongoose.models.User.findById(safeUserId).select('loyaltyTier').session(currentSession);
+    const loyaltyTier = dbUser?.loyaltyTier || 'Novice';
+    
+    let tierDiscountRatio = 0;
+    if (loyaltyTier === 'Seeker') tierDiscountRatio = 0.05;
+    if (loyaltyTier === 'Keeper') tierDiscountRatio = 0.10;
+    if (loyaltyTier === 'Sage') tierDiscountRatio = 0.15;
+    
+    const tierDiscountAmount = round2(itemsPrice * tierDiscountRatio);
+    let effectiveItemsPrice = itemsPrice - tierDiscountAmount;
+    
+    let effectiveShippingPrice = shippingPrice;
+    if (loyaltyTier === 'Keeper' || loyaltyTier === 'Sage') {
+      effectiveShippingPrice = 0;
+    }
+    
+    let effectiveTaxPrice = round2(Number(0.18 * effectiveItemsPrice));
+    let finalTotalPrice = round2(effectiveItemsPrice + effectiveShippingPrice + effectiveTaxPrice);
+    
     let couponInfo = null;
 
     // Handle Coupons
@@ -137,12 +158,12 @@ export const POST = auth(async (req: any) => {
           isPaid: true,
         }).session(currentSession);
         
-        const validation = coupon.isValidForUser(safeUserId, itemsPrice, userOrders, dbOrderItems);
+        const validation = coupon.isValidForUser(safeUserId, effectiveItemsPrice, userOrders, dbOrderItems);
         if (validation.valid) {
-          const discountAmount = coupon.calculateDiscount(itemsPrice, shippingPrice, dbOrderItems);
-          finalTotalPrice = Math.max(0, totalPrice - discountAmount);
+          const discountAmount = coupon.calculateDiscount(effectiveItemsPrice, effectiveShippingPrice, dbOrderItems);
+          finalTotalPrice = Math.max(0, finalTotalPrice - discountAmount);
           
-          await coupon.applyCoupon(safeUserId, itemsPrice, discountAmount);
+          await coupon.applyCoupon(safeUserId, effectiveItemsPrice, discountAmount);
           await coupon.save({ session: currentSession || undefined });
           
           couponInfo = {
@@ -150,7 +171,7 @@ export const POST = auth(async (req: any) => {
             name: payload.coupon.name,
             type: payload.coupon.type,
             discountAmount,
-            originalOrderValue: itemsPrice,
+            originalOrderValue: effectiveItemsPrice,
           };
         }
       }
@@ -158,9 +179,9 @@ export const POST = auth(async (req: any) => {
 
     const newOrderData = {
       items: dbOrderItems,
-      itemsPrice,
-      taxPrice,
-      shippingPrice,
+      itemsPrice: effectiveItemsPrice,
+      taxPrice: effectiveTaxPrice,
+      shippingPrice: effectiveShippingPrice,
       totalPrice: finalTotalPrice,
       coupon: couponInfo,
       shippingAddress: payload.shippingAddress,

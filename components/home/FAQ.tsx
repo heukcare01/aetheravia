@@ -6,12 +6,12 @@ const faqData = [
   {
     num: "01",
     question: "What is the shelf life of Aethravia products?",
-    answer: "Our formulations are crafted in small batches using raw, potent botanicals. To maintain the integrity of these artisanal blends, we recommend utilizing them within 24 months of opening. Store in a cool, dry place away from direct sunlight."
+    answer: "Our formulations are crafted in small batches using raw, potent botanicals. To maintain the integrity of these artisanal blends, we recommend utilizing them within 12 months of opening. Store in a cool, dry place away from direct sunlight."
   },
   {
     num: "02",
     question: "Are these products suitable for sensitive skin?",
-    answer: "Yes. Aethravia was born from the need for gentle yet effective care. We utilize Multani Mitti (Fuller’s Earth) for its natural cooling and toxin-drawing properties, paired with Chandan (Sandalwood) to soothe inflammation. These ancient ingredients work in harmony to calm even the most reactive skin types."
+    answer: "Yes. Aethravia was born from the need for gentle yet effective care. We utilize Multani Mitti (Fuller’s Earth) for its natural cooling and toxin-drawing properties, paired with Reetha (Soapnut) to gently cleanse without stripping. These ancient ingredients work in harmony to calm even the most reactive skin types."
   },
   {
     num: "03",
@@ -50,7 +50,7 @@ export default function FAQ() {
           <div className="flex justify-center mb-6">
             <span className="material-symbols-outlined text-primary text-4xl opacity-60">potted_plant</span>
           </div>
-          <h1 className="font-headline text-5xl md:text-6xl text-primary tracking-tight mb-4">Curated Inquiries</h1>
+          <h1 className="font-headline text-5xl md:text-6xl text-primary tracking-tight mb-4">FAQ</h1>
           <p className="font-body text-secondary max-w-lg mx-auto leading-relaxed">
             Seeking clarity on our artisanal rituals and earthen ingredients. A guide to the Aethravia experience.
           </p>
@@ -95,9 +95,9 @@ export default function FAQ() {
           <div className="relative">
             <div className="bg-surface-container-high w-full aspect-[4/5] rounded-lg overflow-hidden shadow-sm">
               <img 
-                alt="Artisanal burning candles with natural herbs" 
+                alt="Artisanal clay pots and fresh botanical ingredients" 
                 className="w-full h-full object-cover opacity-90 mix-blend-multiply" 
-                src="/images/artisanal-candles.png"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWj_gyBFX7jwujzY3WBQGc7inGam6YkBv_u5onlftBUcD6ubX5wb4oUn29bP29D59-rp0nhoj9vfwH4zs4xQbyo_R-ZBH0Y55yR6DYjjxqnoVIZgprcsVg85NTD1FSZHsQVKUxLByJ-CLMaSe4j7V_0EDDN19yYbiFSS_FiU_-HP2-KCXuATQqJxDs5LKgBWa9DFI-yP5o1NF1HtdNl-xMz7nuqz_dsPLZO-edIAzHZk6ukhIdOdxTrhBj2YFYaWBUp6yV9vYobIS3"
               />
             </div>
             <div className="absolute -bottom-8 -right-8 bg-surface-container-lowest p-8 shadow-sm max-w-[240px]">

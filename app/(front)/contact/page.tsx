@@ -2,7 +2,6 @@ import { Metadata } from 'next';
 import React from 'react';
 import ContactFAQ from './ContactFAQ';
 import ContactForm from './ContactForm';
-import { brandEmail, shopAddress, supportPhone, businessHours } from '@/lib/brand';
 
 export const metadata: Metadata = {
   title: 'Contact Us | Aethravia',
@@ -24,7 +23,7 @@ export default function ContactPage() {
       <header className="max-w-4xl mx-auto text-center px-6 mb-24 relative z-10">
         <h1 className="text-5xl md:text-7xl font-headline tracking-tight text-primary mb-6">Contact Us</h1>
         <p className="text-lg md:text-xl font-body text-secondary max-w-2xl mx-auto leading-relaxed">
-          Whether you seek guidance on a personalized ritual or have a question about our artisanal ingredients, our archive is open to you.
+          Have questions about our products, orders, collaborations, or skincare journey? We'd love to hear from you. Our team typically responds within 24 hours.
         </p>
       </header>
 
@@ -38,7 +37,7 @@ export default function ContactPage() {
             </div>
             <h3 className="text-xl font-headline text-primary mb-2">Email Us</h3>
             <p className="text-secondary font-body text-sm mb-4">Expect a response within 24 hours.</p>
-            <a className="text-on-surface font-semibold font-body hover:text-primary transition-colors underline decoration-outline-variant underline-offset-4 block" href={`mailto:${brandEmail}`}>{brandEmail}</a>
+            <a className="text-on-surface font-semibold font-body hover:text-primary transition-colors underline decoration-outline-variant underline-offset-4 block" href="mailto:aethravia@gmail.com">aethravia@gmail.com</a>
           </div>
           {/* Card 2 */}
           <div className="bg-surface-container-low p-8 transition-all hover:bg-surface-container-high group rounded-lg shadow-sm">
@@ -47,24 +46,25 @@ export default function ContactPage() {
             </div>
             <h3 className="text-xl font-headline text-primary mb-2">Call Us</h3>
             <p className="text-secondary font-body text-sm mb-4">Mon-Fri, 9am to 6pm IST.</p>
-            <a className="text-on-surface font-semibold font-body hover:text-primary transition-colors underline decoration-outline-variant underline-offset-4 block" href={`tel:${supportPhone.replace(/[^0-9+]/g, '')}`}>{supportPhone}</a>
+            <a className="text-on-surface font-semibold font-body hover:text-primary transition-colors underline decoration-outline-variant underline-offset-4 block" href="tel:+910000000000">+91 (800) 123-4567</a>
           </div>
           {/* Card 3 */}
           <div className="bg-surface-container-low p-8 transition-all hover:bg-surface-container-high group rounded-lg shadow-sm">
             <div className="w-12 h-12 bg-secondary-container flex items-center justify-center rounded-full mb-6 text-on-secondary-container">
               <span className="material-symbols-outlined">location_on</span>
             </div>
-            <h3 className="text-xl font-headline text-primary mb-2">Visit Us</h3>
+            <h3 className="text-xl font-headline text-primary mb-2">Head Office</h3>
             <p className="text-secondary font-body text-sm mb-4">Our Flagship Heritage Store.</p>
-            <span className="text-on-surface font-semibold font-body block text-sm">{shopAddress}</span>
+            <span className="text-on-surface font-semibold font-body block text-xs">H.No.46, Mohalla Mohammad Wasil Near Hadri Masjid, Pilibhit, UP-262001 (India)</span>
           </div>
           {/* Card 4 */}
           <div className="bg-surface-container-low p-8 transition-all hover:bg-surface-container-high group rounded-lg shadow-sm">
             <div className="w-12 h-12 bg-secondary-container flex items-center justify-center rounded-full mb-6 text-on-secondary-container">
               <span className="material-symbols-outlined">schedule</span>
             </div>
-            <h3 className="text-xl font-headline text-primary mb-2">Business Hours</h3>
-            <p className="text-secondary font-body text-sm mb-4 relative z-10 bg-transparent">{businessHours}</p>
+            <h3 className="text-xl font-headline text-primary mb-2">Customer Support Hours</h3>
+            <p className="text-secondary font-body text-sm mb-4 relative z-10 bg-transparent">Monday – Saturday</p>
+            <p className="text-on-surface font-semibold font-body">10:00 AM – 6:00 PM IST</p>
           </div>
         </div>
       </section>
@@ -86,16 +86,17 @@ export default function ContactPage() {
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkM-XH6eAU4fbtGisH8wyMM-CSLVWmXYq25f-5ia_BXHvuBguj7gVYTF3ZMmOGR1ftoaX481Qau0MttcJg_sDJcqkcYCbGzOJa187ZXeWiRICIXq1NpIpueYqEhxm9dNXZ3HwjBZvsUHYbegImWZjPXYWEa8y8rZul9fm5gbsWw-wfsYv6o_ryU0M3h8lm1ToioNmkIah9ngwUQJHqg0TfV4VElJUWUdacgidETMMc3Li3HVbcNGmgDKqYa6QGCI9SAnkq8_Jad1f-"
             />
             <div className="absolute inset-0 bg-primary/5"></div>
-            <div className="absolute bottom-6 left-6 bg-surface p-4 shadow-xl rounded max-w-[80%]">
+            <div className="absolute bottom-6 left-6 bg-surface p-4 shadow-xl rounded">
               <p className="font-headline text-primary text-lg">Aethravia Flagship</p>
-              <p className="text-sm font-body text-secondary line-clamp-2">{shopAddress}</p>
+              <p className="text-sm font-body text-secondary">Janpath Road, New Delhi</p>
             </div>
           </div>
           <div className="space-y-8 pl-4 border-l-2 border-primary/20">
             <div>
               <h4 className="font-headline text-xl text-primary mb-2">Physical Address</h4>
-              <p className="text-secondary font-body leading-relaxed text-sm">
-                {shopAddress}
+              <p className="text-secondary font-body leading-relaxed">
+                H.No.46, Mohalla Mohammad Wasil<br/>
+                Near Hadri Masjid, Pilibhit, Uttar Pradesh-262001 (India)
               </p>
             </div>
             <div>
@@ -150,7 +151,7 @@ export default function ContactPage() {
             <h2 className="text-3xl font-headline text-on-primary-container mb-2">Need Immediate Help?</h2>
             <p className="text-on-primary-container/80 font-body">Our concierge is standing by to assist with urgent order issues.</p>
           </div>
-          <a className="relative z-10 px-10 py-4 bg-on-primary-container text-primary font-bold tracking-widest uppercase text-xs hover:bg-surface transition-all flex items-center gap-3 shadow-xl rounded" href={`tel:${supportPhone.replace(/[^0-9+]/g, '')}`}>
+          <a className="relative z-10 px-10 py-4 bg-on-primary-container text-primary font-bold tracking-widest uppercase text-xs hover:bg-surface transition-all flex items-center gap-3 shadow-xl rounded" href="tel:+911234567890">
             <span className="material-symbols-outlined text-sm">phone_in_talk</span>
             Call Now
           </a>

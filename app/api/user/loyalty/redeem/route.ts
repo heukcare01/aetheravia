@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
   user.loyaltyPoints = before - points;
   user.loyaltyHistory.push({ type: 'redeem', points, description, orderId, date: new Date(), source, txnId });
 
-  const oldTier = user.loyaltyTier || 'Bronze';
+  const oldTier = user.loyaltyTier || 'Novice';
   const { newTier, changed } = evaluateTierChange(oldTier, user.loyaltyPoints);
   user.loyaltyTier = newTier;
   await user.save();

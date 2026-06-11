@@ -1,133 +1,84 @@
-# 🚀 Vercel Deployment Guide — Aethravia Store
+# 🚀 Render Deployment Guide (Aethravia Store)
 
-This guide describes how to deploy the **Aethravia Store** Next.js app to **Vercel**.
+This guide describes how to deploy the **Aethravia Store** Next.js app to **Render** using the repo’s Blueprint file.
 
----
+## ✅ What the repo already includes
 
-## ✅ What the Repo Includes
+- Blueprint: [render.yaml](render.yaml)
+- Build command (Render): `npm install --legacy-peer-deps && npm run build`
+- Start command (Render): `npm start` (binds to Render’s `PORT`)
 
-- Framework: Next.js 16 (App Router)
-- Database: MongoDB Atlas (cloud-hosted, no server needed)
-- Analytics: Vercel Analytics (`@vercel/analytics`)
-- Build: Standard Next.js build (`npm run build`)
-
----
-
-## 🏗️ Architecture
+## 🏗️ Architecture (Render)
 
 ```mermaid
 graph TD
-    Client["Browser"] --> Vercel["Vercel Edge Network (Next.js)"]
-    Vercel --> Mongo["MongoDB Atlas"]
-    Vercel --> Cloudinary["Cloudinary (Media)"]
-    Vercel --> Razorpay["Razorpay (Payments)"]
+    Client["Browser"] --> Render["Render Web Service (Next.js)"]
+    Render --> Mongo["MongoDB Atlas"]
 ```
 
----
+## 1) Create the Render service (Blueprint)
 
-## 1) Import Repository into Vercel
+1. Push the repository to GitHub/GitLab.
+2. In Render Dashboard:
+   - **New** → **Blueprint**
+   - Select your repo
+   - Render will read `render.yaml` and create the web service
 
-1. Go to [vercel.com](https://vercel.com) → **Add New Project**
-2. Import from GitHub: `heukcare01/aethravia`
-3. Framework: **Next.js** (auto-detected)
-4. Do NOT change the build command — leave as default (`npm run build`)
+## 2) Set required environment variables
 
----
+In [render.yaml](render.yaml), any env var with `sync: false` must be set in Render.
 
-## 2) Set Environment Variables in Vercel
+Minimum required:
 
-Go to: **Project → Settings → Environment Variables**
+- `MONGODB_URI`
+- `NEXTAUTH_SECRET`
+- `NEXTAUTH_URL` (your Render URL or your custom domain URL)
 
-### Required (App will not start without these)
+Commonly required (depending on enabled features):
 
-| Variable | Value |
-|----------|-------|
-| `MONGODB_URI` | `mongodb+srv://heukcare_db_user:...@cluster0.bghvakr.mongodb.net/aethravia` |
-| `NEXTAUTH_SECRET` | A strong random 32+ char secret (generate via `openssl rand -base64 32`) |
+- Cloudinary uploads: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`
+- Payments (Razorpay): `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `NEXT_PUBLIC_RAZORPAY_KEY_ID`
+- Email: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`
 
-### Authentication
+## 3) MongoDB Atlas network access (important)
 
-| Variable | Value |
-|----------|-------|
-| `NEXTAUTH_URL` | Your production URL e.g. `https://aethravia.vercel.app` |
-| `GOOGLE_CLIENT_ID` | From Google Cloud Console |
-| `GOOGLE_CLIENT_SECRET` | From Google Cloud Console |
+If you use MongoDB Atlas, Atlas must allow connections from Render.
 
-### Payments
-
-| Variable | Value |
-|----------|-------|
-| `RAZORPAY_KEY_ID` | Your Razorpay Key ID (live) |
-| `RAZORPAY_KEY_SECRET` | Your Razorpay Key Secret |
-| `NEXT_PUBLIC_RAZORPAY_KEY_ID` | Same as `RAZORPAY_KEY_ID` (public) |
-
-### Media
-
-| Variable | Value |
-|----------|-------|
-| `CLOUDINARY_CLOUD_NAME` | Your Cloudinary cloud name |
-| `CLOUDINARY_API_KEY` | Your Cloudinary API key |
-| `CLOUDINARY_API_SECRET` | Your Cloudinary API secret |
-
-### Branding (Public)
-
-| Variable | Value |
-|----------|-------|
-| `NEXT_PUBLIC_BRAND_NAME` | `Aethravia` |
-| `NEXT_PUBLIC_BRAND_TAGLINE` | `Embrace the earth, unveil your personality` |
-| `NEXT_PUBLIC_SUPPORT_EMAIL` | `support@aethravia.com` |
-| `NEXT_PUBLIC_SUPPORT_PHONE` | Your support number |
-
----
-
-## 3) MongoDB Atlas Network Access
-
-In Atlas → Network Access → Add IP:
-- Add `0.0.0.0/0` (Allow All) — simplest option for Vercel serverless which uses dynamic IPs
-
----
+- If you can’t use a stable IP allowlist, the simplest (but least restrictive) option is to allow `0.0.0.0/0` in Atlas Network Access.
+- Also confirm your DB user has the correct permissions for the target database.
 
 ## 4) Deploy
 
-1. Click **Deploy** in Vercel
-2. Watch build logs for:
-   - Successful build
-   - Static page generation completing
-3. Health check: `GET /api/health`
+1. In Render, trigger a deploy.
+2. Watch **Logs** for:
+   - a successful build
+   - the app starting (listening on Render `PORT`)
 
----
+Health check you can use after deploy:
 
-## 5) Database Seeding (Optional)
+- `GET /api/health`
 
-Run locally against production DB:
-```bash
-npm run sync-seed
-```
-This will upsert sample users, products, and active coupons into MongoDB Atlas.
+## 5) Seeding (optional)
 
----
+Render does **not** automatically run seeding scripts during deploy.
 
-## 6) Custom Domain (Optional)
+Options:
 
-In Vercel → Project → Domains → Add your domain.
-Then update `NEXTAUTH_URL` to `https://your-domain.com`.
+- Run locally against production `MONGODB_URI`: `npm run sync-seed`
+- If your Render plan supports Shell: run `npm run sync-seed` in the service shell
 
----
+## 6) Custom domain (optional)
 
-## ⚠️ Known Limitation: WebSockets on Vercel
+If you attach a custom domain in Render:
 
-Vercel is a **serverless** platform. Socket.IO's persistent WebSocket connections **do not work** on Vercel serverless functions.
-
-- **Workaround**: Use [Pusher](https://pusher.com), [Ably](https://ably.com), or [Socket.IO hosted](https://socket.io/docs/v4/hosting-on-vercel/) with a separate stateful server for real-time order tracking.
-- The rest of the app (shop, checkout, admin) works fully on Vercel.
-
----
+- Update `NEXTAUTH_URL` to `https://your-domain.com`
+- If you use `AUTH_URL` in your setup, set it to the same value as well
 
 ## Troubleshooting
 
-| Problem | Fix |
-|---------|-----|
-| Build fails with DB error | Ensure `MONGODB_URI` is set in Vercel env vars |
-| Auth redirect broken | Verify `NEXTAUTH_URL` matches your production domain exactly |
-| Google OAuth fails | Add your Vercel URL to Google OAuth authorized redirect URIs |
-| Payment fails | Ensure Razorpay live keys are used (not `rzp_test_`) |
+- Build fails with DB connection errors:
+  - Ensure `MONGODB_URI` is set in Render
+  - Ensure Atlas Network Access allows Render
+- Auth callback issues (NextAuth):
+  - Verify `NEXTAUTH_URL` matches the public site URL exactly (https + domain)
+  - Verify `NEXTAUTH_SECRET` is set

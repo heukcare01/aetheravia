@@ -11,18 +11,16 @@ import UserModel from './models/UserModel';
 export const config = {
   trustHost: true, // Allow all hosts in production
   debug: process.env.AUTH_DEBUG === 'true',
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || 'fallback-secret-for-render-deployment-please-set-proper-secret',
   basePath: '/api/auth',
+  // Add explicit URL configuration for Render
   ...(process.env.NEXTAUTH_URL && { url: process.env.NEXTAUTH_URL }),
   providers: [
-    // Only register Google provider if credentials are configured
-    ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
-      ? [GoogleProvider({
-          clientId: process.env.GOOGLE_CLIENT_ID,
-          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          allowDangerousEmailAccountLinking: true,
-        })]
-      : []),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || 'placeholder',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'placeholder',
+      allowDangerousEmailAccountLinking: true, // Allow linking Google email to existing credentials account
+    }),
     CredentialsProvider({
       credentials: {
         email: {

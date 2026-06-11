@@ -75,7 +75,7 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
   
   // Mock data for ritual intelligence
   const [skinConstitution, setSkinConstitution] = useState(user?.personalization?.tags?.includes('Sensitive') ? 'Sensitive' : 'Combination');
-  const [olfactoryAffinity, setOlfactoryAffinity] = useState(['Oud', 'Sandalwood', 'Vetiver']);
+  const [olfactoryAffinity, setOlfactoryAffinity] = useState(['Oud', 'Rose', 'Vetiver']);
 
   useEffect(() => {
     setName(user?.name || "");
@@ -140,7 +140,7 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
             <p className="font-body text-secondary text-sm flex items-center gap-2 bg-primary/5 px-4 py-1.5 rounded-full border border-primary/10">
               <ShieldCheck size={14} className="text-primary" />
               <span className="font-bold tracking-widest uppercase text-[10px]">
-                {user?.loyaltyTier || 'Bronze'} Tier Member • Established {user?.createdAt ? new Date(user.createdAt).getFullYear() : '2024'}
+                {user?.loyaltyTier || 'Novice'} Tier Member • Established {user?.createdAt ? new Date(user.createdAt).getFullYear() : '2024'}
               </span>
             </p>
             <div className="flex items-center gap-2 text-primary/60 text-xs font-medium">
@@ -544,7 +544,7 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
             { name: 'Vetiver Root Mist', price: 1200, category: 'Cooling Hydration', image: '/images/products/spa-arrangement-with-cremes.jpg' },
             { name: 'Oud & Saffron Elixir', price: 3450, category: 'Nocturnal Recovery', image: '/images/products/organic-cosmetic-product-with-dreamy-aesthetic-fresh-background.jpg', mt: true },
             { name: 'Marigold Petal Mask', price: 2800, category: 'Soothing Brightness', image: '/images/products/natural-cosmetic-products-arrangement.jpg' },
-            { name: 'Sandalwood Paste', price: 1950, category: 'Earthen Purification', image: '/images/products/serum-bottle-with-yellow-background.jpg', mt: true }
+            { name: 'Reetha Paste', price: 1950, category: 'Earthen Purification', image: '/images/products/serum-bottle-with-yellow-background.jpg', mt: true }
           ].map((item, i) => (
             <motion.div 
               key={i} 

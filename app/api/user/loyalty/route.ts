@@ -36,7 +36,7 @@ export async function GET() {
     
     // Canonical values
     const points = (user as any).loyaltyPoints || 0;
-    const tier = (user as any).loyaltyTier || 'Bronze';
+    const tier = (user as any).loyaltyTier || 'Novice';
     const { nextTierPoints, pointsToNextTier } = getProgress(points);
 
     const loyaltyHistory = (user as any).loyaltyHistory || [];

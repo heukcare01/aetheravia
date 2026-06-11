@@ -2,6 +2,8 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Output configuration for Render
+
   staticPageGenerationTimeout: 600,
   
   // Handle large external packages like mongoose
@@ -63,11 +65,11 @@ const nextConfig = {
     ];
     const cspProd = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' checkout.razorpay.com https://va.vercel-scripts.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' checkout.razorpay.com",
       "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
       "font-src 'self' fonts.gstatic.com",
       "img-src 'self' data: blob: res.cloudinary.com lh3.googleusercontent.com",
-      "connect-src 'self' api.razorpay.com lumberjack.razorpay.com https://api.cloudinary.com https://vitals.vercel-insights.com https://vitals.vercel-analytics.com",
+      "connect-src 'self' api.razorpay.com lumberjack.razorpay.com https://api.cloudinary.com",
       "frame-src checkout.razorpay.com api.razorpay.com",
       "object-src 'none'",
       "base-uri 'self'",
@@ -77,11 +79,11 @@ const nextConfig = {
     ].join('; ');
     const cspDev = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: data: https://vercel.live checkout.razorpay.com https://va.vercel-scripts.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: data: https://vercel.live checkout.razorpay.com",
       "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
       "font-src 'self' fonts.gstatic.com",
       "img-src 'self' data: blob: res.cloudinary.com lh3.googleusercontent.com",
-      "connect-src 'self' ws: wss: http://localhost:* https://vercel.live api.razorpay.com lumberjack.razorpay.com https://api.cloudinary.com https://vitals.vercel-insights.com https://vitals.vercel-analytics.com",
+      "connect-src 'self' ws: wss: http://localhost:* https://vercel.live api.razorpay.com lumberjack.razorpay.com https://api.cloudinary.com",
       "frame-src 'self' checkout.razorpay.com api.razorpay.com",
       "worker-src 'self' blob:",
       "object-src 'none'",

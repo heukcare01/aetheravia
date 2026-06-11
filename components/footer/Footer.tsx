@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Instagram, Share2, Globe, ArrowRight } from 'lucide-react';
-import { brandEmail, companyName, shopAddress, manufacturerAddress } from '@/lib/brand';
+import { brandEmail, shopAddress } from '@/lib/brand';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -17,23 +17,30 @@ const Footer = () => {
           
           {/* Column 1: Brand Story & Socials */}
           <div className="space-y-8">
-            <Link href="/" className="flex items-center space-x-3 group">
-              <div className="relative w-12 h-12">
+            <Link href="/" className="flex items-center group">
+              <div className="relative w-10 h-10 md:w-12 md:h-12">
                 <Image
-                  src="/images/icon-192.png"
+                  src="/images/logo.png"
                   alt="Aethravia Logo"
                   fill
                   sizes="48px"
                   className="object-contain"
                 />
               </div>
-              <span className="text-2xl font-serif italic text-primary">Aethravia</span>
+              <div className="relative h-8 w-40 md:h-10 md:w-48">
+                <Image
+                  src="/images/logo-text.png"
+                  alt="Aethravia Logo Text"
+                  fill
+                  className="object-contain"
+                />
+              </div>
             </Link>
 
             <div className="space-y-4">
               <h2 className="text-xl font-serif tracking-tight text-primary">Our Heritage</h2>
               <p className="text-sm font-medium leading-relaxed text-secondary opacity-90">
-                Aethravia is built on the ancient wisdom of Multani Mitti, Chandan, and Reetha. 
+                Aethravia is built on the ancient wisdom of Multani Mitti and Reetha. 
                 Inspired by the earth, crafted for the soul.
               </p>
             </div>
@@ -41,7 +48,7 @@ const Footer = () => {
             {/* Social Area */}
             <div className="flex items-center space-x-6 pt-4">
               <a 
-                href="https://www.instagram.com/Aethravia/?hl=en" 
+                href="https://www.instagram.com/_aethravia/?hl=en" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-secondary hover:text-primary transition-colors flex items-center space-x-2 group"
@@ -101,33 +108,39 @@ const Footer = () => {
           <div className="flex flex-col space-y-6">
             <h3 className="text-xs font-bold tracking-[0.2em] uppercase text-primary">Assistance</h3>
             <nav className="flex flex-col space-y-4">
-              <Link href="/returns" className="text-sm font-medium text-secondary hover:text-primary transition-colors">Shipping & Returns</Link>
+              <Link href="/shipping" className="text-sm font-medium text-secondary hover:text-primary transition-colors">Shipping Policy</Link>
+              <Link href="/returns" className="text-sm font-medium text-secondary hover:text-primary transition-colors">Returns & Refund Policy</Link>
               <Link href="/privacy" className="text-sm font-medium text-secondary hover:text-primary transition-colors">Privacy Policy</Link>
-              <Link href="/terms" className="text-sm font-medium text-secondary hover:text-primary transition-colors">Terms of Service</Link>
+              <Link href="/terms" className="text-sm font-medium text-secondary hover:text-primary transition-colors">Terms & Conditions</Link>
+              <Link href="/cookies" className="text-sm font-medium text-secondary hover:text-primary transition-colors">Cookie Policy</Link>
               <Link href="/faq" className="text-sm font-medium text-secondary hover:text-primary transition-colors uppercase tracking-widest text-[11px]">FAQ</Link>
               <Link href={`mailto:${brandEmail}`} className="pt-2 text-xs font-bold text-primary underline underline-offset-4">{brandEmail}</Link>
             </nav>
           </div>
         </div>
 
-        {/* Company & Address Information */}
-        <div className="mt-16 pt-10 border-t border-primary/10 grid grid-cols-1 md:grid-cols-2 gap-8 text-secondary/80 text-xs leading-relaxed">
+        {/* Company Details */}
+        <div className="mt-16 pt-10 pb-10 border-t border-primary/10 grid grid-cols-1 md:grid-cols-2 gap-12">
           <div>
-            <h4 className="font-bold text-primary mb-2 uppercase tracking-wider text-[10px]">Head Office</h4>
-            <p className="font-medium">{companyName}</p>
-            <p>{shopAddress}</p>
+            <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#b25a24] mb-3">Head Office</h4>
+            <div className="text-xs text-secondary/80 leading-relaxed font-medium space-y-1">
+              <p>Heuk care Private limited</p>
+              <p>H.No.46, Mohalla Mohammad Wasil Near Hadri Masjid, Pilibhit, Uttar Pradesh-262001 (India)</p>
+            </div>
           </div>
           <div>
-            <h4 className="font-bold text-primary mb-2 uppercase tracking-wider text-[10px]">Manufacturer</h4>
-            <p>{manufacturerAddress}</p>
+            <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#b25a24] mb-3">Manufacturer</h4>
+            <div className="text-xs text-secondary/80 leading-relaxed font-medium space-y-1">
+              <p>Sage Apothecary PVT. LTD., Plot No. 516, Pace City-II, Sector-37, Gurugram-122001 (Haryana)</p>
+            </div>
           </div>
         </div>
 
         {/* Minimalist Legal Bottom Bar */}
-        <div className="mt-20 pt-10 border-t border-primary/10">
+        <div className="pt-10 border-t border-primary/10">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0 text-center md:text-left">
             <p className="text-[10px] font-medium text-secondary/60 tracking-wider">
-              © {currentYear} Aethravia ARTISANAL HERITAGE. ALL RIGHTS RESERVED.
+              &copy; {currentYear} Aethravia. All Rights Reserved.
             </p>
             
             <div className="flex items-center space-x-10">

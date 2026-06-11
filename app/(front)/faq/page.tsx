@@ -11,13 +11,13 @@ const faqList = [
   },
   {
     num: "02",
-    question: "How do you ensure the purity of Chandan and Reetha?",
-    answer: "Our Sandalwood (Chandan) is sustainably harvested from protected groves in Karnataka, while our Soapnut (Reetha) is wild-crafted from the Himalayan foothills. Each batch undergoes rigorous testing for mineral density and botanical purity."
+    question: "How do you ensure the purity of Reetha and Multani Mitti?",
+    answer: "Our Multani Mitti is sourced from pure mineral-rich beds, while our Soapnut (Reetha) is wild-crafted from the Himalayan foothills. Each batch undergoes rigorous testing for mineral density and botanical purity."
   },
   {
     num: "03",
     question: "The 'Essential Three' ritual instructions.",
-    answer: "Begin with our Reetha infusion to cleanse, followed by the Multani-Chandan mask to detoxify. Conclude with a splash of cold spring water. We recommend this sequence twice weekly for restorative balance."
+    answer: "Begin with our Reetha infusion to cleanse, followed by the Multani mask to detoxify. Conclude with a splash of cold spring water. We recommend this sequence twice weekly for restorative balance."
   },
   {
     num: "04",
@@ -43,7 +43,7 @@ export default function FAQPage() {
       {/* Hero Section */}
       <header className="max-w-screen-xl mx-auto px-8 mb-24 md:flex items-end justify-between border-b border-outline-variant/20 pb-16">
         <div className="md:max-w-2xl">
-          <h1 className="text-6xl md:text-7xl font-headline text-primary mb-6 tracking-tight">Curated Inquiries</h1>
+          <h1 className="text-6xl md:text-7xl font-headline text-primary mb-6 tracking-tight">FAQ</h1>
           <p className="text-xl font-body text-on-surface-variant leading-relaxed max-w-lg">
             Seeking clarity on our artisanal rituals and earthen ingredients. A guide to our heritage-focused apothecary.
           </p>

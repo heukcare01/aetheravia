@@ -199,7 +199,7 @@ export function generateCancellationEmailTemplate(data: OrderNotificationData): 
             <h3>🤝 Need Help?</h3>
             <p>If you have any questions about your cancellation or need assistance with a new order, our customer support team is here to help:</p>
             <ul>
-              <li>📧 Email: curators@Aethravia.com</li>
+              <li>📧 Email: aethravia@gmail.com</li>
               <li>📞 Phone: +91-XXXX-XXXXXX</li>
               <li>💬 Live Chat: Available on our website</li>
             </ul>
@@ -252,7 +252,7 @@ export function generateCancellationEmailTemplate(data: OrderNotificationData): 
     `}
 
     Need Help?
-    Email: curators@Aethravia.com
+    Email: aethravia@gmail.com
     Phone: +91-XXXX-XXXXXX
 
     Thank you for choosing ${brandName}.
