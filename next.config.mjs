@@ -113,6 +113,14 @@ const nextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      {
+        source: '/storage/:path*',
+        destination: 'http://minio:9000/aethravia/:path*',
+      },
+    ];
+  },
 };
 
 export default nextConfig;
