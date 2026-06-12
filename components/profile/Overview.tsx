@@ -77,9 +77,6 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
   const { data: recommendedData } = useSWR('/api/products/search?sort=rating', fetcher);
   const recommendedProducts = recommendedData?.products?.slice(0, 4) || [];
   
-  // Mock data for ritual intelligence
-  const [skinConstitution, setSkinConstitution] = useState(user?.personalization?.tags?.includes('Sensitive') ? 'Sensitive' : 'Combination');
-  const [olfactoryAffinity, setOlfactoryAffinity] = useState(['Oud', 'Rose', 'Vetiver']);
 
   useEffect(() => {
     setName(user?.name || "");
@@ -290,67 +287,7 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
             </div>
           </section>
 
-          {/* Interactive Skin Profile / Ritual Intelligence */}
-          <section className="bg-primary/[0.02] rounded-3xl p-10 border border-primary/10 relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-8 text-primary/10 rotate-12">
-              <Zap size={120} />
-            </div>
-            <div className="relative z-10">
-              <h2 className="font-headline text-2xl font-bold text-primary tracking-tight mb-10 italic">Ritual Intelligence</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <div>
-                  <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-secondary mb-6 flex items-center gap-2">
-                    <Activity size={12} />
-                    Skin Constitution
-                  </h3>
-                  <div className="flex flex-wrap gap-3">
-                    {['Sensitive', 'Combination', 'Dry', 'Oily'].map(type => (
-                      <button 
-                        key={type}
-                        onClick={() => setSkinConstitution(type)}
-                        className={`px-6 py-2.5 rounded-xl text-xs font-bold tracking-widest transition-all ${
-                          skinConstitution === type 
-                            ? 'bg-primary text-on-primary shadow-lg shadow-primary/20 scale-105' 
-                            : 'border border-primary/20 text-primary hover:bg-primary/5'
-                        }`}
-                      >
-                        {type}
-                      </button>
-                    ))}
-                  </div>
-                  <p className="mt-6 text-[10px] text-secondary leading-relaxed uppercase tracking-[0.2em] font-medium italic opacity-60">
-                    Precision selected for: Autumn / Winter Cycle
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-secondary mb-6 flex items-center gap-2">
-                    <Sparkles size={12} />
-                    Olfactory Affinity
-                  </h3>
-                  <div className="flex flex-wrap gap-2.5">
-                    {olfactoryAffinity.map(scent => (
-                      <span key={scent} className="px-4 py-2 bg-surface-container-high/60 backdrop-blur-sm text-on-surface-variant rounded-lg text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 group cursor-pointer hover:bg-primary-fixed transition-colors">
-                        {scent} <span className="opacity-30 group-hover:opacity-100 transition-opacity">×</span>
-                      </span>
-                    ))}
-                    <button className="px-4 py-2 border border-dashed border-primary/30 text-primary/60 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:border-primary hover:text-primary transition-all flex items-center gap-2">
-                      <Plus size={12} /> Add Scent
-                    </button>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-12 pt-8 border-t border-primary/10 flex items-center gap-6">
-                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shadow-inner">
-                  <Activity size={24} />
-                </div>
-                <p className="text-sm italic text-primary/70 font-medium leading-relaxed max-w-lg">
-                  Synchronizing your preferences dynamically refines the <span className="text-primary font-bold">Heritage Vault</span> specifically for your unique constitution.
-                </p>
-              </div>
-            </div>
-          </section>
-        </div>
+
 
         {/* Right Side: Sidebar Stats & Quick Reorder */}
         <div className="lg:col-span-4 space-y-10">
@@ -361,36 +298,17 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
               <TrendingUp size={160} />
             </div>
             <div className="relative z-10">
-              <h2 className="font-headline text-xl font-bold mb-8 italic">Ritual Consistency</h2>
+              <h2 className="font-headline text-xl font-bold mb-8 italic">Archive Statistics</h2>
               <div className="space-y-8">
                 <div className="flex justify-between items-end">
                   <div>
-                    <p className="text-5xl font-headline font-bold">14</p>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.3em] opacity-80 mt-1">Current Streak (Days)</p>
+                    <p className="text-5xl font-headline font-bold">{orders?.length || 0}</p>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.3em] opacity-80 mt-1">Total Rituals</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-headline font-bold">82%</p>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.3em] opacity-80 mt-1">Monthly Goal</p>
+                    <p className="text-2xl font-headline font-bold">{user?.loyaltyPoints || 0}</p>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.3em] opacity-80 mt-1">Loyalty Points</p>
                   </div>
-                </div>
-                <div className="grid grid-cols-7 gap-1.5">
-                  {[1, 1, 1, 1, 0, 1, 1].map((active, i) => (
-                    <div 
-                      key={i} 
-                      className={`h-10 rounded-lg transition-all duration-500 hover:scale-110 ${
-                        active ? 'bg-white shadow-lg' : 'bg-white/20'
-                      }`}
-                    ></div>
-                  ))}
-                </div>
-                <div className="p-5 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Award size={18} />
-                    <p className="text-xs font-bold uppercase tracking-[0.2em]">Next Reward</p>
-                  </div>
-                  <p className="text-sm opacity-90 leading-relaxed font-medium">
-                    6 more ritual cycles until your <span className="font-bold underline decoration-2 underline-offset-4">Hand-Carved Soap Stone Tray</span> is unlocked.
-                  </p>
                 </div>
               </div>
             </div>
@@ -538,7 +456,7 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
           <span className="font-bold text-[10px] uppercase tracking-[0.4em] text-primary mb-4 block">Evolved Selection</span>
           <h2 className="font-headline text-5xl font-bold text-on-surface tracking-tighter leading-tight italic">Curated for Your Heritage</h2>
           <p className="mt-6 text-on-surface-variant font-body text-xl max-w-xl leading-relaxed opacity-80">
-            Intelligently synchronized based on your <span className="text-primary font-bold italic underline decoration-primary/20 decoration-2 underline-offset-8">{skinConstitution} Constitution</span> and affinity for earthen rituals.
+            Intelligently synchronized based on your recent activity and affinity for earthen rituals.
           </p>
         </div>
         
