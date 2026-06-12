@@ -2,7 +2,7 @@ import { S3Client } from '@aws-sdk/client-s3';
 
 // Validate environment variables
 const MINIO_ENDPOINT = process.env.MINIO_ENDPOINT || 'http://localhost:9010';
-const MINIO_INTERNAL_ENDPOINT = process.env.NODE_ENV === 'production' ? 'http://aethravia_minio:9000' : 'http://localhost:9010';
+const MINIO_INTERNAL_ENDPOINT = process.env.NODE_ENV === 'production' ? 'http://minio:9000' : 'http://localhost:9010';
 const MINIO_ACCESS_KEY = process.env.MINIO_ACCESS_KEY || 'admin';
 const MINIO_SECRET_KEY = process.env.MINIO_SECRET_KEY || 'securepassword123';
 const MINIO_BUCKET_NAME = process.env.MINIO_BUCKET_NAME || 'aethravia';
