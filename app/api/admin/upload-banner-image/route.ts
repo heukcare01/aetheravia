@@ -1,11 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { v2 as cloudinary } from 'cloudinary';
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { s3Client, BUCKET_NAME, getPublicUrl } from '@/lib/s3Client';
 
 export const runtime = 'nodejs'; // Ensure Node.js runtime for file handling
 
@@ -19,20 +14,23 @@ export async function POST(req: NextRequest) {
   // Convert file to buffer
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
+  
+  const sanitizedName = file.name.replace(/\.[^/.]+$/, "").replace(/[^a-z0-9]/gi, "_").toLowerCase();
+  const fileKey = `banners/${Date.now()}-${sanitizedName}`;
 
   try {
-    const uploadResult = await new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream(
-        { folder: 'banners' },
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        }
-      ).end(buffer);
+    const command = new PutObjectCommand({
+      Bucket: BUCKET_NAME,
+      Key: fileKey,
+      Body: buffer,
+      ContentType: file.type || 'application/octet-stream',
     });
-    // @ts-ignore
-    return NextResponse.json({ url: uploadResult.secure_url });
+
+    await s3Client.send(command);
+
+    const secureUrl = getPublicUrl(fileKey);
+    return NextResponse.json({ url: secureUrl });
   } catch (err) {
-    return NextResponse.json({ error: 'Cloudinary upload failed', details: err }, { status: 500 });
+    return NextResponse.json({ error: 'MinIO upload failed', details: err }, { status: 500 });
   }
 }

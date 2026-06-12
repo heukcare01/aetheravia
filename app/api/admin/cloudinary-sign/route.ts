@@ -1,40 +1,34 @@
 import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { s3Client, BUCKET_NAME, getPublicUrl } from '@/lib/s3Client';
 
 export const POST = auth(async (req: any) => {
   if (!req.auth || !req.auth.user?.isAdmin) {
     return NextResponse.json({ message: "unauthorized" }, { status: 401 });
   }
 
-  const { folder, public_id } = await req.json();
-  const timestamp = Math.floor(Date.now() / 1000);
+  try {
+    const { folder, public_id, fileType } = await req.json();
+    const fileKey = `${folder}/${public_id}`;
 
-  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-  const apiKey = process.env.CLOUDINARY_API_KEY;
-  const apiSecret = process.env.CLOUDINARY_API_SECRET;
+    const command = new PutObjectCommand({
+      Bucket: BUCKET_NAME,
+      Key: fileKey,
+      ContentType: fileType || 'application/octet-stream',
+    });
 
-  if (!cloudName || !apiKey || !apiSecret || 
-      cloudName === 'your_cloud_name' || cloudName === 'unknown' ||
-      apiKey === 'your_api_key' || apiKey === 'unknown' ||
-      apiSecret === 'your_api_secret' || apiSecret === 'unknown') {
-    return NextResponse.json({ 
-      message: "Cloudinary credentials are not configured. Please set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET in your .env file." 
-    }, { status: 500 });
+    const presignedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+    const secure_url = getPublicUrl(fileKey);
+
+    return NextResponse.json({
+      presignedUrl,
+      secure_url,
+      public_id
+    });
+  } catch (error) {
+    console.error('Error generating presigned URL:', error);
+    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
-
-  // Build signature string
-  let paramsToSign = `folder=${folder}&public_id=${public_id}&timestamp=${timestamp}`;
-  const crypto = await import("crypto");
-  const signature = crypto.createHash("sha1")
-    .update(paramsToSign + apiSecret)
-    .digest("hex");
-
-  return NextResponse.json({
-    cloudName,
-    apiKey,
-    timestamp,
-    signature,
-    folder,
-    public_id
-  });
 }) as any;
