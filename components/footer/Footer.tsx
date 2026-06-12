@@ -108,7 +108,7 @@ const Footer = () => {
           <div className="flex flex-col space-y-6">
             <h3 className="text-xs font-bold tracking-[0.2em] uppercase text-primary">Assistance</h3>
             <nav className="flex flex-col space-y-4">
-              <Link href="/shipping" className="text-sm font-medium text-secondary hover:text-primary transition-colors">Shipping Policy</Link>
+              <Link href="/shipping-policy" className="text-sm font-medium text-secondary hover:text-primary transition-colors">Shipping Policy</Link>
               <Link href="/returns" className="text-sm font-medium text-secondary hover:text-primary transition-colors">Returns & Refund Policy</Link>
               <Link href="/privacy" className="text-sm font-medium text-secondary hover:text-primary transition-colors">Privacy Policy</Link>
               <Link href="/terms" className="text-sm font-medium text-secondary hover:text-primary transition-colors">Terms & Conditions</Link>

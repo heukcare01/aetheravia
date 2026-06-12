@@ -301,7 +301,7 @@ const Form = () => {
         </div>
         <div className="flex flex-wrap justify-center gap-8 md:gap-12">
           <Link className="text-secondary hover:text-primary transition-colors" href="/about">Sustainability</Link>
-          <Link className="text-secondary hover:text-primary transition-colors" href="/shipping">Shipping</Link>
+          <Link className="text-secondary hover:text-primary transition-colors" href="/shipping-policy">Shipping</Link>
           <Link className="text-secondary hover:text-primary transition-colors" href="/privacy">Privacy Policy</Link>
           <Link className="text-secondary hover:text-primary transition-colors" href="/terms">Terms</Link>
         </div>
