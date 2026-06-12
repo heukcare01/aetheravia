@@ -7,8 +7,8 @@
 # On Mac: brew tap mongodb/brew && brew install mongodb-database-tools
 # On Ubuntu: sudo apt install mongodb-org-tools
 
-REMOTE_URI="mongodb+srv://heukcare_db_user:D4Jsnep56SHcnK9O@cluster0.bghvakr.mongodb.net/aethravia?appName=Cluster0"
-LOCAL_URI="mongodb://admin:securepassword123@localhost:27018/aethravia?authSource=admin"
+REMOTE_URI="mongodb+srv://heukcare_db_user:D4Jsnep56SHcnK9O@cluster0.bghvakr.mongodb.net/aetheravia?appName=Cluster0"
+LOCAL_URI="mongodb://admin:securepassword123@localhost:27018/aetheravia?authSource=admin"
 DUMP_DIR="./mongo_dump_temp"
 
 echo "========================================="
@@ -27,7 +27,7 @@ else
 fi
 
 echo "2. Restoring data to Local VPS MongoDB container..."
-mongorestore --uri="$LOCAL_URI" --drop "$DUMP_DIR/aethravia"
+mongorestore --uri="$LOCAL_URI" --drop "$DUMP_DIR/aetheravia"
 
 if [ $? -eq 0 ]; then
     echo "✓ Restore completed successfully."
