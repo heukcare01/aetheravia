@@ -42,8 +42,15 @@ export async function POST(req: NextRequest) {
 
     const secureUrl = getPublicUrl(fileKey);
     return NextResponse.json({ url: secureUrl });
-  } catch (err) {
+  } catch (err: any) {
     console.error('Proxy upload failed:', err);
-    return NextResponse.json({ error: 'MinIO proxy upload failed', details: err }, { status: 500 });
+    
+    // Extract exact AWS error message
+    const awsError = err.name ? `${err.name}: ${err.message}` : err.message || err.toString();
+    
+    return NextResponse.json({ 
+      error: `MinIO Error: ${awsError}`, 
+      details: err 
+    }, { status: 500 });
   }
 }
