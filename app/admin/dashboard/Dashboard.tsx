@@ -70,12 +70,14 @@ const Dashboard = () => {
     ],
   };
 
+  const categoryColors = ['#904917', '#725a39', '#ae602d', '#d4c3b9', '#605041', '#b38062', '#c7a791'];
+  
   const categoryData = {
     labels: summary.productsData.map((x: { _id: string }) => x._id),
     datasets: [
       {
         data: summary.productsData.map((x: { totalProducts: number }) => x.totalProducts),
-        backgroundColor: ['#904917', '#725a39', '#ae602d', '#d4c3b9'],
+        backgroundColor: categoryColors,
         borderWidth: 0,
         hoverOffset: 20,
       },
@@ -164,7 +166,7 @@ const Dashboard = () => {
             {summary.productsData.slice(0, 3).map((cat: any, i: number) => (
               <div key={i} className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
                 <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: categoryData.datasets[0].backgroundColor[i] }}></div>
+                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: categoryData.datasets[0].backgroundColor[i % categoryData.datasets[0].backgroundColor.length] }}></div>
                   <span className="text-on-surface/70">{cat._id}</span>
                 </div>
                 <span className="text-primary">{cat.totalProducts} items</span>
@@ -182,18 +184,24 @@ const Dashboard = () => {
             <Link href="/admin/users" className="text-[10px] uppercase font-bold tracking-[0.2em] text-primary hover:tracking-[0.3em] transition-all">View All</Link>
           </div>
           <div className="space-y-2">
-            {summary.usersData.slice(0, 5).map((user: any, i: number) => (
+            {(summary.recentUsers || []).map((user: any, i: number) => (
               <div key={i} className="flex items-center gap-6 p-4 rounded-xl hover:bg-surface-container-low transition-all group border border-transparent hover:border-outline-variant/10">
-                <div className="w-12 h-12 rounded-lg bg-surface-container-highest flex items-center justify-center font-headline text-secondary italic font-bold">
-                  {(user._id || '??').toString().substring(0, 2).toUpperCase()}
+                <div className="w-12 h-12 rounded-lg bg-surface-container-highest flex items-center justify-center font-headline text-secondary italic font-bold overflow-hidden">
+                  {user.avatar || user.image ? (
+                    <img src={user.avatar || user.image} alt={user.name} className="w-full h-full object-cover" />
+                  ) : (
+                    (user.name || user._id || '??').toString().substring(0, 2).toUpperCase()
+                  )}
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">User ID: {user._id}</p>
-                  <p className="text-[10px] font-bold text-on-surface-variant/40 uppercase tracking-widest mt-1">Verified Account</p>
+                  <p className="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">{user.name || `User ID: ${user._id.substring(0,8)}`}</p>
+                  <p className="text-[10px] font-bold text-on-surface-variant/40 uppercase tracking-widest mt-1">{user.email || 'Verified Account'}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-headline italic font-bold text-on-surface">Status</p>
-                  <p className="text-[10px] uppercase font-bold text-tertiary tracking-widest">Active</p>
+                  <p className="text-sm font-headline italic font-bold text-on-surface">Joined</p>
+                  <p className="text-[10px] uppercase font-bold text-tertiary tracking-widest">
+                    {new Date(user.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                  </p>
                 </div>
               </div>
             ))}
@@ -215,9 +223,9 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="flex gap-4 relative z-10">
-            <MetricsBox label="Views" value="1.2k" />
-            <MetricsBox label="Orders" value="8.4%" />
-            <MetricsBox label="Revenue" value="₹64k" primary />
+            <MetricsBox label="Total Users" value={formatNumber(summary.usersCount)} />
+            <MetricsBox label="Total Orders" value={formatNumber(summary.ordersCount)} />
+            <MetricsBox label="Revenue" value={formatPrice(summary.ordersPrice)} primary />
           </div>
         </div>
       </div>

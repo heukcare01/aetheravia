@@ -59,6 +59,8 @@ export const GET = auth(async (...request: any) => {
     { $sort: { _id: 1 } },
   ]);
 
+  const recentUsers = await UserModel.find().sort({ createdAt: -1 }).limit(5);
+
   return Response.json({
     ordersCount,
     productsCount,
@@ -67,5 +69,6 @@ export const GET = auth(async (...request: any) => {
     salesData,
     productsData,
     usersData,
+    recentUsers,
   });
 });

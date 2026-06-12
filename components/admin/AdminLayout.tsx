@@ -39,8 +39,7 @@ const AdminLayout = ({
     {
       title: 'Commerce Hub',
       items: [
-        { key: 'orders-advanced', label: 'Advanced Orders', href: '/admin/orders/advanced', icon: 'assignment' },
-        { key: 'orders-unified', label: 'Unified Orders', href: '/admin/orders/unified', icon: 'shopping_cart' },
+        { key: 'orders', label: 'Orders', href: '/admin/orders', icon: 'shopping_cart' },
         { key: 'products', label: 'Products', href: '/admin/products', icon: 'spa' },
       ]
     },
@@ -81,6 +80,14 @@ const AdminLayout = ({
     <div className="bg-background text-on-background min-h-screen relative font-body selection:bg-primary/10 selection:text-primary">
       {/* Tactile Depth Overlay */}
       <div className="fixed inset-0 pointer-events-none bg-noise z-50 opacity-[0.03]"></div>
+
+      {/* Mobile Sidebar Overlay */}
+      {sidebarOpen && isMobile && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-30 lg:hidden backdrop-blur-sm"
+          onClick={() => setSidebarOpen(false)}
+        ></div>
+      )}
 
       {/* SideNavBar */}
       <aside className={`h-screen w-72 flex-col fixed left-0 top-0 bg-surface border-r border-outline-variant/20 z-40 transition-transform duration-500 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
@@ -127,9 +134,20 @@ const AdminLayout = ({
           <div className="mt-12 pt-8 border-t border-outline-variant/10 flex-shrink-0">
             <div className="p-5 bg-surface-container rounded-2xl border border-outline-variant/10 mb-6">
               <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/40 mb-2">System Status</p>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 mb-6">
                 <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
                 <p className="text-xs font-bold text-on-surface">Connected</p>
+              </div>
+              <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant/40 mb-3 px-3">System & Settings</div>
+              <div className="space-y-1">
+                <Link href="/admin/logs" className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-highest transition-colors text-on-surface-variant group">
+                  <span className="material-symbols-outlined text-xl group-hover:text-primary transition-colors">history</span>
+                  <span className="text-sm font-medium">System Logs</span>
+                </Link>
+                <Link href="/admin/security" className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-highest transition-colors text-on-surface-variant group">
+                  <span className="material-symbols-outlined text-xl group-hover:text-primary transition-colors">security</span>
+                  <span className="text-sm font-medium">Security</span>
+                </Link>
               </div>
             </div>
             <Link href="/admin/products/new">
@@ -179,8 +197,8 @@ const AdminLayout = ({
             
             <button className="flex items-center gap-3 group pl-2 py-1 pr-1 hover:bg-surface-container rounded-full transition-all">
               <div className="w-9 h-9 rounded-full bg-secondary-container p-0.5 border border-primary/10 shadow-sm ring-2 ring-transparent group-hover:ring-primary/20 transition-all">
-                {session && (session.user as any)?.avatar ? (
-                  <img src={(session.user as any).avatar} className="w-full h-full object-cover rounded-full" alt="Admin" />
+                {session && ((session.user as any)?.avatar || (session.user as any)?.image) ? (
+                  <img src={(session.user as any)?.avatar || (session.user as any)?.image} className="w-full h-full object-cover rounded-full" alt="Admin" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-primary text-on-primary rounded-full font-headline italic text-xs font-bold">
                     {session?.user?.name?.[0] || 'A'}

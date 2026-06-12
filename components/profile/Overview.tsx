@@ -73,6 +73,10 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
   const { data: orders } = useSWR<OrderLite[]>('/api/orders/mine', fetcher);
   const latestOrder = orders?.[0];
   
+  // Fetch recommended products
+  const { data: recommendedData } = useSWR('/api/products/search?sort=rating', fetcher);
+  const recommendedProducts = recommendedData?.products?.slice(0, 4) || [];
+  
   // Mock data for ritual intelligence
   const [skinConstitution, setSkinConstitution] = useState(user?.personalization?.tags?.includes('Sensitive') ? 'Sensitive' : 'Combination');
   const [olfactoryAffinity, setOlfactoryAffinity] = useState(['Oud', 'Rose', 'Vetiver']);
@@ -538,30 +542,25 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
           </p>
         </div>
         
-        {/* We would typically fetch recommended products here, for now using a mock layout */}
+        {/* Recommended Products dynamically fetched */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
-          {[
-            { name: 'Vetiver Root Mist', price: 1200, category: 'Cooling Hydration', image: '/images/products/spa-arrangement-with-cremes.jpg' },
-            { name: 'Oud & Saffron Elixir', price: 3450, category: 'Nocturnal Recovery', image: '/images/products/organic-cosmetic-product-with-dreamy-aesthetic-fresh-background.jpg', mt: true },
-            { name: 'Marigold Petal Mask', price: 2800, category: 'Soothing Brightness', image: '/images/products/natural-cosmetic-products-arrangement.jpg' },
-            { name: 'Reetha Paste', price: 1950, category: 'Earthen Purification', image: '/images/products/serum-bottle-with-yellow-background.jpg', mt: true }
-          ].map((item, i) => (
+          {recommendedProducts.map((item: any, i: number) => (
             <motion.div 
               key={i} 
               whileHover={{ y: -10 }}
-              className={`group cursor-pointer ${item.mt ? 'lg:mt-12' : ''}`}
+              className={`group cursor-pointer ${i % 2 !== 0 ? 'lg:mt-12' : ''}`}
             >
               <div className="relative aspect-square mb-6 overflow-hidden bg-surface-container-low rounded-2xl shadow-xl shadow-primary/5">
                 <Image 
-                  src={item.image} 
+                  src={item.images?.[0] || item.image || '/images/products/spa-arrangement-with-cremes.jpg'} 
                   alt={item.name} 
                   fill 
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" 
                 />
                 <div className="absolute bottom-6 left-6 right-6 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                  <button className="w-full bg-white/90 backdrop-blur-md py-3 rounded-xl text-[9px] font-bold uppercase tracking-widest text-primary shadow-lg">
+                  <Link href={`/product/${item.slug}`} className="block w-full bg-white/90 backdrop-blur-md py-3 rounded-xl text-[9px] font-bold uppercase tracking-widest text-primary shadow-lg text-center">
                     Begin Ritual
-                  </button>
+                  </Link>
                 </div>
               </div>
               <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-secondary mb-2 opacity-60">{item.category}</p>

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import OrderModel from '@/lib/models/OrderModel';
 import { requireAdminSession } from '@/lib/requireAdminSession';
+import { systemLogger, LogModule } from '@/lib/logger';
 
 // Simple delivery partner assignment without complex 3PL integration
 const DELIVERY_PARTNERS = {
@@ -109,6 +110,13 @@ export async function POST(request: NextRequest) {
         });
       }
     }
+
+    systemLogger.info({
+      module: LogModule.ORDER,
+      message: `Admin assigned delivery partners to ${assignedCount} orders`,
+      user: (session as any).user._id,
+      meta: { assignedCount, provider, totalRequested: orderIds.length }
+    });
 
     return NextResponse.json({
       success: true,

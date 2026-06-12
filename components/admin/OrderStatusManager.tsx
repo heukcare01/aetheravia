@@ -34,8 +34,9 @@ const OrderStatusManager: React.FC<OrderStatusManagerProps> = ({
     { value: ORDER_STATUS.RETURNED, label: 'Returned', color: 'error' },
   ];
 
-  const handleStatusUpdate = async () => {
-    if (!selectedStatus) return;
+  const handleStatusUpdate = async (statusOverride?: OrderStatus) => {
+    const statusToUpdate = statusOverride || selectedStatus;
+    if (!statusToUpdate) return;
 
     setIsUpdating(true);
     try {
@@ -45,7 +46,7 @@ const OrderStatusManager: React.FC<OrderStatusManagerProps> = ({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          status: selectedStatus,
+          status: statusToUpdate,
           description: description || undefined,
           trackingNumber: trackingNumber || undefined,
           carrierName: carrierName || undefined,
@@ -55,7 +56,7 @@ const OrderStatusManager: React.FC<OrderStatusManagerProps> = ({
 
       if (response.ok) {
         toast.success('Order status updated successfully');
-        onStatusUpdate?.(selectedStatus);
+        onStatusUpdate?.(statusToUpdate);
         
         // Reset form
         setDescription('');
@@ -142,7 +143,7 @@ const OrderStatusManager: React.FC<OrderStatusManagerProps> = ({
                   className={`btn btn-xs sm:btn-sm btn-${action.color}`}
                   onClick={() => {
                     setSelectedStatus(action.status);
-                    handleStatusUpdate();
+                    handleStatusUpdate(action.status);
                   }}
                   disabled={isUpdating}
                 >
@@ -233,7 +234,7 @@ const OrderStatusManager: React.FC<OrderStatusManagerProps> = ({
 
           <button
             className="btn btn-primary w-full btn-sm sm:btn-md"
-            onClick={handleStatusUpdate}
+            onClick={() => handleStatusUpdate()}
             disabled={isUpdating || selectedStatus === currentStatus}
           >
             {isUpdating && <span className="loading loading-spinner loading-xs sm:loading-sm"></span>}

@@ -3,6 +3,7 @@ import dbConnect from '@/lib/dbConnect';
 import OrderModel from '@/lib/models/OrderModel';
 import { razorpay } from '@/lib/razorpay';
 import { awardPointsForOrder } from '@/lib/services/loyaltyService';
+import { systemLogger, LogModule } from '@/lib/logger';
 
 export const POST = auth(async (req: any, { params }: any) => {
   const { id } = await params;
@@ -48,8 +49,22 @@ export const POST = auth(async (req: any, { params }: any) => {
           // Don't fail the payment response if loyalty awarding fails
         }
 
+        systemLogger.info({
+          module: LogModule.PAYMENT,
+          message: `Payment successful for order ${order._id}`,
+          user: req.auth.user._id || req.auth.user.id,
+          meta: { orderId: order._id.toString(), paymentId: razorpay_payment_id, amount: order.totalPrice }
+        });
+
         return Response.json(updatedOrder);
       } else {
+        systemLogger.warn({
+          module: LogModule.PAYMENT,
+          message: `Invalid payment signature for order ${order._id}`,
+          user: req.auth.user._id || req.auth.user.id,
+          meta: { orderId: order._id.toString(), paymentId: razorpay_payment_id }
+        });
+
         return Response.json(
           { message: 'Invalid payment signature' },
           {

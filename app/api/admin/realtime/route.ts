@@ -1,11 +1,18 @@
 import { NextRequest } from 'next/server';
 import { onAdminEvent } from '@/lib/eventBus';
+import { requireAdminSession } from '@/lib/requireAdminSession';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 // GET /api/admin/realtime - Server-Sent Events stream of admin events
 export async function GET(req: NextRequest) {
+  try {
+    await requireAdminSession();
+  } catch (err) {
+    return new Response('Unauthorized', { status: 401 });
+  }
+
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
     start(controller) {

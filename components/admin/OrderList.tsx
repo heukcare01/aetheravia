@@ -58,7 +58,7 @@ interface UnifiedOrderListProps {
   onStatusUpdate: (orderId: string, newStatus: string) => void;
 }
 
-export default function UnifiedOrderList({
+export default function OrderList({
   orders,
   loading,
   viewMode,
@@ -196,7 +196,7 @@ export default function UnifiedOrderList({
               {/* Actions */}
               <div className="flex gap-2">
                 <Link 
-                  href={`/order/${order._id}`} 
+                  href={`/admin/orders/${order._id}`} 
                   className="btn btn-xs btn-outline flex-1"
                 >
                   View
@@ -207,10 +207,10 @@ export default function UnifiedOrderList({
                     Status
                   </label>
                   <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-40">
-                    <li><a onClick={() => onStatusUpdate(order._id, 'processing')}>Processing</a></li>
-                    <li><a onClick={() => onStatusUpdate(order._id, 'shipped')}>Shipped</a></li>
-                    <li><a onClick={() => onStatusUpdate(order._id, 'delivered')}>Delivered</a></li>
-                    <li><a onClick={() => onStatusUpdate(order._id, 'cancelled')}>Cancelled</a></li>
+                    <li><a onClick={() => { (document.activeElement as HTMLElement)?.blur(); onStatusUpdate(order._id, 'processing'); }}>Processing</a></li>
+                    <li><a onClick={() => { (document.activeElement as HTMLElement)?.blur(); onStatusUpdate(order._id, 'shipped'); }}>Shipped</a></li>
+                    <li><a onClick={() => { (document.activeElement as HTMLElement)?.blur(); onStatusUpdate(order._id, 'delivered'); }}>Delivered</a></li>
+                    <li><a onClick={() => { (document.activeElement as HTMLElement)?.blur(); onStatusUpdate(order._id, 'cancelled'); }}>Cancelled</a></li>
                   </ul>
                 </div>
               </div>
@@ -297,7 +297,7 @@ export default function UnifiedOrderList({
                 <td>
                   <div className="flex gap-1">
                     <Link 
-                      href={`/order/${order._id}`} 
+                      href={`/admin/orders/${order._id}`} 
                       className="btn btn-ghost btn-xs"
                       title="View Details"
                     >
@@ -309,10 +309,10 @@ export default function UnifiedOrderList({
                         <Settings size={16} />
                       </label>
                       <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-40">
-                        <li><a onClick={() => onStatusUpdate(order._id, 'processing')}>Processing</a></li>
-                        <li><a onClick={() => onStatusUpdate(order._id, 'shipped')}>Shipped</a></li>
-                        <li><a onClick={() => onStatusUpdate(order._id, 'delivered')}>Delivered</a></li>
-                        <li><a onClick={() => onStatusUpdate(order._id, 'cancelled')}>Cancelled</a></li>
+                        <li><a onClick={() => { (document.activeElement as HTMLElement)?.blur(); onStatusUpdate(order._id, 'processing'); }}>Processing</a></li>
+                        <li><a onClick={() => { (document.activeElement as HTMLElement)?.blur(); onStatusUpdate(order._id, 'shipped'); }}>Shipped</a></li>
+                        <li><a onClick={() => { (document.activeElement as HTMLElement)?.blur(); onStatusUpdate(order._id, 'delivered'); }}>Delivered</a></li>
+                        <li><a onClick={() => { (document.activeElement as HTMLElement)?.blur(); onStatusUpdate(order._id, 'cancelled'); }}>Cancelled</a></li>
                       </ul>
                     </div>
                   </div>

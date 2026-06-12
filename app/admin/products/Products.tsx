@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useMemo, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { Product } from '@/lib/models/ProductModel';
@@ -71,19 +71,7 @@ export default function Products() {
     },
   );
 
-  const { trigger: createProduct, isMutating: isCreating } = useSWRMutation(
-    `/api/admin/products`,
-    async (url) => {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      const data = await res.json();
-      if (!res.ok) return toast.error(data.message);
-      toast.success('Product created successfully');
-      router.push(`/admin/products/${data.product._id}`);
-    },
-  );
+  // Removed createProduct mutation that littered DB with dummies
 
   // Unique categories for filter
   const categories = useMemo(() => {
@@ -148,6 +136,7 @@ export default function Products() {
         await deleteProduct({ productId });
       }
       setSelectedProducts([]);
+      mutate('/api/admin/products');
     }
   };
 
@@ -178,10 +167,9 @@ export default function Products() {
               <span className="mr-1">🗑️</span> Delete Selected ({selectedProducts.length})
             </button>
           )}
-          <button disabled={isCreating} onClick={() => createProduct()} className='btn btn-primary btn-sm'>
-            {isCreating && <span className='loading loading-spinner loading-xs'></span>}
+          <Link href="/admin/products/new" className='btn btn-primary btn-sm'>
             <span className="mr-1">➕</span> Create Product
-          </button>
+          </Link>
         </div>
       </div>
 
