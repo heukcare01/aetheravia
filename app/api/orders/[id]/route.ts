@@ -25,6 +25,14 @@ export const GET = auth(async (...request: any) => {
       return Response.json({ message: 'Order not found' }, { status: 404 });
     }
 
+    if (
+      order.user &&
+      order.user._id.toString() !== req.auth.user.id &&
+      !req.auth.user.isAdmin
+    ) {
+      return Response.json({ message: 'unauthorized' }, { status: 401 });
+    }
+
     // Calculate additional data
     const progressPercentage = order.getProgressPercentage();
     const nextStatus = order.getNextStatus();
@@ -60,7 +68,7 @@ export const GET = auth(async (...request: any) => {
 export const PATCH = auth(async (...request: any) => {
   const [req, { params: paramsPromise }] = request;
   const params = await paramsPromise;
-  if (!req.auth) {
+  if (!req.auth || !req.auth.user?.isAdmin) {
     return Response.json(
       { message: 'unauthorized' },
       { status: 401 }

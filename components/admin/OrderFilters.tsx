@@ -51,7 +51,7 @@ const sortOptions = [
   { value: 'user.name', label: 'Customer Name' },
 ];
 
-export default function UnifiedOrderFilters({
+export default function OrderFilters({
   onFiltersChange,
   totalOrders = 0,
   currentPage = 1,

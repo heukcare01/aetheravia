@@ -50,6 +50,7 @@
     "next-nprogress-bar": "^2.4.7",
     "nodemailer": "^8.0.4",
     "postcss": "8.4.31",
+    "razorpay": "^2.9.6",
     "react": "^19.0.0",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.0.0",

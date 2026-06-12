@@ -19,10 +19,19 @@ export const GET = auth(async (...args: any) => {
   console.log(`[Admin API] GET product ID: ${id}`);
 
   if (id === 'new') {
-    return Response.json(
-      { message: 'Template state - please create a new product first' },
-      { status: 404 }
-    );
+    return Response.json({
+      name: '',
+      slug: '',
+      price: '',
+      image: '',
+      images: [],
+      category: '',
+      brand: '',
+      countInStock: '',
+      description: '',
+      rating: 0,
+      numReviews: 0,
+    });
   }
 
   try {
@@ -72,6 +81,23 @@ export const PUT = auth(async (...args: any) => {
 
   try {
     await dbConnect();
+
+    if (params.id === 'new') {
+      const newProduct = new ProductModel({
+        name,
+        slug,
+        price,
+        category,
+        image,
+        images,
+        brand,
+        countInStock,
+        description,
+        sizes,
+      });
+      const createdProduct = await newProduct.save();
+      return Response.json(createdProduct);
+    }
 
     const product = await ProductModel.findById(params.id);
     if (product) {

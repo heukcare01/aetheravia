@@ -2,13 +2,8 @@ import mongoose from 'mongoose';
 import dns from 'dns';
 import env from './env';
 
-if (typeof dns.setServers === 'function') {
-  try {
-    dns.setServers(['1.1.1.1', '8.8.8.8']);
-  } catch (e) {
-    console.error('[db] Failed to set DNS servers:', e);
-  }
-}
+// Removed forced DNS servers to rely on system default DNS.
+// Forcing 1.1.1.1 / 8.8.8.8 often breaks MongoDB SRV resolution in certain networks.
 
 interface Connection {
   isConnected?: number;

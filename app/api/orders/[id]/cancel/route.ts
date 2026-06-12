@@ -4,6 +4,7 @@ import OrderModel, { ORDER_STATUS } from '@/lib/models/OrderModel';
 import { NextRequest } from 'next/server';
 import { notificationService } from '@/lib/notifications';
 import { cancellationAnalytics } from '@/lib/analytics/cancellation';
+import { systemLogger, LogModule } from '@/lib/logger';
 
 export const POST = auth(async (...request: any) => {
   const [req, { params: paramsPromise }] = request;
@@ -150,6 +151,14 @@ export const POST = auth(async (...request: any) => {
     } catch (inventoryError) {
       console.error('Failed to update inventory:', inventoryError);
     }
+
+    // Log system event
+    systemLogger.info({
+      module: LogModule.ORDER,
+      message: `Order ${order._id} cancelled by customer`,
+      user: userId,
+      meta: { reason, refundProcessed, status: order.status }
+    });
 
     return Response.json({
       success: true,

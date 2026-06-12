@@ -5,6 +5,7 @@ import UserModel from '@/lib/models/UserModel';
 import { withBasicSecurity, getSanitizedBody } from '@/lib/api-security-wrapper';
 import { enhancedSecurity } from '@/lib/enhanced-security';
 import RegistrationErrorHandler from '@/lib/registration-errors';
+import { systemLogger, LogModule } from '@/lib/logger';
 
 async function registerHandler(request: NextRequest, context: any): Promise<NextResponse> {
   const { securityLogger, clientIP } = context;
@@ -106,6 +107,18 @@ async function registerHandler(request: NextRequest, context: any): Promise<Next
     // Log successful registration
     securityLogger.logAuth(newUser._id.toString(), email, true);
     console.log(`[SECURITY] New user registered: ${email.substring(0, 3)}***@${email.split('@')[1]} from ${clientIP.substring(0, 8)}***`);
+
+    // Write to system logs
+    systemLogger.info({
+      module: LogModule.AUTH,
+      message: `New user registration: ${email}`,
+      ipAddress: clientIP,
+      user: newUser._id.toString(),
+      meta: {
+        securityScore: passwordValidation.score,
+        requiresVerification: process.env.NODE_ENV === 'production'
+      }
+    });
 
     // In production, trigger email verification here
     if (process.env.NODE_ENV === 'production') {

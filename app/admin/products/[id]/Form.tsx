@@ -43,7 +43,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
       });
       const data = await res.json();
       if (!res.ok) return toast.error(data.message);
-      toast.success('Product updated successfully');
+      toast.success(productId === 'new' ? 'Product created successfully' : 'Product updated successfully');
       router.push('/admin/products');
     },
   );
@@ -151,7 +151,11 @@ export default function ProductEditForm({ productId }: { productId: string }) {
   return (
     <div className='space-y-6 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8'>
       <div className='flex flex-col md:flex-row md:items-center justify-between gap-2'>
-        <h1 className='h-fluid'>Edit Product <span className='text-primary'>{formatId(productId)}</span></h1>
+        <h1 className='h-fluid'>
+          {productId === 'new' ? 'Create New Product' : (
+            <>Edit Product <span className='text-primary'>{formatId(productId)}</span></>
+          )}
+        </h1>
         <div className='text-xs opacity-70'>Primary Image used in listings</div>
       </div>
 
