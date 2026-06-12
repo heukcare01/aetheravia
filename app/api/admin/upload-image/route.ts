@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PutObjectCommand, CreateBucketCommand } from '@aws-sdk/client-s3';
+import { PutObjectCommand, CreateBucketCommand, PutBucketPolicyCommand } from '@aws-sdk/client-s3';
 import { s3Client, BUCKET_NAME, getPublicUrl } from '@/lib/s3Client';
 
 export const runtime = 'nodejs'; // Ensure Node.js runtime for file handling
@@ -21,9 +21,28 @@ export async function POST(req: NextRequest) {
     const sanitizedName = file.name.replace(/\.[^/.]+$/, "").replace(/[^a-z0-9]/gi, "_").toLowerCase();
     const fileKey = `${folder}/${Date.now()}-${sanitizedName}`;
 
-    // Ensure bucket exists
+    // Ensure bucket exists and is public
     try {
       await s3Client.send(new CreateBucketCommand({ Bucket: BUCKET_NAME }));
+      
+      // Make bucket public
+      const policy = {
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Sid: "PublicReadGetObject",
+            Effect: "Allow",
+            Principal: "*",
+            Action: ["s3:GetObject"],
+            Resource: [`arn:aws:s3:::${BUCKET_NAME}/*`]
+          }
+        ]
+      };
+      
+      await s3Client.send(new PutBucketPolicyCommand({
+        Bucket: BUCKET_NAME,
+        Policy: JSON.stringify(policy)
+      }));
     } catch (bucketErr: any) {
       // Ignore if bucket already exists
       if (bucketErr.name !== 'BucketAlreadyOwnedByYou' && bucketErr.name !== 'BucketAlreadyExists') {

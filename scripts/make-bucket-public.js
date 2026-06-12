@@ -3,7 +3,7 @@ const { S3Client, PutBucketPolicyCommand } = require('@aws-sdk/client-s3');
 // Configure S3 Client for MinIO
 const s3Client = new S3Client({
   region: 'us-east-1',
-  endpoint: 'http://localhost:9010', // Port 9010 is what we mapped in docker-compose
+  endpoint: 'http://195.35.22.92:9010', // Port 9010 is what we mapped in docker-compose
   credentials: {
     accessKeyId: 'admin',
     secretAccessKey: 'securepassword123',
