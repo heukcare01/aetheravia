@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -229,8 +230,9 @@ export default function ProductEditForm({ productId }: { productId: string }) {
                 <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4'>
                   {images.map((img, idx) => (
                     <div key={img} className={`relative group border rounded-lg overflow-hidden ${idx === 0 ? 'ring-2 ring-primary' : ''}`}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={img} alt={`Image ${idx+1}`} className='w-full h-28 object-cover' />
+                      <div className='relative w-full h-28'>
+                        <Image src={img} alt={`Image ${idx+1}`} fill sizes="(max-width: 768px) 100vw, 33vw" className='object-cover' />
+                      </div>
                       <div className='absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex flex-col justify-center items-center gap-2 text-xs'>
                         <button type='button' onClick={() => makePrimary(img)} className='btn btn-xs btn-primary'>Primary</button>
                         <button type='button' onClick={() => removeImage(img)} className='btn btn-xs btn-error'>Remove</button>
@@ -286,12 +288,15 @@ export default function ProductEditForm({ productId }: { productId: string }) {
               <div className='flex flex-col md:flex-row gap-6'>
                 <div className='flex-1 flex flex-col items-center gap-3'>
                   <div className='w-full aspect-square max-w-sm relative rounded-lg overflow-hidden border'>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={reviewImages[currentReviewIndex]}
-                      alt={`Uploaded ${currentReviewIndex + 1}`}
-                      className='object-contain w-full h-full bg-base-200'
-                    />
+                    <div className='relative w-full h-full'>
+                      <Image
+                        src={reviewImages[currentReviewIndex]}
+                        alt={`Uploaded ${currentReviewIndex + 1}`}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className='object-contain bg-base-200'
+                      />
+                    </div>
                     {images[0] === reviewImages[currentReviewIndex] && (
                       <span className='absolute top-2 left-2 badge badge-primary badge-sm'>Primary</span>
                     )}
@@ -320,8 +325,9 @@ export default function ProductEditForm({ productId }: { productId: string }) {
                         className={`h-12 w-12 overflow-hidden rounded border ${idx === currentReviewIndex ? 'ring ring-primary' : 'opacity-70 hover:opacity-100'}`}
                         title={`Image ${idx + 1}`}
                       >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={u} alt='' className='object-cover w-full h-full' />
+                        <div className='relative w-full h-full'>
+                          <Image src={u} alt='' fill sizes="48px" className='object-cover' />
+                        </div>
                       </button>
                     ))}
                   </div>

@@ -54,6 +54,7 @@ const nextConfig = {
       {
         protocol: 'http',
         hostname: '195.35.22.92',
+        port: '9010',
       },
       {
         protocol: 'http',
