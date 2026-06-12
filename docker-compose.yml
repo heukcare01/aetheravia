@@ -32,8 +32,8 @@ services:
     container_name: aethravia_minio
     restart: unless-stopped
     ports:
-      - "9001:9000" # Using 9001 for Aethravia MinIO API
-      - "9002:9001" # Using 9002 for Aethravia MinIO Console
+      - "9010:9000" # Using 9010 for Aethravia MinIO API (Tripdekho likely uses 9000/9001)
+      - "9011:9001" # Using 9011 for Aethravia MinIO Console
     environment:
       - MINIO_ROOT_USER=admin
       - MINIO_ROOT_PASSWORD=securepassword123
