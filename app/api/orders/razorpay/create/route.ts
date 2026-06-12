@@ -1,5 +1,7 @@
 import { auth } from '@/lib/auth';
 import { razorpay } from '@/lib/razorpay';
+import dbConnect from '@/lib/dbConnect';
+import OrderModel from '@/lib/models/OrderModel';
 
 export const POST = auth(async (req: any) => {
   if (!req.auth) {
@@ -10,16 +12,24 @@ export const POST = auth(async (req: any) => {
   }
 
   try {
-    const { amount, orderId, paymentMethod } = await req.json();
+    const { orderId, paymentMethod } = await req.json();
 
-
-
-    if (!amount || !orderId) {
+    if (!orderId) {
       return Response.json(
-        { message: 'Amount and order ID are required' },
+        { message: 'Order ID is required' },
         { status: 400 }
       );
     }
+
+    await dbConnect();
+    const order = await OrderModel.findById(orderId);
+    
+    if (!order) {
+      return Response.json({ message: 'Order not found' }, { status: 404 });
+    }
+
+    // SECURITY FIX: Never trust the client for the amount!
+    const amount = order.totalPrice;
 
     // Create Razorpay order
     const razorpayOrder = await razorpay.createOrder(amount, {
