@@ -205,12 +205,26 @@ export const POST = auth(async (req: any) => {
   };
 
   try {
+    let transactionSuccess = false;
     if (session) {
       // Try with transaction
-      await session.withTransaction(async () => {
-        createdOrder = await performOrderCreation(session);
-      });
-    } else {
+      try {
+        await session.withTransaction(async () => {
+          createdOrder = await performOrderCreation(session);
+        });
+        transactionSuccess = true;
+      } catch (txErr: any) {
+        if (txErr.message && txErr.message.includes('Transaction numbers are only allowed')) {
+          console.warn("MongoDB Standalone detected. Falling back to non-transactional flow.");
+          session.endSession();
+          session = null;
+        } else {
+          throw txErr;
+        }
+      }
+    } 
+    
+    if (!transactionSuccess && !session) {
       // Direct execution if sessions not supported
       createdOrder = await performOrderCreation(null);
     }

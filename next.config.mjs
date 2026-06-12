@@ -74,7 +74,7 @@ const nextConfig = {
     ];
     const cspProd = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' checkout.razorpay.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' checkout.razorpay.com https://checkout.razorpay.com cdn.razorpay.com https://cdn.razorpay.com",
       "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
       "font-src 'self' fonts.gstatic.com",
       "img-src 'self' data: blob: res.cloudinary.com lh3.googleusercontent.com http://195.35.22.92:*",
@@ -87,7 +87,7 @@ const nextConfig = {
     ].join('; ');
     const cspDev = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: data: https://vercel.live checkout.razorpay.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: data: https://vercel.live checkout.razorpay.com https://checkout.razorpay.com cdn.razorpay.com https://cdn.razorpay.com",
       "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
       "font-src 'self' fonts.gstatic.com",
       "img-src 'self' data: blob: res.cloudinary.com lh3.googleusercontent.com http://195.35.22.92:*",
