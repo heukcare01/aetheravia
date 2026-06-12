@@ -93,9 +93,20 @@ const Form = () => {
     } else if (result?.ok) {
       toast.success('Login successful! Welcome back.', { id: 'signin-success' });
       router.refresh();
-      router.push(callbackUrl);
+      
+      // Wait for session to update to check admin status
+      setTimeout(() => {
+        router.push(callbackUrl);
+      }, 500);
     }
   };
+
+  // Automatically redirect admins to dashboard if they are on the signin page
+  useEffect(() => {
+    if (session?.user?.isAdmin && callbackUrl === '/') {
+      router.replace('/admin/dashboard');
+    }
+  }, [session, callbackUrl, router]);
 
   const handleResendOtp = async () => {
     setResending(true);
