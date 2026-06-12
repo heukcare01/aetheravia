@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="relative pt-24 pb-24 bg-surface text-on-surface overflow-x-hidden antialiased">
+    <main className="relative pt-16 md:pt-24 pb-16 md:pb-24 bg-surface text-on-surface overflow-x-hidden antialiased">
       <div 
         className="fixed inset-0 pointer-events-none z-[100]"
         style={{
@@ -28,7 +28,7 @@ export default function ContactPage() {
       </header>
 
       {/* Contact Cards */}
-      <section className="max-w-7xl mx-auto px-6 mb-32 relative z-10">
+      <section className="max-w-7xl mx-auto px-6 mb-16 md:mb-32 relative z-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Card 1 */}
           <div className="bg-surface-container-low p-8 transition-all hover:bg-surface-container-high group rounded-lg shadow-sm">
@@ -55,7 +55,7 @@ export default function ContactPage() {
             </div>
             <h3 className="text-xl font-headline text-primary mb-2">Head Office</h3>
             <p className="text-secondary font-body text-sm mb-4">Our Flagship Heritage Store.</p>
-            <span className="text-on-surface font-semibold font-body block text-xs">H.No.46, Mohalla Mohammad Wasil Near Hadri Masjid, Pilibhit, UP-262001 (India)</span>
+            <a href="https://www.google.com/maps/search/?api=1&query=28%C2%B038%2707.4%22N+79%C2%B048%2740.2%22E" target="_blank" rel="noopener noreferrer" className="text-on-surface font-semibold font-body block text-xs hover:text-primary transition-colors underline decoration-outline-variant underline-offset-4">H.No.46, Mohalla Mohammad Wasil Near Hadri Masjid, Pilibhit, UP-262001 (India)</a>
           </div>
           {/* Card 4 */}
           <div className="bg-surface-container-low p-8 transition-all hover:bg-surface-container-high group rounded-lg shadow-sm">
@@ -70,7 +70,7 @@ export default function ContactPage() {
       </section>
 
       {/* Interactive Section */}
-      <section className="max-w-7xl mx-auto px-6 mb-32 grid grid-cols-1 lg:grid-cols-2 gap-16 items-start relative z-10">
+      <section className="max-w-7xl mx-auto px-6 mb-16 md:mb-32 grid grid-cols-1 lg:grid-cols-2 gap-16 items-start relative z-10">
         {/* Form Column */}
         <div className="bg-surface-container-lowest p-8 md:p-12 shadow-sm rounded-lg border border-outline-variant/20">
           <h2 className="text-3xl font-headline text-primary mb-8">Send us a Message</h2>
@@ -94,10 +94,10 @@ export default function ContactPage() {
           <div className="space-y-8 pl-4 border-l-2 border-primary/20">
             <div>
               <h4 className="font-headline text-xl text-primary mb-2">Physical Address</h4>
-              <p className="text-secondary font-body leading-relaxed">
+              <a href="https://www.google.com/maps/search/?api=1&query=28%C2%B038%2707.4%22N+79%C2%B048%2740.2%22E" target="_blank" rel="noopener noreferrer" className="text-secondary font-body leading-relaxed hover:text-primary transition-colors block underline decoration-outline-variant underline-offset-4">
                 H.No.46, Mohalla Mohammad Wasil<br/>
                 Near Hadri Masjid, Pilibhit, Uttar Pradesh-262001 (India)
-              </p>
+              </a>
             </div>
             <div>
               <h4 className="font-headline text-xl text-primary mb-2">Parking Info</h4>
@@ -109,34 +109,10 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Support Details & Socials */}
-      <section className="max-w-7xl mx-auto px-6 mb-32 grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-surface-container-low p-12 rounded-lg relative z-10 shadow-sm border border-outline-variant/10">
-        <div>
-          <div className="inline-flex items-center gap-3 text-primary mb-4">
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
-            <span className="text-xs font-label uppercase tracking-widest font-bold">Quick Response Guarantee</span>
-          </div>
-          <h2 className="text-3xl font-headline text-on-surface mb-4 leading-snug">We value your time as much as your skin.</h2>
-          <p className="text-secondary font-body leading-relaxed">Our concierge team of herbalists and skincare specialists aims to respond to every inquiry within a single business day.</p>
-        </div>
-        <div className="flex flex-col md:items-end gap-6">
-          <span className="text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold">Follow Our Story</span>
-          <div className="flex gap-4">
-            <a className="w-12 h-12 flex items-center justify-center border border-outline-variant rounded hover:bg-primary hover:text-on-primary hover:border-primary transition-all text-on-surface" href="#">
-              <span className="material-symbols-outlined">share</span>
-            </a>
-            <a className="w-12 h-12 flex items-center justify-center border border-outline-variant rounded hover:bg-primary hover:text-on-primary hover:border-primary transition-all text-on-surface" href="#">
-              <span className="material-symbols-outlined">photo_camera</span>
-            </a>
-            <a className="w-12 h-12 flex items-center justify-center border border-outline-variant rounded hover:bg-primary hover:text-on-primary hover:border-primary transition-all text-on-surface" href="#">
-              <span className="material-symbols-outlined">play_circle</span>
-            </a>
-          </div>
-        </div>
-      </section>
+
 
       {/* FAQ Snippet */}
-      <section className="max-w-4xl mx-auto px-6 mb-32 relative z-10">
+      <section className="max-w-4xl mx-auto px-6 mb-16 md:mb-32 relative z-10">
         <h2 className="text-4xl font-headline text-primary text-center mb-12">Frequently Asked Questions</h2>
         <ContactFAQ />
       </section>

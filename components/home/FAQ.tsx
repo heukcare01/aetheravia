@@ -43,10 +43,10 @@ export default function FAQ() {
   };
 
   return (
-    <section className="pt-20 pb-12 px-6">
+    <section className="pt-12 md:pt-20 pb-12 px-6">
       <div className="max-w-6xl mx-auto">
         {/* Hero Header */}
-        <header className="text-center mb-24">
+        <header className="text-center mb-12 md:mb-24">
           <div className="flex justify-center mb-6">
             <span className="material-symbols-outlined text-primary text-4xl opacity-60">potted_plant</span>
           </div>
@@ -91,7 +91,7 @@ export default function FAQ() {
         </div>
 
         {/* Asymmetric Editorial Image Section */}
-        <section className="mt-32 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <section className="mt-16 md:mt-32 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <div className="relative">
             <div className="bg-surface-container-high w-full aspect-[4/5] rounded-lg overflow-hidden shadow-sm">
               <img 

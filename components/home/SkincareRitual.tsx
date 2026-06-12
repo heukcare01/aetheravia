@@ -23,8 +23,8 @@ const steps = [
 
 export default function SkincareRitual() {
   return (
-    <section className="py-24 md:py-32 px-4 md:px-8 bg-surface">
-      <div className="max-w-7xl mx-auto flex flex-col items-center gap-8 md:gap-12">
+    <section className="py-16 md:py-32 px-4 md:px-8 bg-surface">
+      <div className="max-w-7xl mx-auto flex flex-col items-center gap-10 md:gap-12">
         <div className="w-full">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}

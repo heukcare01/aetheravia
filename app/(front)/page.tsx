@@ -27,7 +27,7 @@ const HomePage = () => {
       <IngredientGallery />
 
       {/* Top Rated & New Arrivals Sliders */}
-      <section className="py-24 w-full space-y-32">
+      <section className="py-12 md:py-24 w-full space-y-16 md:space-y-32">
         <Suspense fallback={<ProductItemsSkeleton qty={4} layout="slider" />}>
           <ProductItems 
             layout="slider" 

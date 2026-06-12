@@ -23,13 +23,13 @@ const ingredients = [
 
 export default function IngredientGallery() {
   return (
-    <section className="py-24 md:py-32 px-4 md:px-8 bg-surface-container-low">
+    <section className="py-16 md:py-32 px-4 md:px-8 bg-surface-container-low">
       <div className="max-w-5xl mx-auto">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="flex flex-col md:flex-row justify-between items-baseline mb-24 gap-8"
+          className="flex flex-col md:flex-row justify-between items-baseline mb-12 md:mb-24 gap-8"
         >
           <h2 className="font-headline text-4xl md:text-5xl text-secondary">The Elemental Duo</h2>
           <p className="font-body text-surface-foreground/70 max-w-md italic border-l-2 border-outline-variant pl-6 leading-relaxed">

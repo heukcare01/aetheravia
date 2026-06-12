@@ -68,15 +68,7 @@ const Sidebar = () => {
   return (
     <div className="flex flex-col h-full bg-white max-w-[320px] shadow-2xl overflow-hidden">
       {/* Drawer Header */}
-      <div className="px-6 pt-10 pb-6 border-b border-gray-50 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-            <Sparkles size={18} />
-          </div>
-          <span className="hidden text-xl font-black tracking-tighter uppercase text-primary">
-            Aethravia
-          </span>
-        </div>
+      <div className="px-6 pt-10 pb-6 border-b border-gray-50 flex items-center justify-end">
         <button 
           onClick={toggleDrawer}
           className="p-2 -mr-2 rounded-full hover:bg-gray-50 transition-colors text-gray-400"

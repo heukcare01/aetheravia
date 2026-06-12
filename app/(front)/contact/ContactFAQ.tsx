@@ -46,7 +46,7 @@ export default function ContactFAQ() {
               </span>
             </div>
             <div 
-              className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-40 opacity-100 mt-4 mb-6' : 'max-h-0 opacity-0 m-0'}`}
+              className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100 mt-4 mb-6' : 'max-h-0 opacity-0 m-0'}`}
             >
               <p className="text-secondary font-body leading-relaxed">
                 {faq.answer}

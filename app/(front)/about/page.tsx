@@ -54,8 +54,8 @@ export default function AboutPage() {
       </section>
 
       {/* 2. How Aethravia Began */}
-      <section className="bg-surface-container-low px-8 md:px-24 py-32">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-20 items-center">
+      <section className="bg-surface-container-low px-8 md:px-24 py-16 md:py-32">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-12 md:gap-20 items-center">
           <div className="w-full md:w-1/2 relative group">
             <div className="absolute -top-6 -left-6 w-full h-full bg-surface-container-highest -z-10 rounded-lg"></div>
             <img 
@@ -77,7 +77,7 @@ export default function AboutPage() {
       </section>
 
       {/* 3. Our Mission */}
-      <section className="px-8 py-40 text-center bg-surface relative overflow-hidden">
+      <section className="px-8 py-20 md:py-40 text-center bg-surface relative overflow-hidden">
         <div className="max-w-4xl mx-auto relative z-10">
           <div className="inline-block px-4 py-1 mb-8 border border-primary/20 rounded-full text-[10px] uppercase tracking-[0.3em] text-primary">
             Manifesto
@@ -100,7 +100,7 @@ export default function AboutPage() {
       </section>
 
       {/* 4. What Makes Us Unique (Bento-style Grid) */}
-      <section className="px-8 md:px-24 py-24 md:py-32 bg-surface-container-highest">
+      <section className="px-8 md:px-24 py-16 md:py-32 bg-surface-container-highest">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16 text-center">
             <h2 className="font-headline text-3xl md:text-4xl text-on-surface mb-4">Our Philosophy</h2>
@@ -148,7 +148,7 @@ export default function AboutPage() {
       </section>
 
       {/* 5. Founders' Messages Section */}
-      <section className="px-8 md:px-24 py-24 md:py-32 space-y-24">
+      <section className="px-8 md:px-24 py-16 md:py-32 space-y-16 md:space-y-24">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <span className="text-xs uppercase tracking-[0.4em] text-primary font-bold mb-4 block">Our Leadership</span>
@@ -166,7 +166,7 @@ export default function AboutPage() {
                     src="/founder-arpita.jpeg"
                   />
                 </div>
-                <div className="absolute -bottom-8 -right-8 bg-primary text-on-primary p-8 rounded-lg shadow-xl hidden sm:block">
+                <div className="relative sm:absolute mt-4 sm:mt-0 sm:-bottom-8 sm:-right-8 bg-primary text-on-primary p-6 sm:p-8 rounded-lg shadow-xl">
                   <p className="font-headline text-lg italic">"Nature does not hurry, yet everything is accomplished."</p>
                 </div>
               </div>
@@ -192,7 +192,7 @@ export default function AboutPage() {
                     src="/prajjwal-co-founder.jpeg"
                   />
                 </div>
-                <div className="absolute -bottom-8 -left-8 bg-secondary text-on-primary p-8 rounded-lg shadow-xl hidden sm:block">
+                <div className="relative sm:absolute mt-4 sm:mt-0 sm:-bottom-8 sm:-left-8 bg-secondary text-on-primary p-6 sm:p-8 rounded-lg shadow-xl">
                   <p className="font-headline text-lg italic">"Precision is the highest form of respect for tradition."</p>
                 </div>
               </div>
@@ -212,7 +212,7 @@ export default function AboutPage() {
       </section>
 
       {/* 6. Our Commitments */}
-      <section className="bg-surface-container-high py-24 md:py-32 px-8 text-center">
+      <section className="bg-surface-container-high py-16 md:py-32 px-8 text-center">
         <div className="max-w-3xl mx-auto border-y border-outline-variant/30 py-16">
           <h2 className="font-headline text-3xl md:text-4xl text-primary mb-6">Our Everlasting Commitment</h2>
           <p className="font-body text-on-surface-variant text-base md:text-lg leading-loose mb-10">
