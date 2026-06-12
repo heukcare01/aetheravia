@@ -22,5 +22,6 @@ export const BUCKET_NAME = MINIO_BUCKET_NAME;
 
 // Utility to generate a public URL for an uploaded file
 export function getPublicUrl(key: string) {
-  return `${MINIO_PUBLIC_ENDPOINT}/${MINIO_BUCKET_NAME}/${key}`;
+  // Use Next.js rewrite to proxy the image over HTTPS
+  return `/storage/${key}`;
 }
