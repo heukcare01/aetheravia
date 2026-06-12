@@ -287,7 +287,7 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
             </div>
           </section>
 
-
+        </div>
 
         {/* Right Side: Sidebar Stats & Quick Reorder */}
         <div className="lg:col-span-4 space-y-10">
