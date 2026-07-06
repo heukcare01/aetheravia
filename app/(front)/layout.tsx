@@ -17,6 +17,15 @@ export default function FrontLayout({
       <ResponsiveDrawerInit />
       <div className='drawer-content'>
         <div className='flex min-h-screen flex-col overflow-x-hidden'>
+          <div className="bg-primary text-white text-center py-2 text-xs md:text-sm font-semibold tracking-wider flex justify-center items-center gap-2 md:gap-4 px-4 uppercase font-body z-[100] relative">
+            <span>Made in India</span>
+            <span className="hidden sm:inline">•</span>
+            <span>FDA Registered</span>
+            <span className="hidden sm:inline">•</span>
+            <span>Cruelty Free</span>
+            <span className="hidden sm:inline">•</span>
+            <span>Vegan</span>
+          </div>
           <Header />
           <main className='flex-grow'>{children}</main>
           <Footer />

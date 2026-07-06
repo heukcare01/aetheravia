@@ -20,8 +20,8 @@ const faqData = [
   },
   {
     num: "04",
-    question: "Is your packaging sustainable?",
-    answer: "Our commitment to the earth extends to our vessels. We use high-grade recyclable glass and biodegradable secondary packaging. Each element is designed to be repurposed, honoring the cycle of nature that provides our ingredients."
+    question: "Are Aethravia products suitable for all skin types?",
+    answer: "Yes. Our formulations are designed to be gentle and suitable for most skin types. However, we recommend performing a patch test before first use, especially if you have sensitive skin."
   },
   {
     num: "05",

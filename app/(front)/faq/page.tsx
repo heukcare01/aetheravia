@@ -21,8 +21,8 @@ const faqList = [
   },
   {
     num: "04",
-    question: "Is your packaging fully biodegradable?",
-    answer: "Yes. We utilize stone-paper labels and compostable mycelium-based protective casing. Our amber glass jars are designed for lifelong reuse within your home apothecary."
+    question: "Are Aethravia products suitable for all skin types?",
+    answer: "Yes. Our formulations are designed to be gentle and suitable for most skin types. However, we recommend performing a patch test before first use, especially if you have sensitive skin."
   },
   {
     num: "05",

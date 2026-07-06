@@ -46,7 +46,7 @@ export default function ContactPage() {
             </div>
             <h3 className="text-xl font-headline text-primary mb-2">Call Us</h3>
             <p className="text-secondary font-body text-sm mb-4">Mon-Fri, 9am to 6pm IST.</p>
-            <a className="text-on-surface font-semibold font-body hover:text-primary transition-colors underline decoration-outline-variant underline-offset-4 block" href="tel:+910000000000">+91 (800) 123-4567</a>
+            <a className="text-on-surface font-semibold font-body hover:text-primary transition-colors underline decoration-outline-variant underline-offset-4 block" href="tel:+919259775846">+91 9259775846</a>
           </div>
           {/* Card 3 */}
           <div className="bg-surface-container-low p-8 transition-all hover:bg-surface-container-high group rounded-lg shadow-sm">
@@ -99,12 +99,7 @@ export default function ContactPage() {
                 Near Hadri Masjid, Pilibhit, Uttar Pradesh-262001 (India)
               </a>
             </div>
-            <div>
-              <h4 className="font-headline text-xl text-primary mb-2">Parking Info</h4>
-              <p className="text-secondary font-body leading-relaxed">
-                Complimentary valet parking is available at the front entrance for all patrons visiting the Archive.
-              </p>
-            </div>
+
           </div>
         </div>
       </section>
@@ -127,7 +122,7 @@ export default function ContactPage() {
             <h2 className="text-3xl font-headline text-on-primary-container mb-2">Need Immediate Help?</h2>
             <p className="text-on-primary-container/80 font-body">Our concierge is standing by to assist with urgent order issues.</p>
           </div>
-          <a className="relative z-10 px-10 py-4 bg-on-primary-container text-primary font-bold tracking-widest uppercase text-xs hover:bg-surface transition-all flex items-center gap-3 shadow-xl rounded" href="tel:+911234567890">
+          <a className="relative z-10 px-10 py-4 bg-on-primary-container text-primary font-bold tracking-widest uppercase text-xs hover:bg-surface transition-all flex items-center gap-3 shadow-xl rounded" href="tel:+919259775846">
             <span className="material-symbols-outlined text-sm">phone_in_talk</span>
             Call Now
           </a>

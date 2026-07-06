@@ -57,7 +57,7 @@ export default async function CategoriesBar() {
     console.error('[CategoriesBar] Failed to load categories:', error);
     all = [];
   }
-  const allowedCategories = ['Body Scrub', 'Body Wash', 'Face Wash'];
+  const allowedCategories = ['Body Scrub', 'Body Wash', 'Face Wash', 'Combo Packs'];
   const categories = Array.isArray(all) 
     ? all.filter(cat => allowedCategories.includes(cat)) 
     : [];

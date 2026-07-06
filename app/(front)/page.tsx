@@ -9,6 +9,7 @@ import Slider from '@/components/slider/Slider';
 import ProductItems, { ProductItemsSkeleton } from '@/components/products/ProductItems';
 import TrustBarModern from '@/components/home/TrustBarModern';
 import TrustBar from '@/components/footer/TrustBar';
+import Testimonials from '@/components/testimonials/Testimonials';
 
 export const metadata: Metadata = {
   title: {
@@ -23,8 +24,7 @@ const HomePage = () => {
       {/* Hero Section: Ancient Wisdom */}
       <HeroModern />
 
-      {/* Key Ingredients: The Elemental Three */}
-      <IngredientGallery />
+
 
       {/* Top Rated & New Arrivals Sliders */}
       <section className="py-12 md:py-24 w-full space-y-16 md:space-y-32">
@@ -44,6 +44,15 @@ const HomePage = () => {
             sort="latest"
           />
         </Suspense>
+      </section>
+
+      {/* Key Ingredients: The Elemental Three */}
+      <IngredientGallery />
+
+      {/* Client Reviews */}
+      <section className="py-12 md:py-24 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-3xl md:text-4xl font-headline text-center mb-8 text-primary">Ritual Reviews</h2>
+        <Testimonials />
       </section>
 
       {/* Trust & Heritage Values */}
