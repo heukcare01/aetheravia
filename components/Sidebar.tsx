@@ -59,28 +59,24 @@ const Sidebar = () => {
     </Link>
   );
 
-  const SectionHeader = ({ children }: { children: React.ReactNode }) => (
-    <h3 className="px-4 text-[10px] font-bold text-primary/40 uppercase tracking-[0.3em] mb-2 mt-8">
+  const SectionHeader = ({ children, noTopMargin = false }: { children: React.ReactNode, noTopMargin?: boolean }) => (
+    <h3 className={`px-4 text-[10px] font-bold text-primary/40 uppercase tracking-[0.3em] mb-2 ${noTopMargin ? 'mt-2' : 'mt-8'}`}>
       {children}
     </h3>
   );
 
-  return (
-    <div className="flex flex-col h-full bg-white max-w-[320px] shadow-2xl overflow-hidden">
-      {/* Drawer Header */}
-      <div className="px-6 pt-4 pb-3 md:pt-6 md:pb-4 border-b border-gray-50 flex items-center justify-end">
-        <button 
-          onClick={toggleDrawer}
-          className="p-2 -mr-2 rounded-full hover:bg-gray-50 transition-colors text-gray-400"
-          suppressHydrationWarning
-        >
-          <X size={20} />
-        </button>
-      </div>
+    <div className="flex flex-col h-full bg-white max-w-[320px] shadow-2xl overflow-hidden relative">
+      <button 
+        onClick={toggleDrawer}
+        className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-50 transition-colors text-gray-400 z-10"
+        suppressHydrationWarning
+      >
+        <X size={20} />
+      </button>
 
-      <div className="flex-1 overflow-y-auto px-4 py-6 scrollbar-hide">
+      <div className="flex-1 overflow-y-auto px-4 py-4 pt-12 scrollbar-hide">
         {/* Primary Site Navigation */}
-        <SectionHeader>Menu</SectionHeader>
+        <SectionHeader noTopMargin>Menu</SectionHeader>
         <div className="space-y-1">
           <NavLink href="/" icon={Home} isPrimary>Home</NavLink>
           <NavLink href="/shop" icon={ShoppingBag}>Shop</NavLink>
