@@ -11,7 +11,7 @@ interface Tab {
   image: string;
 }
 
-export default function ProductTabs({ description }: { description: string }) {
+export default function ProductTabs({ description, ingredients }: { description: string; ingredients?: string[] }) {
   const tabs: Tab[] = [
     {
       id: 'ritual',
@@ -24,7 +24,9 @@ export default function ProductTabs({ description }: { description: string }) {
       id: 'ingredients',
       label: 'Ingredients',
       title: 'Nature’s Raw Potency',
-      content: 'Our formula is anchored by Multani Mitti (Fuller’s Earth) to draw out impurities, and Reetha (Soapnut) for a gentle natural lather. We combine this with Wild Honey to lock in moisture, known for its anti-inflammatory properties. No synthetic fragrances, sulfates, or parabens.',
+      content: ingredients && ingredients.length > 0
+        ? `Key ingredients: ${ingredients.join(', ')}. Our formula is anchored by these carefully selected natural ingredients. No synthetic fragrances, sulfates, or parabens.`
+        : 'Our formula is anchored by Multani Mitti (Fuller’s Earth) to draw out impurities, and Reetha (Soapnut) for a gentle natural lather. We combine this with Wild Honey to lock in moisture, known for its anti-inflammatory properties. No synthetic fragrances, sulfates, or parabens.',
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBXQhijcmtPtMf8skYc0_3R0py0Ztzsu7U-7gYyYozfnJWbJ782GjNXZhuf8kU9DIiu91Zn1SjEg54kCjAcuTm5iQJQOKMsS5fhwjfObBmBviJOChb0YVH8VhABREKOpV26o-LUGQgaj-jnmdvwJxjXgTRSkphNeXEBhz4689nZtVO-EHZ7Fgcht1PQ1Xu5xYAqeyaYFNff7SFz7akIyoMmA1pGqhMwt9kavFSnvCLy9ZNhJ8VhMWLg4hNaJNJw5-60g0KRiLuA2Qfo'
     },
     {

@@ -68,7 +68,7 @@ const Sidebar = () => {
   return (
     <div className="flex flex-col h-full bg-white max-w-[320px] shadow-2xl overflow-hidden">
       {/* Drawer Header */}
-      <div className="px-6 pt-10 pb-6 border-b border-gray-50 flex items-center justify-end">
+      <div className="px-6 pt-4 pb-3 md:pt-6 md:pb-4 border-b border-gray-50 flex items-center justify-end">
         <button 
           onClick={toggleDrawer}
           className="p-2 -mr-2 rounded-full hover:bg-gray-50 transition-colors text-gray-400"

@@ -11,6 +11,7 @@ import { convertDocToObj, formatPrice } from '@/lib/utils';
 import FAQSection from '@/components/footer/FAQ';
 import ProductTabs from '@/components/products/ProductTabs';
 import ProductModel from '@/lib/models/ProductModel';
+import Testimonials from '@/components/testimonials/Testimonials';
 import dbConnect from '@/lib/dbConnect';
 
 export const generateMetadata = async ({
@@ -141,20 +142,34 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
             <WishlistButton product={convertDocToObj(product)} />
           </div>
 
-          {/* Chips (Ingredients) */}
-          <div className="flex flex-wrap gap-2 pt-4">
-            <span className="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-[11px] font-medium tracking-wide">Rose Water</span>
-            <span className="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-[11px] font-medium tracking-wide">Multani Mitti</span>
-            <span className="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-[11px] font-medium tracking-wide">Soapnut</span>
-            <span className="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-[11px] font-medium tracking-wide">Wild Honey</span>
-          </div>
+          {/* Ingredient Chips */}
+          {product.ingredients && product.ingredients.length > 0 ? (
+            <div className="flex flex-wrap gap-2 pt-4">
+              {product.ingredients.map((ingredient: string, idx: number) => (
+                <span key={idx} className="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-[11px] font-medium tracking-wide">
+                  {ingredient}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-2 pt-4">
+              <span className="text-on-surface-variant text-xs italic">Ingredients will be listed soon</span>
+            </div>
+          )}
         </div>
       </section>
 
       {/* Detailed Content Tabs */}
-      <ProductTabs description={product.description} />
+      <ProductTabs description={product.description} ingredients={product.ingredients} />
 
-      {/* Related Products (Bento/Card Style) */}
+      {/* Customer Reviews */}
+      <section className="mt-16 md:mt-24 max-w-screen-2xl mx-auto px-6 md:px-12">
+        <div className="space-y-2 mb-8">
+          <h3 className="font-label uppercase text-[10px] tracking-widest text-on-surface-variant">What Our Community Says</h3>
+          <h2 className="font-headline text-3xl md:text-4xl text-primary italic">Ritual Reviews</h2>
+        </div>
+        <Testimonials />
+      </section>
       <section className="mt-24 max-w-screen-2xl mx-auto px-6 md:px-12">
         <div className="flex justify-between items-end mb-12">
           <div className="space-y-2">

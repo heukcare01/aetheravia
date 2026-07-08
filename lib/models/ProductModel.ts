@@ -16,6 +16,7 @@ export type Product = {
   countInStock: number;
   colors?: string[];
   sizes?: string[];
+  ingredients?: string[];
 };
 
 const productSchema = new mongoose.Schema(
@@ -35,6 +36,7 @@ const productSchema = new mongoose.Schema(
     banner: String,
     sizes: { type: [String], default: [] },
     colors: { type: [String], default: [] },
+    ingredients: { type: [String], default: [] },
   },
   {
     timestamps: true,

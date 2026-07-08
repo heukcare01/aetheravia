@@ -131,9 +131,9 @@ const ShopPage = async (props: {
               <div className="relative z-10">
                 <h4 className="font-headline text-2xl mb-4">Ritual Guide</h4>
                 <p className="text-sm text-secondary/70 mb-8 leading-relaxed">Discover the ancient sequence for your skin's unique journey.</p>
-                <button className="text-xs font-bold uppercase tracking-widest text-primary flex items-center gap-3 group-hover:gap-5 transition-all">
-                  Take Quiz <ArrowRight size={14} />
-                </button>
+                <Link href="/ritual" className="text-xs font-bold uppercase tracking-widest text-primary flex items-center gap-3 group-hover:gap-5 transition-all">
+                  Explore Rituals <ArrowRight size={14} />
+                </Link>
               </div>
               <div className="absolute -right-6 -bottom-6 opacity-[0.05] group-hover:scale-110 transition-all duration-1000">
                 <span className="material-symbols-outlined text-9xl">spa</span>
@@ -174,9 +174,9 @@ const ShopPage = async (props: {
                   <h4 className="font-headline text-3xl text-primary">Consciously Crafted</h4>
                   <p className="text-secondary/80 leading-relaxed font-body text-lg">We source directly from farm cooperatives across the Deccan Plateau, ensuring every ingredient tells a story of fair trade and soil health.</p>
                 </div>
-                <button className="inline-flex items-center gap-2 font-bold uppercase tracking-[0.2em] text-[10px] border-b-2 border-primary pb-2 text-primary hover:gap-4 transition-all w-fit">
+                <Link href="/about" className="inline-flex items-center gap-2 font-bold uppercase tracking-[0.2em] text-[10px] border-b-2 border-primary pb-2 text-primary hover:gap-4 transition-all w-fit">
                   Trace our origin
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -218,10 +218,10 @@ const ShopPage = async (props: {
               </div>
 
               <div className="pt-8">
-                <button className="flex items-center gap-4 text-primary font-bold text-[10px] tracking-[0.3em] uppercase group">
+                <Link href="/ingredients" className="flex items-center gap-4 text-primary font-bold text-[10px] tracking-[0.3em] uppercase group">
                   Explore Sourcing 
                   <ArrowRight size={18} className="transition-transform group-hover:translate-x-3" />
-                </button>
+                </Link>
               </div>
             </div>
           </div>
