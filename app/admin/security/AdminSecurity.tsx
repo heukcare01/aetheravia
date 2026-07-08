@@ -20,16 +20,10 @@ export default function AdminSecurity() {
     if (simulating) return;
     setSimulating(true);
     try {
-      await fetch('/api/auth/register', {
+      await fetch('/api/admin/security/simulate-attack', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: 'Suspicious Hacker',
-          email: 'hacker@blackhat.com',
-          password: 'password123'
-        })
       });
-      // Allow SWR to pick it up on next poll or mutate manually
+      // SWR will pick it up on next poll (15s) or we can wait a bit
     } catch (e) {
       console.error(e);
     } finally {

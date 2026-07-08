@@ -164,11 +164,7 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
 
       {/* Customer Reviews */}
       <section className="mt-16 md:mt-24 max-w-screen-2xl mx-auto px-6 md:px-12">
-        <div className="space-y-2 mb-8">
-          <h3 className="font-label uppercase text-[10px] tracking-widest text-on-surface-variant">What Our Community Says</h3>
-          <h2 className="font-headline text-3xl md:text-4xl text-primary italic">Ritual Reviews</h2>
-        </div>
-        <Testimonials />
+        <Testimonials heading="Ritual Reviews" subtitle="What Our Community Says" />
       </section>
       <section className="mt-24 max-w-screen-2xl mx-auto px-6 md:px-12">
         <div className="flex justify-between items-end mb-12">

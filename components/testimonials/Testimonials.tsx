@@ -20,41 +20,6 @@ type Testimonial = {
   quote: string;
 };
 
-const DEFAULTS: Testimonial[] = [
-  {
-    id: "in-1",
-    name: "Aarav Sharma",
-    role: "Verified Buyer · New Delhi",
-    rating: 5,
-    quote:
-      "Impressive quality and premium finish. Delivery was quick and packaging felt luxurious. Value for money!",
-  },
-  {
-    id: "in-2",
-    name: "Ananya Iyer",
-    role: "Fashion Blogger · Bengaluru",
-    rating: 5,
-    quote:
-      "The silhouettes and fabrics are stunning. Pairing was effortless — got compliments at a wedding!",
-  },
-  {
-    id: "in-3",
-    name: "Rohan Mehta",
-    role: "Verified Buyer · Mumbai",
-    rating: 4,
-    quote:
-      "Fits true to size and feels premium. Exchange process was smooth — customer care was helpful.",
-  },
-  {
-    id: "in-4",
-    name: "Ishita Gupta",
-    role: "Stylist · Kolkata",
-    rating: 5,
-    quote:
-      "Minimal, chic, and well-constructed. Great for festive layering and everyday elegance alike.",
-  },
-];
-
 function Stars({ value = 5 }: { value?: number }) {
   const v = Math.max(0, Math.min(5, Math.round(value)));
   return (
@@ -72,9 +37,13 @@ function Stars({ value = 5 }: { value?: number }) {
 export default function Testimonials({
   items,
   title = "What our customers say",
+  heading,
+  subtitle,
 }: {
   items?: Testimonial[];
   title?: string;
+  heading?: string;
+  subtitle?: string;
 }) {
   const [remote, setRemote] = useState<Testimonial[] | null>(null);
   const [loading, setLoading] = useState(false);
@@ -101,42 +70,58 @@ export default function Testimonials({
   const data = useMemo(() => {
     if (items && items.length) return items;
     if (remote && remote.length) return remote;
-    return DEFAULTS;
+    return [];
   }, [items, remote]);
+
+  // Don't render the section at all if there are no testimonials
+  if (!loading && data.length === 0) {
+    return null;
+  }
 
   return (
     <section aria-label="Testimonials" className="mt-4 md:mt-10">
+      {/* Optional heading rendered inside so it hides when no data */}
+      {heading && (
+        <div className="space-y-2 mb-8">
+          {subtitle && (
+            <h3 className="font-label uppercase text-[10px] tracking-widest text-on-surface-variant">{subtitle}</h3>
+          )}
+          <h2 className="font-headline text-3xl md:text-4xl text-primary italic text-center">{heading}</h2>
+        </div>
+      )}
       <div className="mb-3 flex items-end justify-end">
         {loading && <span className="text-xs opacity-60">Loading…</span>}
         {error && <span className="text-xs text-error">{error}</span>}
       </div>
-      <SCarousel
-        opts={{ loop: true, align: "start", skipSnaps: false }}
-        plugins={[Autoplay({ delay: 2800, stopOnMouseEnter: true, stopOnInteraction: false })]}
-        className="relative"
-      >
-        <CarouselContent>
-          {data.map((t) => (
-            <CarouselItem key={t.id} className="md:basis-1/2 lg:basis-1/3">
-              <article 
-                className="card shadow-md transition hover:shadow-xl h-full"
-                style={{ backgroundColor: '#9F5035', color: 'white' }}
-              >
-                <div className="card-body gap-3">
-                  {typeof t.rating === "number" && <Stars value={t.rating} />}
-                  <p className="text-sm md:text-base leading-relaxed opacity-95">“{t.quote}”</p>
-                  <div className="mt-2 border-t border-white/20 pt-3">
-                    <p className="font-bold">{t.name}</p>
-                    {t.role && <p className="text-xs opacity-80">{t.role}</p>}
+      {data.length > 0 && (
+        <SCarousel
+          opts={{ loop: false, align: "start", skipSnaps: false }}
+          plugins={[Autoplay({ delay: 2800, stopOnMouseEnter: true, stopOnInteraction: true })]}
+          className="relative"
+        >
+          <CarouselContent>
+            {data.map((t) => (
+              <CarouselItem key={t.id} className="md:basis-1/2 lg:basis-1/3">
+                <article 
+                  className="card shadow-md transition hover:shadow-xl h-full"
+                  style={{ backgroundColor: '#9F5035', color: 'white' }}
+                >
+                  <div className="card-body gap-3">
+                    {typeof t.rating === "number" && <Stars value={t.rating} />}
+                    <p className="text-sm md:text-base leading-relaxed opacity-95">&ldquo;{t.quote}&rdquo;</p>
+                    <div className="mt-2 border-t border-white/20 pt-3">
+                      <p className="font-bold">{t.name}</p>
+                      {t.role && <p className="text-xs opacity-80">{t.role}</p>}
+                    </div>
                   </div>
-                </div>
-              </article>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <CarouselPrevious className="-left-3 md:-left-4" />
-        <CarouselNext className="-right-3 md:-right-4" />
-      </SCarousel>
+                </article>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="-left-3 md:-left-4" />
+          <CarouselNext className="-right-3 md:-right-4" />
+        </SCarousel>
+      )}
     </section>
   );
 }
