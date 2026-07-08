@@ -65,6 +65,7 @@ const Sidebar = () => {
     </h3>
   );
 
+  return (
     <div className="flex flex-col h-full bg-white max-w-[320px] shadow-2xl overflow-hidden relative">
       <button 
         onClick={toggleDrawer}
