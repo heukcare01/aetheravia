@@ -10,7 +10,7 @@ import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { Product } from '@/lib/models/ProductModel';
-import { uploadToCloudinary } from '@/lib/cloudinaryUpload';
+import { uploadImage } from '@/lib/cloudinaryUpload';
 import { formatId } from '@/lib/utils';
 
 interface ProductFormData {
@@ -96,7 +96,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
     try {
       const uploaded: string[] = [];
       for (const file of Array.from(files)) {
-        const url = await uploadToCloudinary(file, 'products');
+        const url = await uploadImage(file, 'products');
         if (url) uploaded.push(url);
       }
       if (uploaded.length) {

@@ -55,20 +55,6 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
     return notFound();
   }
 
-  // A curated list of aesthetic complementary texture images
-  const complementaryImages = [
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuBZjpRQ_TLEzEbLXhUI8jizKsyF_CVMSaJxlVGlLEoAX-uQcCw3l3llGXhXh7Yh5HrgccK6rmQ4n-HtB3N0k-ULsDV0c7jBrJx7p00hvGbKjSrxH4ig6FL5ctDt8O7vtJaB9DR3GlI_diNet7fyesaOJ5MUbRkCV5V86klMo14kaexcuO0atkojCqgg3u3Xg2sVe162K_7yswucOyWPLYQz2kAB0BT0JkeXa_53V6Fr-n7zVvHmkpmcHUNMuhzblxQqMliqBcN0BU9T", // Botanical log
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuBXQhijcmtPtMf8skYc0_3R0py0Ztzsu7U-7gYyYozfnJWbJ782GjNXZhuf8kU9DIiu91Zn1SjEg54kCjAcuTm5iQJQOKMsS5fhwjfObBmBviJOChb0YVH8VhABREKOpV26o-LUGQgaj-jnmdvwJxjXgTRSkphNeXEBhz4689nZtVO-EHZ7Fgcht1PQ1Xu5xYAqeyaYFNff7SFz7akIyoMmA1pGqhMwt9kavFSnvCLy9ZNhJ8VhMWLg4hNaJNJw5-60g0KRiLuA2Qfo", // Clay texture
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuATexIdksonwhogQUZmLLaNwoiJWqTCd7laB9bTaVBksXb-6twX9SSMXO89NyPvr6eOg7eXa8_4X9ZVH_wjapZ5mQhFo6GqZutv4lNQFnRr47G4K2-1qrl3mnem5iTr1WZunwusuupDI1urhf_XbHAl_Nh84Ose103uk6NqgBfkB-UQczvkqG5GuqyVeqJvphQPQxGxo8ylSNZpgM1OsHKQu3Qlu7s93SnOm7E1DrzbT55T5bNcFc4YuYDWXBmbtRbvO5nIWy8-TBX3", // Brass Bowl
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuCH8AX3rmkoojzeqfztDH33C-ozpMi8xQjEKjhtji4ruOcVsb0954dA2GzcdzSrw46FoznwjkYQZxwfDzwf4QR1UHwHCiW3tS109MOYGYhhgZgDkr23CBEtCAO5qH3esVdkE_Sr1MFgvW1Y-RaTZcYnD7z6zMWMKqNGH6g1l9KSDOISKVP8SBRSwIxD6y2Ul4BZTUJW_rvvdWaeuEQeB3ITG9URJYJq98lm5qkGV0X67XJ49vsGDAc1_E7N2Ty90IEzjdHaU_DvllbV", // Floral Water
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuA9ZShktg9GUcLb2eOrOkddW2dKHaW5df84_hyMJ4_iny76Jlo3g0RSniildI26aAFYp4OyhBtLV4RlsV_27bPKmqKhJ2yWQFjECK6Qppsx1oxLg8OTOD1LRjdESdlmhIm_6aPeOIds-UWLg_939XrfV8bg9-tiJU-7ytbxU-m1lVGMrj5peX1BCIRVF862alVtWm1rUjzOkTpF3A3Avh-LDMDhIfDj7YxEXy54zIbYa3ijIk2zNpD36dpXtuxAQcZa62GQY6_lSGWJ", // Paste texture
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuBhPBEXj1G62rDU0iDGJDSjpIb0NiNkklq4GEpJoEHx_UzKUrzipedCBalLdbz0JYquLRrDpwgUC7G63jV_tpxr7GWk_uOLqnSH0L_ldJcqfLF0NsPMEnpHjmuasHcOJ_-GBPychyFziPFqaPL59eEVjpmcUYq5njW-3f6P42W6Qyt8AEGpNWNMEb1rKmYn2ilJ5xqCRiHdOS3N4g6LY03oe2876d043IktkMYEJsvIhmBdoqcHHbP_TFDxUG-2d_VqwJE-XNyw4noz" // Leaf bubbles
-  ];
-
-  // Deterministically select two unique complementary images based on the product slug
-  const seed = slug.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  const compImage1 = complementaryImages[seed % complementaryImages.length];
-  const compImage2 = complementaryImages[(seed + 1) % complementaryImages.length];
 
   // Fetch related products (excluding current)
   let relatedProducts: any[] = [];
@@ -90,11 +76,11 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
       <section className="max-w-screen-2xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-start">
         {/* Product Gallery (Interactive) */}
         <ProductGallery 
-          images={[
-            /^(\/|https?:)/.test(product.image) ? product.image : '/images/banner/banner0.jpg',
-            compImage1,
-            compImage2
-          ]} 
+          images={
+            product.images && product.images.length > 0
+              ? product.images
+              : [/^(\/|https?:)/.test(product.image) ? product.image : '/images/banner/banner0.jpg']
+          } 
         />
 
         {/* Product Info */}

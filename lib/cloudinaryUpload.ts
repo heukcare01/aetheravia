@@ -1,5 +1,5 @@
-// Utility for uploading images to MinIO (proxied via Next.js to avoid Mixed Content)
-export async function uploadToCloudinary(file: File, folder = "banners") {
+// Utility for uploading images to MinIO (proxied via Next.js API route)
+export async function uploadImage(file: File, folder = "banners") {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("folder", folder);
@@ -11,9 +11,12 @@ export async function uploadToCloudinary(file: File, folder = "banners") {
 
   if (!uploadRes.ok) {
     const errorData = await uploadRes.json();
-    throw new Error(errorData.error || "MinIO upload failed via proxy");
+    throw new Error(errorData.error || "MinIO upload failed");
   }
 
   const { url } = await uploadRes.json();
   return url;
 }
+
+// Keep the old name as an alias for backward compatibility during transition
+export const uploadToCloudinary = uploadImage;

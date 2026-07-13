@@ -1,4 +1,4 @@
-// Utility to upload a file to the server-side API, which then uploads to Cloudinary
+// Utility to upload a file to the server-side API, which then uploads to MinIO
 export async function uploadBannerImage(file: File) {
   const formData = new FormData();
   formData.append('file', file);
