@@ -13,6 +13,7 @@ import ProductTabs from '@/components/products/ProductTabs';
 import ProductModel from '@/lib/models/ProductModel';
 import AvailableOffers from '@/components/products/AvailableOffers';
 import ProductReviews from '@/components/products/ProductReviews';
+import ComplementaryCarousel from '@/components/products/ComplementaryCarousel';
 import dbConnect from '@/lib/dbConnect';
 
 export const generateMetadata = async ({
@@ -76,7 +77,7 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
     relatedProducts = await ProductModel.find({
       slug: { $ne: slug },
     })
-      .limit(3)
+      .limit(10)
       .lean();
   } catch (error) {
     console.error('[ProductPage] Failed to load related products:', error);
@@ -168,61 +169,7 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
       <ProductReviews productId={product._id?.toString() || ''} productName={product.name} />
 
       <section className="mt-24 max-w-screen-2xl mx-auto px-6 md:px-12">
-        <div className="flex justify-between items-end mb-12">
-          <div className="space-y-2">
-            <h3 className="font-label uppercase text-[10px] tracking-widest text-on-surface-variant">Complete the Set</h3>
-            <h2 className="font-headline text-4xl text-primary italic">Complementary Products</h2>
-          </div>
-          <div className="hidden md:flex gap-2">
-            <button className="w-10 h-10 flex items-center justify-center rounded-full border border-outline-variant/20 hover:border-primary transition-all">
-              <span className="material-symbols-outlined text-sm">arrow_back</span>
-            </button>
-            <button className="w-10 h-10 flex items-center justify-center rounded-full border border-outline-variant/20 hover:border-primary transition-all">
-              <span className="material-symbols-outlined text-sm">arrow_forward</span>
-            </button>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {relatedProducts.length > 0 ? (
-            relatedProducts.map((relProduct: any) => (
-              <Link key={relProduct._id} href={`/product/${relProduct.slug}`} className="group cursor-pointer">
-                <div className="bg-surface-container-low aspect-[3/4] rounded-lg overflow-hidden mb-6 relative border border-outline-variant/10">
-                  <Image 
-                    src={relProduct.image}
-                    alt={relProduct.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700" 
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-on-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </div>
-                <h4 className="font-headline text-2xl text-primary italic">{relProduct.name}</h4>
-                <p className="text-on-surface-variant font-body text-sm mt-1">{relProduct.category}</p>
-                <div className="mt-4 flex items-center justify-between">
-                  <span className="font-medium">{formatPrice(relProduct.price)}</span>
-                  <span className="text-[10px] font-label uppercase tracking-widest text-primary border-b border-primary/20 pb-1">Explore Details</span>
-                </div>
-              </Link>
-            ))
-          ) : (
-            <div className="lg:col-span-3 text-center py-12 bg-surface-container-low rounded-lg border border-dashed border-outline-variant/30">
-              <span className="material-symbols-outlined text-4xl text-outline-variant/50 mb-3">inventory_2</span>
-              <p className="text-on-surface-variant font-body">Exploring more treasures soon...</p>
-            </div>
-          )}
-
-          {/* Visual Placeholder/Info Card if fewer than 3 products */}
-          {relatedProducts.length < 3 && (
-            <div className="hidden lg:flex bg-secondary-container/20 rounded-lg p-12 flex-col justify-center space-y-6">
-              <span className="material-symbols-outlined text-4xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>eco</span>
-              <h4 className="font-headline text-3xl text-primary italic leading-tight">The Sustainable Standard</h4>
-              <p className="text-on-surface-variant text-sm leading-relaxed">
-                Every bottle is infinitely recyclable glass, and every purchase contributes to reforestation programs in the Western Ghats.
-              </p>
-              <Link href="/about" className="text-[10px] font-label uppercase tracking-widest text-primary underline underline-offset-8">Our Journey</Link>
-            </div>
-          )}
-        </div>
+        <ComplementaryCarousel relatedProducts={relatedProducts.map(p => convertDocToObj(p))} />
       </section>
 
       <div className="mt-24 max-w-screen-2xl mx-auto px-6 md:px-12 border-t border-outline-variant/20 pt-16">
