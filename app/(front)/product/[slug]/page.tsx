@@ -149,7 +149,7 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
       </section>
 
       {/* Detailed Content Tabs */}
-      <ProductTabs description={product.description} ingredients={product.ingredients} />
+      <ProductTabs description={product.description} ingredients={product.ingredients} productName={product.name} category={product.category} />
 
       {/* Customer Reviews - Product Specific */}
       <ProductReviews productId={product._id?.toString() || ''} productName={product.name} />

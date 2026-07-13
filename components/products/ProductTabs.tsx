@@ -7,18 +7,30 @@ interface Tab {
   id: string;
   label: string;
   title: string;
-  content: string;
-  image: string;
+  content: React.ReactNode;
 }
 
-export default function ProductTabs({ description, ingredients }: { description: string; ingredients?: string[] }) {
+export default function ProductTabs({ description, ingredients, productName, category }: { description: string; ingredients?: string[]; productName: string; category?: string }) {
+  const getRitualText = () => {
+    const name = productName || 'AETHRAVIA Product';
+    if (category === 'Body Scrub') {
+      return `Begin your routine by gently exfoliating your skin with the ${name}. Massage a small amount onto damp skin using gentle circular motions, paying attention to rough areas, then rinse thoroughly with water.`;
+    }
+    if (category === 'Body Wash') {
+      return `Begin your routine by cleansing your body with the ${name}. Apply to damp skin, work into a rich lather, and rinse thoroughly to leave your skin feeling refreshed and renewed.`;
+    }
+    if (category === 'Face Wash') {
+      return `Begin your routine by cleansing your face with the ${name}. Massage a small amount onto damp skin using gentle circular motions, then rinse thoroughly with water.`;
+    }
+    return `Begin your routine with the ${name}. Apply a small amount as directed, massaging gently into the skin, and enjoy the natural aromas of your daily ritual.`;
+  };
+
   const tabs: Tab[] = [
     {
       id: 'ritual',
       label: 'The Ritual',
       title: 'Cleansing as Meditation',
-      content: 'Begin your routine by cleansing your face with the AETHRAVIA Face Wash. Massage a small amount onto damp skin using gentle circular motions, then rinse thoroughly with water.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCRSmWpCzGLgiS4xXmXgcabj9yx-1jx55OCHnwhDI3KqgH2AC44z2R07FpIInuLyJ7I4r6s6JSVjFP_LXmVVWBNjVTxxt5nA5rD4S21VwQUkW8jdtrSvyrLHXPYxV639zShq0Z99BvF5UqyfftFQJGSkv4TBKKzzLLgNxevvtTYnsjff9KUK0MtUGHeWc1Sh_yMDO05HjHhBZmd9BVWQtvR47azLXZo3mNeIPaTGYd2EVsEV_ByExW58R37rG_PJLipBo71W9uwSoEF'
+      content: getRitualText(),
     },
     {
       id: 'ingredients',
@@ -27,14 +39,20 @@ export default function ProductTabs({ description, ingredients }: { description:
       content: ingredients && ingredients.length > 0
         ? `Key ingredients: ${ingredients.join(', ')}. Our formula is anchored by these carefully selected natural ingredients. No synthetic fragrances, sulfates, or parabens.`
         : 'Our formula is anchored by Multani Mitti (Fuller’s Earth) to draw out impurities, and Reetha (Soapnut) for a gentle natural lather. We combine this with Wild Honey to lock in moisture, known for its anti-inflammatory properties. No synthetic fragrances, sulfates, or parabens.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBXQhijcmtPtMf8skYc0_3R0py0Ztzsu7U-7gYyYozfnJWbJ782GjNXZhuf8kU9DIiu91Zn1SjEg54kCjAcuTm5iQJQOKMsS5fhwjfObBmBviJOChb0YVH8VhABREKOpV26o-LUGQgaj-jnmdvwJxjXgTRSkphNeXEBhz4689nZtVO-EHZ7Fgcht1PQ1Xu5xYAqeyaYFNff7SFz7akIyoMmA1pGqhMwt9kavFSnvCLy9ZNhJ8VhMWLg4hNaJNJw5-60g0KRiLuA2Qfo'
     },
     {
       id: 'ethics',
       label: 'Our Ethics',
       title: 'Conscious Craftsmanship',
-      content: 'At AETHRAVIA, we believe great skincare begins with thoughtful formulations and responsible choices. Every product is created with care, combining nature-inspired ingredients with modern cosmetic science. We are cruelty-free — we never test on animals. Our formulas are 100% vegan, made without animal-derived ingredients. Dermatologist tested for skin compatibility. We use cosmetic ingredients that meet internationally accepted quality and safety standards. Proudly Made in India.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuATexIdksonwhogQUZmLLaNwoiJWqTCd7laB9bTaVBksXb-6twX9SSMXO89NyPvr6eOg7eXa8_4X9ZVH_wjapZ5mQhFo6GqZutv4lNQFnRr47G4K2-1qrl3mnem5iTr1WZunwusuupDI1urhf_XbHAl_Nh84Ose103uk6NqgBfkB-UQczvkqG5GuqyVeqJvphQPQxGxo8ylSNZpgM1OsHKQu3Qlu7s93SnOm7E1DrzbT55T5bNcFc4YuYDWXBmbtRbvO5nIWy8-TBX3'
+      content: (
+        <ul className="list-disc pl-5 space-y-3">
+          <li><strong>Thoughtful Formulations:</strong> Combining nature-inspired ingredients with modern cosmetic science.</li>
+          <li><strong>Cruelty-Free:</strong> We are strictly cruelty-free and never test on animals.</li>
+          <li><strong>100% Vegan:</strong> Formulas made entirely without animal-derived ingredients.</li>
+          <li><strong>Dermatologist Tested:</strong> Ensuring safety and skin compatibility.</li>
+          <li><strong>Made in India:</strong> Proudly crafted adhering to international quality standards.</li>
+        </ul>
+      )
     }
   ];
 
@@ -60,21 +78,12 @@ export default function ProductTabs({ description, ingredients }: { description:
           ))}
         </div>
         <div className="space-y-12 transition-all duration-500">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="max-w-3xl">
             <div className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-700">
               <h2 className="font-headline text-3xl text-primary italic leading-tight">{activeTab.title}</h2>
-              <p className="text-on-surface-variant leading-relaxed">
+              <div className="text-on-surface-variant leading-relaxed text-lg">
                 {activeTab.content}
-              </p>
-            </div>
-            <div className="rounded-lg overflow-hidden aspect-square shadow-xl animate-in fade-in slide-in-from-right-4 duration-700">
-              <Image 
-                src={activeTab.image}
-                alt={activeTab.label}
-                width={600}
-                height={600}
-                className="w-full h-full object-cover"
-              />
+              </div>
             </div>
           </div>
         </div>
