@@ -18,6 +18,8 @@ type Testimonial = {
   role?: string;
   rating?: number; // 1..5
   quote: string;
+  images?: string[];
+  isVerifiedPurchase?: boolean;
 };
 
 function Stars({ value = 5 }: { value?: number }) {
@@ -109,9 +111,37 @@ export default function Testimonials({
                   <div className="card-body gap-3">
                     {typeof t.rating === "number" && <Stars value={t.rating} />}
                     <p className="text-sm md:text-base leading-relaxed opacity-95">&ldquo;{t.quote}&rdquo;</p>
-                    <div className="mt-2 border-t border-white/20 pt-3">
-                      <p className="font-bold">{t.name}</p>
-                      {t.role && <p className="text-xs opacity-80">{t.role}</p>}
+
+                    {/* Review Images */}
+                    {t.images && t.images.length > 0 && (
+                      <div className="flex gap-2 mt-2">
+                        {t.images.slice(0, 3).map((src, idx) => (
+                          <a
+                            key={idx}
+                            href={src}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-14 h-14 rounded-lg overflow-hidden border border-white/20 flex-shrink-0 hover:opacity-80 transition-opacity"
+                          >
+                            <img src={src} alt={`Review image ${idx + 1}`} className="w-full h-full object-cover" />
+                          </a>
+                        ))}
+                        {t.images.length > 3 && (
+                          <div className="w-14 h-14 rounded-lg bg-black/30 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                            +{t.images.length - 3}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    <div className="mt-2 border-t border-white/20 pt-3 flex items-center justify-between">
+                      <div>
+                        <p className="font-bold">{t.name}</p>
+                        {t.role && <p className="text-xs opacity-80">{t.role}</p>}
+                      </div>
+                      {t.isVerifiedPurchase && (
+                        <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-medium">✓ Verified</span>
+                      )}
                     </div>
                   </div>
                 </article>

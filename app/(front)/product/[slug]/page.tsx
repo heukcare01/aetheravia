@@ -12,6 +12,8 @@ import FAQSection from '@/components/footer/FAQ';
 import ProductTabs from '@/components/products/ProductTabs';
 import ProductModel from '@/lib/models/ProductModel';
 import Testimonials from '@/components/testimonials/Testimonials';
+import AvailableOffers from '@/components/products/AvailableOffers';
+import ReviewForm from '@/components/products/ReviewForm';
 import dbConnect from '@/lib/dbConnect';
 
 export const generateMetadata = async ({
@@ -155,6 +157,8 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
               <span className="text-on-surface-variant text-xs italic">Ingredients will be listed soon</span>
             </div>
           )}
+          {/* Available Offers */}
+          <AvailableOffers productId={product._id?.toString() || ''} />
         </div>
       </section>
 
@@ -164,6 +168,10 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
       {/* Customer Reviews */}
       <section className="mt-16 md:mt-24 max-w-screen-2xl mx-auto px-6 md:px-12">
         <Testimonials heading="Ritual Reviews" subtitle="What Our Community Says" />
+        {/* Review Form */}
+        <div className="mt-12 max-w-2xl mx-auto bg-surface-container-low rounded-2xl p-6 md:p-10 border border-outline-variant/10">
+          <ReviewForm productId={product._id?.toString() || ''} productName={product.name} />
+        </div>
       </section>
       <section className="mt-24 max-w-screen-2xl mx-auto px-6 md:px-12">
         <div className="flex justify-between items-end mb-12">

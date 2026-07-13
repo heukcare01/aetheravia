@@ -5,6 +5,8 @@ import dbConnect from "@/lib/dbConnect";
 import CouponModel from "@/lib/models/CouponModel";
 import OrderModel, { OrderItem } from "@/lib/models/OrderModel";
 import ProductModel from "@/lib/models/ProductModel";
+import UserModel from "@/lib/models/UserModel";
+import ReferralSettingsModel from "@/lib/models/ReferralSettingsModel";
 import { emitAdminEvent } from "@/lib/eventBus";
 import {
   sanitizeRequestBody,
@@ -250,6 +252,66 @@ export const POST = auth(async (req: any) => {
         total: createdOrder.totalPrice,
         userId: createdOrder.user?.toString?.(),
       });
+
+      // ---- Referral Reward Crediting ----
+      // Credit the referrer when a referred user places their first paid order
+      try {
+        const orderUser = await UserModel.findById(safeUserId).select(
+          'referredBy referralHistory'
+        );
+        if (orderUser?.referredBy) {
+          // Check this is the user's first order (excluding this one)
+          const previousOrders = await OrderModel.countDocuments({
+            user: safeUserId,
+            _id: { $ne: createdOrder._id },
+          });
+          if (previousOrders === 0) {
+            // First order — credit the referrer
+            const settings = await ReferralSettingsModel.findOne({});
+            if (settings?.enabled) {
+              let reward = 0;
+              if (settings.rewardType === 'fixed') {
+                reward = settings.rewardValue || 0;
+              } else if (settings.rewardType === 'percent') {
+                reward = Math.round(
+                  (createdOrder.totalPrice * (settings.rewardValue || 0)) / 100
+                );
+                if (settings.maxReward && reward > settings.maxReward) {
+                  reward = settings.maxReward;
+                }
+              }
+
+              if (reward > 0) {
+                const referrer = await UserModel.findOne({
+                  referralCode: orderUser.referredBy,
+                });
+                if (referrer) {
+                  referrer.referralCredits =
+                    (referrer.referralCredits || 0) + reward;
+                  referrer.referralHistory = referrer.referralHistory || [];
+                  referrer.referralHistory.push({
+                    referredUserId: safeUserId,
+                    referredUserEmail: user?.email || '',
+                    reward,
+                    orderId: createdOrder._id?.toString(),
+                    date: new Date(),
+                  });
+                  await referrer.save();
+                  emitAdminEvent({
+                    type: 'referral.reward',
+                    referrerId: referrer._id?.toString(),
+                    referredUserId: safeUserId,
+                    reward,
+                  });
+                }
+              }
+            }
+          }
+        }
+      } catch (refErr) {
+        // Non-critical: log but don't fail the order
+        console.error('Referral reward crediting error:', refErr);
+      }
     }
   }
 });

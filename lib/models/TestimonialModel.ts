@@ -9,6 +9,10 @@ export type Testimonial = {
   city?: string;
   published?: boolean;
   order?: number;
+  images?: string[];
+  productId?: string;
+  userId?: string;
+  isVerifiedPurchase?: boolean;
 };
 
 const testimonialSchema = new mongoose.Schema(
@@ -20,11 +24,16 @@ const testimonialSchema = new mongoose.Schema(
     city: { type: String, trim: true },
     published: { type: Boolean, default: true },
     order: { type: Number, default: 0 },
+    images: { type: [String], default: [] },
+    productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    isVerifiedPurchase: { type: Boolean, default: false },
   },
   { timestamps: true },
 );
 
 testimonialSchema.index({ published: 1, order: 1, createdAt: -1 });
+testimonialSchema.index({ productId: 1, published: 1 });
 
 const TestimonialModel =
   mongoose.models.Testimonial || mongoose.model('Testimonial', testimonialSchema);
