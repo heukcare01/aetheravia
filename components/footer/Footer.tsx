@@ -16,7 +16,12 @@ const Footer = async () => {
 
   const currentYear = new Date().getFullYear();
   const email = settings?.supportEmail || 'aethravia@gmail.com';
-  const address = settings?.shopAddress || 'H.No.46, Mohalla Mohammad Wasil Near Hadri Masjid, Pilibhit, Uttar Pradesh-262001 (India)';
+  const address = settings?.shopAddress || 'H.No.46, Mohalla Mohammad Wasil Near Hadri Masjid, Pilibhit, UP-262001 (India)';
+  const phone = settings?.supportPhone || '+91-XXXX-XXXXXX';
+  const phoneClean = phone.replace(/[^0-9+]/g, '');
+  const rawWhatsapp = (settings?.whatsappNumber || phone).replace(/[^0-9+]/g, '');
+  const whatsappUrlSafe = rawWhatsapp.startsWith('+') ? rawWhatsapp.substring(1) : rawWhatsapp;
+  const whatsappUrl = `https://wa.me/${whatsappUrlSafe}?text=Hello! I have a query regarding Aethravia products.`;
 
   return (
     <footer className="bg-[#e5e2dd] relative overflow-hidden text-[#1c1c19]">
@@ -68,7 +73,7 @@ const Footer = async () => {
                 <span className="text-[10px] font-bold tracking-widest uppercase">Instagram</span>
               </a>
               <a 
-                href="https://wa.me/yournumber" 
+                href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-secondary hover:text-primary transition-colors flex items-center space-x-2 group"
@@ -126,6 +131,7 @@ const Footer = async () => {
               <Link href="/cookies" className="text-sm font-medium text-secondary hover:text-primary transition-colors">Cookie Policy</Link>
               <Link href="/faq" className="text-sm font-medium text-secondary hover:text-primary transition-colors uppercase tracking-widest text-[11px]">FAQ</Link>
               <Link href={`mailto:${email}`} className="pt-2 text-xs font-bold text-primary underline underline-offset-4">{email}</Link>
+              <a href={`tel:${phoneClean}`} className="text-xs font-bold text-primary underline underline-offset-4">{phone}</a>
             </nav>
           </div>
         </div>

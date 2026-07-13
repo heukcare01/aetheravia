@@ -36,9 +36,9 @@ async function updateTags() {
     console.log('Connected to MongoDB.');
 
     const updates = [
-      { name: "Face Wash", tags: faceWashTags },
-      { name: "Body wash", tags: bodyWashTags },
-      { name: "Body Scrub", tags: bodyScrubTags }
+      { name: "Face Wash", tags: faceWashTags, tagBannerImage: '/images/tag-banners/face-wash-tags.jpg' },
+      { name: "Body wash", tags: bodyWashTags, tagBannerImage: '/images/tag-banners/body-wash-tags.jpg' },
+      { name: "Body Scrub", tags: bodyScrubTags, tagBannerImage: '/images/tag-banners/body-scrub-tags.jpg' }
     ];
 
     for (const update of updates) {
@@ -46,8 +46,9 @@ async function updateTags() {
       const product = await ProductModel.findOne({ name: { $regex: new RegExp(update.name, 'i') } });
       if (product) {
         product.tags = update.tags;
+        product.tagBannerImage = update.tagBannerImage;
         await product.save();
-        console.log(`Updated tags for: ${product.name}`);
+        console.log(`Updated tags + tagBannerImage for: ${product.name}`);
       } else {
         console.log(`Product NOT FOUND: ${update.name}`);
         const allProducts = await ProductModel.find({}, 'name');

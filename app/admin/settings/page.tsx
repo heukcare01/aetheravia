@@ -62,6 +62,35 @@ export default function AdminSettingsPage() {
         </p>
       </div>
 
+      {/* Current Live Values */}
+      <div className="card bg-base-100 border border-info/20 shadow-sm">
+        <div className="card-body p-5 space-y-4">
+          <h2 className="text-sm font-bold flex items-center gap-2">🔴 Currently Live on Website</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-base-200/50 rounded-lg p-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Phone Number</p>
+              <p className="text-sm font-semibold break-all">{data?.supportPhone || '—'}</p>
+              <p className="text-[10px] opacity-40 mt-1">Floating widget, footer, contact page</p>
+            </div>
+            <div className="bg-base-200/50 rounded-lg p-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">WhatsApp</p>
+              <p className="text-sm font-semibold break-all">{data?.whatsappNumber || data?.supportPhone || '—'}</p>
+              <p className="text-[10px] opacity-40 mt-1">Floating widget, footer, FAQ curator button</p>
+            </div>
+            <div className="bg-base-200/50 rounded-lg p-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Email</p>
+              <p className="text-sm font-semibold break-all">{data?.supportEmail || '—'}</p>
+              <p className="text-[10px] opacity-40 mt-1">Footer, contact page, email templates</p>
+            </div>
+            <div className="bg-base-200/50 rounded-lg p-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Address</p>
+              <p className="text-sm font-semibold line-clamp-2">{data?.shopAddress || '—'}</p>
+              <p className="text-[10px] opacity-40 mt-1">Footer, contact page</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="card bg-base-100 border shadow-sm">
         <div className="card-body p-6 space-y-6">
           <h2 className="text-lg font-bold flex items-center gap-2">📞 Contact Details</h2>

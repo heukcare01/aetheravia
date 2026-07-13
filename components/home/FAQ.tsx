@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useSiteSettings } from '@/lib/hooks/useSiteSettings';
 
 const faqData = [
   {
@@ -37,6 +38,12 @@ const faqData = [
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const { settings } = useSiteSettings();
+
+  // Build dynamic WhatsApp URL
+  const rawWhatsapp = (settings.whatsappNumber || settings.supportPhone).replace(/[^0-9+]/g, '');
+  const whatsappUrlSafe = rawWhatsapp.startsWith('+') ? rawWhatsapp.substring(1) : rawWhatsapp;
+  const whatsappUrl = `https://wa.me/${whatsappUrlSafe}?text=Hello! I have a query regarding Aethravia products.`;
 
   const toggleOpen = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -108,7 +115,7 @@ export default function FAQ() {
             <h2 className="font-headline text-3xl text-secondary mb-6 leading-tight">Still have questions?</h2>
             <p className="font-body text-on-surface-variant mb-8">Our curators are available for personalized consultations regarding your skin ritual. Reach out to our heritage team for a deeper dive into our sourcing and ethos.</p>
             <a
-              href="https://wa.me/919045429750?text=Hello! I have a query regarding Aethravia products."
+              href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-primary text-on-primary px-8 py-4 rounded-lg font-label font-semibold tracking-wider hover:opacity-90 transition-opacity"

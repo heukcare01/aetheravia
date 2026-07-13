@@ -84,7 +84,7 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
         />
 
         {/* Product Info */}
-        <div className="lg:col-span-7 flex flex-col space-y-8 mt-8 lg:mt-0">
+        <div className="lg:col-span-7 flex flex-col space-y-6 mt-8 lg:mt-0">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               {product.countInStock > 0 ? (
@@ -102,10 +102,9 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
             <h1 className="font-headline text-4xl md:text-5xl text-primary tracking-tighter italic leading-tight">
               {product.name}
             </h1>
-            <p className="text-2xl font-body font-light text-on-surface">{formatPrice(product.price)}</p>
           </div>
 
-          {/* Tags */}
+          {/* Tags (right after name, like Aqualogica) */}
           {product.tags && product.tags.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {product.tags.map((tag: string, idx: number) => (
@@ -116,15 +115,22 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
             </div>
           )}
 
-          <div className="space-y-4">
-            <h3 className="font-label uppercase text-[10px] tracking-widest text-on-surface-variant">Ancient Wisdom</h3>
-            <p className="text-on-surface-variant leading-relaxed text-lg">
-              {product.description}
-            </p>
-          </div>
+          {/* Tag Banner Image (cropped feature graphic) */}
+          {product.tagBannerImage && (
+            <div className="rounded-lg overflow-hidden border border-outline-variant/20">
+              <img
+                src={product.tagBannerImage}
+                alt={`${product.name} features`}
+                className="w-full h-auto object-contain"
+              />
+            </div>
+          )}
 
-          {/* Selectors */}
-          <div className="flex flex-col sm:flex-row gap-4 pt-4 items-stretch sm:items-center">
+          {/* Price */}
+          <p className="text-2xl font-body font-light text-on-surface">{formatPrice(product.price)}</p>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
             {product.countInStock > 0 && (
                <div className="flex-1">
                  <AddToCart
@@ -142,7 +148,7 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
 
           {/* Ingredient Chips */}
           {product.ingredients && product.ingredients.length > 0 ? (
-            <div className="flex flex-wrap gap-2 pt-4">
+            <div className="flex flex-wrap gap-2 pt-2">
               {product.ingredients.map((ingredient: string, idx: number) => (
                 <span key={idx} className="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-[11px] font-medium tracking-wide">
                   {ingredient}
@@ -150,12 +156,21 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
               ))}
             </div>
           ) : (
-            <div className="flex flex-wrap gap-2 pt-4">
+            <div className="flex flex-wrap gap-2 pt-2">
               <span className="text-on-surface-variant text-xs italic">Ingredients will be listed soon</span>
             </div>
           )}
+
           {/* Available Offers */}
           <AvailableOffers productId={product._id?.toString() || ''} />
+
+          {/* Description (moved down for scrollability) */}
+          <div className="space-y-3 pt-4 border-t border-outline-variant/20">
+            <h3 className="font-label uppercase text-[10px] tracking-widest text-on-surface-variant">About This Product</h3>
+            <p className="text-on-surface-variant leading-relaxed text-base">
+              {product.description}
+            </p>
+          </div>
         </div>
       </section>
 
