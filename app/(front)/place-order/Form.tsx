@@ -16,7 +16,6 @@ import useCartService from '@/lib/hooks/useCartStore';
 import { formatPrice } from '@/lib/utils';
 
 const PAYMENT_METHOD_LABELS = {
-  cod: 'Cash on Delivery (COD)',
   Razorpay: 'Razorpay Secure Gateway',
   razorpay_upi: 'Instant UPI',
   razorpay_card: 'Credit / Debit Card',
@@ -54,7 +53,6 @@ const Form = () => {
     }
   }, [status, router]);
 
-  const isCashOnDelivery = paymentMethod === 'cod';
   const isRazorpayPayment = paymentMethod?.startsWith('razorpay');
 
   const handleRazorpayPayment = async (orderId: string) => {
@@ -161,12 +159,12 @@ const Form = () => {
       const data = await res.json();
       if (res.ok) {
         const orderId = data.order._id;
-        if (isCashOnDelivery) {
-          clear();
-          toast.success('Manifest Recorded. Payment due upon arrival.');
-          return router.push(`/order/${orderId}`);
-        } else if (isRazorpayPayment) {
+        if (isRazorpayPayment) {
           await handleRazorpayPayment(orderId);
+        } else {
+          // Fallback: redirect to order page
+          clear();
+          router.push(`/order/${orderId}`);
         }
       } else {
         toast.error(data.message);
@@ -241,14 +239,14 @@ const Form = () => {
               </div>
               <div className="p-8 flex items-center gap-6">
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <span className="material-symbols-outlined">{isCashOnDelivery ? 'payments' : 'verified_user'}</span>
+                  <span className="material-symbols-outlined">verified_user</span>
                 </div>
                 <div>
                   <p className="font-label text-on-surface font-bold text-lg">
                     {PAYMENT_METHOD_LABELS[paymentMethod as keyof typeof PAYMENT_METHOD_LABELS] || paymentMethod}
                   </p>
                   <p className="text-xs text-secondary font-body mt-1 italic">
-                    {isCashOnDelivery ? 'Pay with cash upon delivery.' : 'Secured via encrypted payment gateway.'}
+                    Secured via encrypted payment gateway.
                   </p>
                 </div>
               </div>
@@ -360,7 +358,7 @@ const Form = () => {
                     <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
                   ) : (
                     <>
-                      {isCashOnDelivery ? 'Confirm Order' : 'Pay Now'}
+                      Pay Now
                       <span className="material-symbols-outlined text-sm">check_circle</span>
                     </>
                   )}

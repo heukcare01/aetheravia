@@ -37,8 +37,9 @@ const statusOptions = [
 
 const paymentMethodOptions = [
   { value: '', label: 'All Payment Methods' },
-  { value: 'razorpay', label: 'Razorpay' },
-  { value: 'cod', label: 'Cash on Delivery' },
+  { value: 'razorpay_upi', label: 'UPI' },
+  { value: 'razorpay_card', label: 'Card' },
+  { value: 'razorpay_netbanking', label: 'Net Banking' },
   { value: 'wallet', label: 'Wallet' },
 ];
 

@@ -64,6 +64,8 @@ export const POST = auth(async (req: any) => {
     // Update order with payment details
     order.isPaid = true;
     order.paidAt = new Date();
+    order.status = 'confirmed';
+    order.orderStatus = 'confirmed';
     order.paymentResult = {
       id: razorpay_payment_id,
       status: paymentDetails.status,

@@ -16,7 +16,7 @@ const faqData = [
   {
     num: "03",
     question: "How should I use the 'Essential Three' ritual?",
-    answer: "The 'Essential Three' follows a rhythmic progression: First, cleanse with our earthen wash; second, exfoliate gently with the Mitti Polish; and third, seal in moisture with our infused oils. It is a slow, tactile ritual meant to be practiced twice weekly for optimal skin restoration."
+    answer: "Begin your ritual with the AETHRAVIA Face Wash to gently cleanse away impurities and prepare your skin. Follow with the Body Scrub to exfoliate and smoothen the skin's texture, then complete your ritual with the Body Wash for a refreshing cleanse and a soft, nourished feel. Use this mindful three-step routine regularly to transform your everyday skincare into a calming self-care experience."
   },
   {
     num: "04",
@@ -30,8 +30,8 @@ const faqData = [
   },
   {
     num: "06",
-    question: "Can I use the Mitti Polish on my face?",
-    answer: "While specifically formulated for the body's thicker dermis, the Mitti Polish can be used as a targeted facial mask. Apply to oily areas (like the T-zone) for 5 minutes, then rinse gently without scrubbing to avoid over-exfoliation of delicate facial skin."
+    question: "Why is a consistent skincare ritual important?",
+    answer: "A consistent skincare ritual helps nurture your skin over time while turning everyday care into a mindful self-care experience."
   }
 ];
 
@@ -107,13 +107,17 @@ export default function FAQ() {
           <div className="md:pl-12 mt-12 md:mt-0">
             <h2 className="font-headline text-3xl text-secondary mb-6 leading-tight">Still have questions?</h2>
             <p className="font-body text-on-surface-variant mb-8">Our curators are available for personalized consultations regarding your skin ritual. Reach out to our heritage team for a deeper dive into our sourcing and ethos.</p>
-            <button className="bg-primary text-on-primary px-8 py-4 rounded-lg font-label font-semibold tracking-wider hover:opacity-90 transition-opacity" suppressHydrationWarning>
+            <a
+              href="https://wa.me/919045429750?text=Hello! I have a query regarding Aethravia products."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-primary text-on-primary px-8 py-4 rounded-lg font-label font-semibold tracking-wider hover:opacity-90 transition-opacity"
+            >
               CONNECT WITH A CURATOR
-            </button>
+            </a>
           </div>
         </section>
       </div>
     </section>
   );
 }
-

@@ -17,7 +17,7 @@ export default function ProductTabs({ description, ingredients }: { description:
       id: 'ritual',
       label: 'The Ritual',
       title: 'Cleansing as Meditation',
-      content: 'Dispense a small amount onto your palm or a natural loofah. Massage onto damp skin in gentle circular motions, focusing on areas that hold tension. Inhale the grounding scent of the earth. Rinse with lukewarm water to reveal skin that feels soft, detoxified, and deeply nourished.',
+      content: 'Begin your routine by cleansing your face with the AETHRAVIA Face Wash. Massage a small amount onto damp skin using gentle circular motions, then rinse thoroughly with water.',
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCRSmWpCzGLgiS4xXmXgcabj9yx-1jx55OCHnwhDI3KqgH2AC44z2R07FpIInuLyJ7I4r6s6JSVjFP_LXmVVWBNjVTxxt5nA5rD4S21VwQUkW8jdtrSvyrLHXPYxV639zShq0Z99BvF5UqyfftFQJGSkv4TBKKzzLLgNxevvtTYnsjff9KUK0MtUGHeWc1Sh_yMDO05HjHhBZmd9BVWQtvR47azLXZo3mNeIPaTGYd2EVsEV_ByExW58R37rG_PJLipBo71W9uwSoEF'
     },
     {
@@ -33,7 +33,7 @@ export default function ProductTabs({ description, ingredients }: { description:
       id: 'ethics',
       label: 'Our Ethics',
       title: 'Conscious Craftsmanship',
-      content: 'Aethravia is built on the principle of Ahimsa (non-violence). Every ingredient is ethically sourced, supporting local cooperatives. Our packaging is 100% plastic-free, using infinitely recyclable glass and recycled paper. We never test on animals and ensure a fair wage for every hand in our supply chain.',
+      content: 'At AETHRAVIA, we believe great skincare begins with thoughtful formulations and responsible choices. Every product is created with care, combining nature-inspired ingredients with modern cosmetic science. We are cruelty-free — we never test on animals. Our formulas are 100% vegan, made without animal-derived ingredients. Dermatologist tested for skin compatibility. We use cosmetic ingredients that meet internationally accepted quality and safety standards. Proudly Made in India.',
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuATexIdksonwhogQUZmLLaNwoiJWqTCd7laB9bTaVBksXb-6twX9SSMXO89NyPvr6eOg7eXa8_4X9ZVH_wjapZ5mQhFo6GqZutv4lNQFnRr47G4K2-1qrl3mnem5iTr1WZunwusuupDI1urhf_XbHAl_Nh84Ose103uk6NqgBfkB-UQczvkqG5GuqyVeqJvphQPQxGxo8ylSNZpgM1OsHKQu3Qlu7s93SnOm7E1DrzbT55T5bNcFc4YuYDWXBmbtRbvO5nIWy8-TBX3'
     }
   ];

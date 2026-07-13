@@ -29,13 +29,6 @@ const PAYMENT_METHODS = [
     description: 'Traditional acquisition through direct banking portals',
     icon: 'account_balance_wallet',
   },
-  {
-    id: 'cod',
-    name: 'Cash on Delivery (COD)',
-    description: 'Pay with cash upon delivery of your order',
-    icon: 'payments',
-    tag: 'Convenience Fee'
-  },
 ];
 
 const Form = () => {
