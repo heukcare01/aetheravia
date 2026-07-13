@@ -31,6 +31,7 @@ export const GET = auth(async (...args: any) => {
       description: '',
       rating: 0,
       numReviews: 0,
+      tags: [],
     });
   }
 
@@ -77,6 +78,7 @@ export const PUT = auth(async (...args: any) => {
     countInStock,
     description,
     sizes,
+    tags,
   } = await req.json();
 
   try {
@@ -94,6 +96,7 @@ export const PUT = auth(async (...args: any) => {
         countInStock,
         description,
         sizes,
+        tags,
       });
       const createdProduct = await newProduct.save();
       return Response.json(createdProduct);
@@ -111,6 +114,7 @@ export const PUT = auth(async (...args: any) => {
       product.countInStock = countInStock;
       product.description = description;
       product.sizes = sizes;
+      product.tags = tags;
 
       const updatedProduct = await product.save();
       return Response.json(updatedProduct);

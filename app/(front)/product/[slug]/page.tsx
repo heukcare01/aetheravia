@@ -105,6 +105,17 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
             <p className="text-2xl font-body font-light text-on-surface">{formatPrice(product.price)}</p>
           </div>
 
+          {/* Tags */}
+          {product.tags && product.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {product.tags.map((tag: string, idx: number) => (
+                <span key={idx} className="bg-surface-variant/30 border border-outline-variant/30 text-on-surface-variant px-2.5 py-0.5 rounded-full text-[11px] font-medium tracking-wide">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+
           <div className="space-y-4">
             <h3 className="font-label uppercase text-[10px] tracking-widest text-on-surface-variant">Ancient Wisdom</h3>
             <p className="text-on-surface-variant leading-relaxed text-lg">

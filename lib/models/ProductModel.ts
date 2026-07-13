@@ -17,6 +17,7 @@ export type Product = {
   colors?: string[];
   sizes?: string[];
   ingredients?: string[];
+  tags?: string[];
 };
 
 const productSchema = new mongoose.Schema(
@@ -37,6 +38,7 @@ const productSchema = new mongoose.Schema(
     sizes: { type: [String], default: [] },
     colors: { type: [String], default: [] },
     ingredients: { type: [String], default: [] },
+    tags: { type: [String], default: [] },
   },
   {
     timestamps: true,
