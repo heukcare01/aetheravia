@@ -68,12 +68,11 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
   const compImage1 = complementaryImages[seed % complementaryImages.length];
   const compImage2 = complementaryImages[(seed + 1) % complementaryImages.length];
 
-  // Fetch related products (same category, excluding current)
+  // Fetch related products (excluding current)
   let relatedProducts: any[] = [];
   try {
     await dbConnect();
     relatedProducts = await ProductModel.find({
-      category: product.category,
       slug: { $ne: slug },
     })
       .limit(3)
