@@ -2,13 +2,26 @@ import { Metadata } from 'next';
 import React from 'react';
 import ContactFAQ from './ContactFAQ';
 import ContactForm from './ContactForm';
+import dbConnect from '@/lib/dbConnect';
+import SiteSettingsModel from '@/lib/models/SiteSettingsModel';
 
 export const metadata: Metadata = {
   title: 'Contact Us | Aethravia',
   description: 'Whether you seek guidance on a personalized ritual or have a question about our artisanal ingredients, our archive is open to you.',
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  let settings: any = null;
+  try {
+    await dbConnect();
+    settings = await SiteSettingsModel.findOne({}).lean();
+  } catch (e) {
+    console.error('Contact page failed to load settings', e);
+  }
+  const email = settings?.supportEmail || 'aethravia@gmail.com';
+  const phone = settings?.supportPhone || '+91-9259775846';
+  const phoneClean = phone.replace(/[^0-9+]/g, '');
+  const address = settings?.shopAddress || 'H.No.46, Mohalla Mohammad Wasil Near Hadri Masjid, Pilibhit, UP-262001 (India)';
   return (
     <main className="relative pt-16 md:pt-24 pb-16 md:pb-24 bg-surface text-on-surface overflow-x-hidden antialiased">
       <div 
@@ -37,7 +50,7 @@ export default function ContactPage() {
             </div>
             <h3 className="text-xl font-headline text-primary mb-2">Email Us</h3>
             <p className="text-secondary font-body text-sm mb-4">Expect a response within 24 hours.</p>
-            <a className="text-on-surface font-semibold font-body hover:text-primary transition-colors underline decoration-outline-variant underline-offset-4 block" href="mailto:aethravia@gmail.com">aethravia@gmail.com</a>
+            <a className="text-on-surface font-semibold font-body hover:text-primary transition-colors underline decoration-outline-variant underline-offset-4 block" href={`mailto:${email}`}>{email}</a>
           </div>
           {/* Card 2 */}
           <div className="bg-surface-container-low p-8 transition-all hover:bg-surface-container-high group rounded-lg shadow-sm">
@@ -46,7 +59,7 @@ export default function ContactPage() {
             </div>
             <h3 className="text-xl font-headline text-primary mb-2">Call Us</h3>
             <p className="text-secondary font-body text-sm mb-4">Mon-Fri, 9am to 6pm IST.</p>
-            <a className="text-on-surface font-semibold font-body hover:text-primary transition-colors underline decoration-outline-variant underline-offset-4 block" href="tel:+919259775846">+91 9259775846</a>
+            <a className="text-on-surface font-semibold font-body hover:text-primary transition-colors underline decoration-outline-variant underline-offset-4 block" href={`tel:${phoneClean}`}>{phone}</a>
           </div>
           {/* Card 3 */}
           <div className="bg-surface-container-low p-8 transition-all hover:bg-surface-container-high group rounded-lg shadow-sm">
@@ -55,7 +68,7 @@ export default function ContactPage() {
             </div>
             <h3 className="text-xl font-headline text-primary mb-2">Head Office</h3>
             <p className="text-secondary font-body text-sm mb-4">Our Flagship Heritage Store.</p>
-            <a href="https://www.google.com/maps/search/?api=1&query=28%C2%B038%2707.4%22N+79%C2%B048%2740.2%22E" target="_blank" rel="noopener noreferrer" className="text-on-surface font-semibold font-body block text-xs hover:text-primary transition-colors underline decoration-outline-variant underline-offset-4">H.No.46, Mohalla Mohammad Wasil Near Hadri Masjid, Pilibhit, UP-262001 (India)</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=28%C2%B038%2707.4%22N+79%C2%B048%2740.2%22E" target="_blank" rel="noopener noreferrer" className="text-on-surface font-semibold font-body block text-xs hover:text-primary transition-colors underline decoration-outline-variant underline-offset-4">{address}</a>
           </div>
           {/* Card 4 */}
           <div className="bg-surface-container-low p-8 transition-all hover:bg-surface-container-high group rounded-lg shadow-sm">
@@ -122,7 +135,7 @@ export default function ContactPage() {
             <h2 className="text-3xl font-headline text-on-primary-container mb-2">Need Immediate Help?</h2>
             <p className="text-on-primary-container/80 font-body">Our concierge is standing by to assist with urgent order issues.</p>
           </div>
-          <a className="relative z-10 px-10 py-4 bg-on-primary-container text-primary font-bold tracking-widest uppercase text-xs hover:bg-surface transition-all flex items-center gap-3 shadow-xl rounded" href="tel:+919259775846">
+          <a className="relative z-10 px-10 py-4 bg-on-primary-container text-primary font-bold tracking-widest uppercase text-xs hover:bg-surface transition-all flex items-center gap-3 shadow-xl rounded" href={`tel:${phoneClean}`}>
             <span className="material-symbols-outlined text-sm">phone_in_talk</span>
             Call Now
           </a>

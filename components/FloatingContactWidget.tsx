@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { MessageCircle, Phone, X, MessageSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { supportPhone } from '@/lib/brand';
+import { useSiteSettings } from '@/lib/hooks/useSiteSettings';
 
 /**
  * Premium Floating Contact Widget
@@ -12,14 +12,16 @@ import { supportPhone } from '@/lib/brand';
  */
 const FloatingContactWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { settings } = useSiteSettings();
 
   // Clean the phone number for URLs
-  const phoneNumber = supportPhone.replace(/[^0-9+]/g, '');
+  const phoneNumber = settings.supportPhone.replace(/[^0-9+]/g, '');
+  const rawWhatsapp = settings.whatsappNumber.replace(/[^0-9+]/g, '');
   
   // WhatsApp usually prefers numbers without + for the wa.me link in some contexts, 
   // but wa.me/number works fine with international format.
-  const whatsappNumber = phoneNumber.startsWith('+') ? phoneNumber.substring(1) : phoneNumber;
-  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=Hello! I have a query regarding Aethravia products.`;
+  const whatsappUrlSafe = rawWhatsapp.startsWith('+') ? rawWhatsapp.substring(1) : rawWhatsapp;
+  const whatsappUrl = `https://wa.me/${whatsappUrlSafe}?text=Hello! I have a query regarding Aethravia products.`;
   const telUrl = `tel:${phoneNumber}`;
 
   return (

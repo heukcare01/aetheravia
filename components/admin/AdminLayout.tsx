@@ -63,6 +63,7 @@ const AdminLayout = ({
       title: 'Editorial',
       items: [
         { key: 'testimonials', label: 'Testimonials', href: '/admin/testimonials', icon: 'chat' },
+        { key: 'settings', label: 'Settings', href: '/admin/settings', icon: 'settings' },
       ]
     }
   ];

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
@@ -20,10 +20,10 @@ type T = {
 export default function TestimonialForm({ id }: { id: string }) {
   const { data, error } = useSWR(`/api/admin/testimonials/${id}`);
   const router = useRouter();
-  const [isMutating, setIsMutating] = ((): [boolean, (b: boolean) => void] => {
-    let flag = false;
-    return [flag, (b: boolean) => { flag = b; }];
-  })();
+  const [saving, setSaving] = useState(false);
+  const [images, setImages] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<T>();
 
@@ -36,18 +36,50 @@ export default function TestimonialForm({ id }: { id: string }) {
     setValue('rating', data.rating ?? 5);
     setValue('published', data.published ?? true);
     setValue('order', data.order ?? 0);
+    setImages(data.images || []);
   }, [data, setValue]);
 
   if (error) return error.message;
   if (!data) return 'Loading...';
 
+  const handleImageUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const remaining = 5 - images.length;
+    if (remaining <= 0) {
+      toast.error('Maximum 5 images allowed');
+      return;
+    }
+    const filesToUpload = Array.from(files).slice(0, remaining);
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      filesToUpload.forEach((file) => formData.append('files', file));
+      const res = await fetch('/api/reviews/upload', { method: 'POST', body: formData });
+      if (!res.ok) throw new Error('Upload failed');
+      const result = await res.json();
+      const urls: string[] = result.urls || [];
+      setImages((prev) => [...prev, ...urls]);
+      toast.success(`${urls.length} image(s) uploaded`);
+    } catch (e: any) {
+      toast.error(e.message || 'Upload failed');
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  const removeImage = (idx: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== idx));
+  };
+
   const onSubmit = async (form: T) => {
+    setSaving(true);
     const toastId = toast.loading('Updating...');
     try {
       const res = await fetch(`/api/admin/testimonials/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, images }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json?.message || 'Failed to update');
@@ -55,6 +87,8 @@ export default function TestimonialForm({ id }: { id: string }) {
       router.push('/admin/testimonials');
     } catch (e: any) {
       toast.error(e?.message || 'Update failed', { id: toastId });
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -106,8 +140,50 @@ export default function TestimonialForm({ id }: { id: string }) {
             {errors.quote && <p className='text-error'>{errors.quote.message}</p>}
           </div>
         </div>
-        <button type='submit' className='btn btn-primary' disabled={isMutating}>
-          {isMutating && <span className='loading loading-spinner'></span>}
+
+        {/* Image Upload Section */}
+        <div className='md:flex'>
+          <label className='label md:w-1/5'>Images</label>
+          <div className='md:w-4/5 space-y-3'>
+            {/* Preview existing images */}
+            {images.length > 0 && (
+              <div className='flex flex-wrap gap-3'>
+                {images.map((url, idx) => (
+                  <div key={idx} className='relative group w-24 h-24 rounded-lg overflow-hidden border border-base-300'>
+                    <img src={url} alt={`Image ${idx + 1}`} className='w-full h-full object-cover' />
+                    <button
+                      type='button'
+                      onClick={() => removeImage(idx)}
+                      className='absolute top-1 right-1 w-5 h-5 bg-error text-error-content rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity'
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {/* Upload button */}
+            {images.length < 5 && (
+              <div>
+                <input
+                  ref={fileInputRef}
+                  type='file'
+                  accept='image/*'
+                  multiple
+                  className='file-input file-input-bordered file-input-sm w-full max-w-md'
+                  onChange={(e) => handleImageUpload(e.target.files)}
+                  disabled={uploading}
+                />
+                <p className='text-xs opacity-60 mt-1'>
+                  {uploading ? 'Uploading...' : `Up to ${5 - images.length} more image(s). Max 5MB each.`}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <button type='submit' className='btn btn-primary' disabled={saving || uploading}>
+          {saving && <span className='loading loading-spinner'></span>}
           Save
         </button>
         <Link href='/admin/testimonials' className='btn ml-3'>Cancel</Link>

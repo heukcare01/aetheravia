@@ -2,10 +2,21 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Instagram, Share2, Globe, ArrowRight } from 'lucide-react';
-import { brandEmail, shopAddress } from '@/lib/brand';
+import dbConnect from '@/lib/dbConnect';
+import SiteSettingsModel from '@/lib/models/SiteSettingsModel';
 
-const Footer = () => {
+const Footer = async () => {
+  let settings: any = null;
+  try {
+    await dbConnect();
+    settings = await SiteSettingsModel.findOne({}).lean();
+  } catch (error) {
+    console.error('Footer failed to load site settings', error);
+  }
+
   const currentYear = new Date().getFullYear();
+  const email = settings?.supportEmail || 'aethravia@gmail.com';
+  const address = settings?.shopAddress || 'H.No.46, Mohalla Mohammad Wasil Near Hadri Masjid, Pilibhit, Uttar Pradesh-262001 (India)';
 
   return (
     <footer className="bg-[#e5e2dd] relative overflow-hidden text-[#1c1c19]">
@@ -114,7 +125,7 @@ const Footer = () => {
               <Link href="/terms" className="text-sm font-medium text-secondary hover:text-primary transition-colors">Terms & Conditions</Link>
               <Link href="/cookies" className="text-sm font-medium text-secondary hover:text-primary transition-colors">Cookie Policy</Link>
               <Link href="/faq" className="text-sm font-medium text-secondary hover:text-primary transition-colors uppercase tracking-widest text-[11px]">FAQ</Link>
-              <Link href={`mailto:${brandEmail}`} className="pt-2 text-xs font-bold text-primary underline underline-offset-4">{brandEmail}</Link>
+              <Link href={`mailto:${email}`} className="pt-2 text-xs font-bold text-primary underline underline-offset-4">{email}</Link>
             </nav>
           </div>
         </div>
@@ -123,9 +134,9 @@ const Footer = () => {
         <div className="mt-16 pt-10 pb-10 border-t border-primary/10 grid grid-cols-1 md:grid-cols-2 gap-12">
           <div>
             <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#b25a24] mb-3">Head Office</h4>
-            <div className="text-xs text-secondary/80 leading-relaxed font-medium space-y-1">
+            <div className="text-xs text-secondary/80 leading-relaxed font-medium space-y-1 whitespace-pre-wrap">
               <p>Heuk care Private limited</p>
-              <p>H.No.46, Mohalla Mohammad Wasil Near Hadri Masjid, Pilibhit, Uttar Pradesh-262001 (India)</p>
+              <p>{address}</p>
             </div>
           </div>
           <div>

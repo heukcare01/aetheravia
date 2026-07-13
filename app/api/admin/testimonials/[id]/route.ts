@@ -38,6 +38,7 @@ export const PUT = auth(async (...args: any) => {
   if (typeof body.rating === 'number') item.rating = Math.max(1, Math.min(5, Math.round(body.rating)));
   if (typeof body.published === 'boolean') item.published = body.published;
   if (typeof body.order === 'number') item.order = body.order;
+  if (Array.isArray(body.images)) item.images = body.images;
   await item.save();
   
   // Emit real-time event
