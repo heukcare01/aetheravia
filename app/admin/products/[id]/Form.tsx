@@ -24,7 +24,6 @@ interface ProductFormData {
   countInStock: number | string;
   description: string;
   tags: string;
-  tagBannerImage: string;
 }
 
 export default function ProductEditForm({ productId }: { productId: string }) {
@@ -32,7 +31,6 @@ export default function ProductEditForm({ productId }: { productId: string }) {
   const { data: categories } = useSWR<string[]>('/api/products/categories');
   const router = useRouter();
   const [isUploading, setIsUploading] = useState(false);
-  const [isUploadingBanner, setIsUploadingBanner] = useState(false);
   const [reviewImages, setReviewImages] = useState<string[]>([]);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
@@ -54,7 +52,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
 
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<ProductFormData>({
     defaultValues: {
-      name: '', slug: '', price: '', image: '', images: [], category: '', brand: '', countInStock: '', description: '', tags: '', tagBannerImage: ''
+      name: '', slug: '', price: '', image: '', images: [], category: '', brand: '', countInStock: '', description: '', tags: ''
     },
   });
 
@@ -71,8 +69,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
     setValue('brand', product.brand || '');
     setValue('countInStock', product.countInStock as any);
     setValue('description', product.description || '');
-    setValue('tags', product.tags ? product.tags.join(', ') : '');
-    setValue('tagBannerImage', (product as any).tagBannerImage || '');
+    setValue('tags', Array.isArray((product as any).tags) ? (product as any).tags.join(', ') : '');
     setValue('images', product.images || (product.image ? [product.image] : []));
   }, [product, setValue]);
 
@@ -139,24 +136,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
     await updateProduct(payload as any);
   };
 
-  const uploadTagBannerHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
-    setIsUploadingBanner(true);
-    const toastId = toast.loading('Uploading tag banner...');
-    try {
-      const url = await uploadImage(files[0], 'products');
-      if (url) {
-        setValue('tagBannerImage', url);
-        toast.success('Tag banner uploaded', { id: toastId });
-      }
-    } catch (err: any) {
-      toast.error(err.message || 'Upload failed', { id: toastId });
-    } finally {
-      setIsUploadingBanner(false);
-      e.target.value = '';
-    }
-  };
+
 
   if (error) return <div className='alert alert-error'>{(error as any).message || 'Failed to load product'}</div>;
   if (!product) return <div className='flex flex-col items-center justify-center p-10 gap-3'><span className='loading loading-spinner loading-lg' /><p className='text-sm opacity-70'>Loading product…</p></div>;
@@ -289,39 +269,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
           </div>
         </div>
 
-        {/* Tag Banner Image */}
-        <div className='card bg-base-100 shadow-sm'>
-          <div className='card-body p-5 space-y-4'>
-            <h2 className='font-semibold tracking-wide text-sm uppercase opacity-70'>Tag / Feature Banner Image</h2>
-            <p className='text-xs opacity-60'>Upload a product feature/tag graphic (e.g. the tag badges with icons). This image is displayed on the product page near the tags.</p>
-            <div className='flex items-center gap-3 flex-wrap'>
-              <input
-                type='file'
-                onChange={uploadTagBannerHandler}
-                disabled={isUploadingBanner}
-                className='file-input file-input-sm file-input-bordered'
-                accept='image/*'
-              />
-              {isUploadingBanner && <span className='loading loading-spinner loading-sm' />}
-              <input
-                type='text'
-                placeholder='Or paste image URL directly'
-                className='input input-bordered input-sm flex-1'
-                {...register('tagBannerImage')}
-              />
-            </div>
-            {watch('tagBannerImage') && (
-              <div className='relative border rounded-lg overflow-hidden max-w-md'>
-                <Image src={watch('tagBannerImage')} alt='Tag Banner Preview' width={500} height={300} className='w-full h-auto object-contain' />
-                <button
-                  type='button'
-                  className='btn btn-xs btn-error absolute top-2 right-2'
-                  onClick={() => setValue('tagBannerImage', '')}
-                >Remove</button>
-              </div>
-            )}
-          </div>
-        </div>
+
 
         {/* Submit */}
         <div className='flex flex-col sm:flex-row gap-3 sm:items-center justify-between'>

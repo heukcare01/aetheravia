@@ -15,6 +15,7 @@ import AvailableOffers from '@/components/products/AvailableOffers';
 import ProductReviews from '@/components/products/ProductReviews';
 import ComplementaryCarousel from '@/components/products/ComplementaryCarousel';
 import dbConnect from '@/lib/dbConnect';
+import TestimonialModel from '@/lib/models/TestimonialModel';
 
 export const generateMetadata = async ({
   params,
@@ -58,6 +59,7 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
 
   // Fetch related products (excluding current)
   let relatedProducts: any[] = [];
+  let reviewStats = { averageRating: 0, totalReviews: 0 };
   try {
     await dbConnect();
     relatedProducts = await ProductModel.find({
@@ -65,6 +67,21 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
     })
       .limit(10)
       .lean();
+
+    // Compute real review stats from Testimonials
+    const productId = product._id?.toString();
+    if (productId) {
+      const ratingAgg = await TestimonialModel.aggregate([
+        { $match: { productId: new (await import('mongoose')).default.Types.ObjectId(productId), published: true } },
+        { $group: { _id: null, avg: { $avg: '$rating' }, count: { $sum: 1 } } },
+      ]);
+      if (ratingAgg.length > 0) {
+        reviewStats = {
+          averageRating: +(ratingAgg[0].avg || 0).toFixed(1),
+          totalReviews: ratingAgg[0].count || 0,
+        };
+      }
+    }
   } catch (error) {
     console.error('[ProductPage] Failed to load related products:', error);
     relatedProducts = [];
@@ -94,8 +111,8 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
               )}
               <div className="flex items-center text-primary">
                  <Rating 
-                    value={product.rating}
-                    caption={`${product.numReviews} reviews`}
+                    value={reviewStats.averageRating}
+                    caption={`${reviewStats.totalReviews} review${reviewStats.totalReviews !== 1 ? 's' : ''}`}
                  />
               </div>
             </div>
@@ -112,17 +129,6 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
                   {tag}
                 </span>
               ))}
-            </div>
-          )}
-
-          {/* Tag Banner Image (cropped feature graphic) */}
-          {product.tagBannerImage && (
-            <div className="rounded-lg overflow-hidden border border-outline-variant/20">
-              <img
-                src={product.tagBannerImage}
-                alt={`${product.name} features`}
-                className="w-full h-auto object-contain"
-              />
             </div>
           )}
 
