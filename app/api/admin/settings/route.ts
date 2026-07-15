@@ -37,6 +37,11 @@ export const POST = auth(async (req: any) => {
   if (typeof body.supportEmail === 'string') settings.supportEmail = body.supportEmail.trim();
   if (typeof body.shopAddress === 'string') settings.shopAddress = body.shopAddress.trim();
 
+  // Pricing & Logistics
+  if (body.shippingPrice !== undefined) settings.shippingPrice = Number(body.shippingPrice);
+  if (body.freeShippingThreshold !== undefined) settings.freeShippingThreshold = Number(body.freeShippingThreshold);
+  if (body.taxRate !== undefined) settings.taxRate = Number(body.taxRate);
+
   await settings.save();
   return NextResponse.json({ message: 'Settings updated', settings });
 }) as any;

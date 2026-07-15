@@ -14,11 +14,14 @@ import { formatPrice } from '@/lib/utils';
 import ReorderButton from '@/components/order/ReorderButton';
 
 const STATUS_CONFIG = {
-  delivered: { label: 'Completed Ritual', color: 'bg-primary text-on-primary', icon: 'auto_fix_high' },
-  shipped: { label: 'In Transit', color: 'bg-secondary text-white', icon: 'local_shipping' },
-  processing: { label: 'Preparing Record', color: 'bg-surface-container-high text-secondary', icon: 'history_edu' },
-  cancelled: { label: 'Manifest Voided', color: 'bg-error text-on-error', icon: 'block' },
-  pending: { label: 'Awaiting Action', color: 'bg-outline text-white', icon: 'pending' },
+  pending: { label: 'Order Placed', color: 'bg-outline text-white', icon: 'pending' },
+  confirmed: { label: 'Confirmed', color: 'bg-info text-white', icon: 'verified' },
+  processing: { label: 'Processing', color: 'bg-surface-container-high text-secondary', icon: 'history_edu' },
+  shipped: { label: 'Shipped', color: 'bg-secondary text-white', icon: 'local_shipping' },
+  out_for_delivery: { label: 'Out for Delivery', color: 'bg-warning text-white', icon: 'delivery_dining' },
+  delivered: { label: 'Delivered', color: 'bg-primary text-on-primary', icon: 'auto_fix_high' },
+  cancelled: { label: 'Cancelled', color: 'bg-error text-on-error', icon: 'block' },
+  returned: { label: 'Returned', color: 'bg-error/70 text-white', icon: 'assignment_return' },
 };
 
 const MyOrders = () => {

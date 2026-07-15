@@ -270,12 +270,58 @@ const useCartService = () => {
 
 export default useCartService;
 
+// ---- Dynamic Pricing ----
+// Pricing config is fetched once from the API and cached for the session.
+// Falls back to safe defaults if the fetch fails.
+let _pricingConfig: { shippingPrice: number; freeShippingThreshold: number; taxRate: number } | null = null;
+let _pricingFetchPromise: Promise<any> | null = null;
+
+export const fetchPricingConfig = async () => {
+  if (_pricingConfig) return _pricingConfig;
+  if (_pricingFetchPromise) return _pricingFetchPromise;
+  
+  _pricingFetchPromise = fetch('/api/settings')
+    .then(res => res.json())
+    .then(data => {
+      _pricingConfig = {
+        shippingPrice: data.shippingPrice ?? 200,
+        freeShippingThreshold: data.freeShippingThreshold ?? 2000,
+        taxRate: data.taxRate ?? 18,
+      };
+      _pricingFetchPromise = null;
+      return _pricingConfig;
+    })
+    .catch(() => {
+      _pricingFetchPromise = null;
+      // Return defaults on failure
+      return { shippingPrice: 200, freeShippingThreshold: 2000, taxRate: 18 };
+    });
+  
+  return _pricingFetchPromise;
+};
+
+// Get current pricing config synchronously (returns cached or defaults)
+export const getPricingConfig = () => {
+  return _pricingConfig || { shippingPrice: 200, freeShippingThreshold: 2000, taxRate: 18 };
+};
+
+// Invalidate the cache (call after admin updates settings)
+export const invalidatePricingConfig = () => {
+  _pricingConfig = null;
+  _pricingFetchPromise = null;
+};
+
 export const calcPrice = (items: OrderItem[]) => {
+  const config = getPricingConfig();
   const itemsPrice = round2(
       items.reduce((acc, item) => acc + item.price * item.qty, 0),
     ),
-    shippingPrice = round2(itemsPrice > 2000 ? 0 : 200),
-    taxPrice = round2(Number(0.18 * itemsPrice)),
+    shippingPrice = round2(
+      config.freeShippingThreshold > 0 && itemsPrice > config.freeShippingThreshold
+        ? 0
+        : config.shippingPrice
+    ),
+    taxPrice = round2(Number((config.taxRate / 100) * itemsPrice)),
     totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
   return { itemsPrice, shippingPrice, taxPrice, totalPrice };
 };

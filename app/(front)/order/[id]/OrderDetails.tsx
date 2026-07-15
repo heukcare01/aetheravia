@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
@@ -27,6 +27,8 @@ const OrderDetails = ({ orderId, razorpayKeyId }: IOrderDetails) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'tracking' | 'details' | 'timeline'>('tracking');
   const [mounted, setMounted] = useState(false);
+  const searchParams = useSearchParams();
+  const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -35,7 +37,14 @@ const OrderDetails = ({ orderId, razorpayKeyId }: IOrderDetails) => {
       toast.error('Please sign in to view your ritual details');
       router.push(`/signin?callbackUrl=/order/${orderId}`);
     }
-  }, [authStatus, session, router, orderId]);
+    // Detect payment success
+    if (searchParams?.get('payment') === 'success') {
+      setShowPaymentSuccess(true);
+      // Auto-dismiss after 8 seconds
+      const timer = setTimeout(() => setShowPaymentSuccess(false), 8000);
+      return () => clearTimeout(timer);
+    }
+  }, [authStatus, session, router, orderId, searchParams]);
 
   const { trigger: deliverOrder, isMutating: isDelivering } = useSWRMutation(
     `/api/orders/${orderId}`,
@@ -153,6 +162,36 @@ const OrderDetails = ({ orderId, razorpayKeyId }: IOrderDetails) => {
       <div className="fixed inset-0 noise-overlay z-0 pointer-events-none opacity-40"></div>
 
       <div className="max-w-7xl mx-auto px-4 relative z-10 pt-12">
+        {/* Payment Success Banner */}
+        <AnimatePresence>
+          {showPaymentSuccess && (
+            <motion.div
+              initial={{ opacity: 0, y: -30, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.95 }}
+              className="mb-8 bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 border border-primary/30 rounded-xl p-6 md:p-8 relative overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,_rgba(114,90,57,0.08),transparent_70%)]" />
+              <div className="relative flex items-center gap-6">
+                <div className="w-16 h-16 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0">
+                  <span className="material-symbols-outlined text-primary text-4xl">check_circle</span>
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-headline text-2xl md:text-3xl text-primary italic">Payment Successful!</h3>
+                  <p className="text-secondary font-body text-sm mt-1 opacity-80">
+                    Your payment has been verified and your order is confirmed. You will receive updates as your order progresses.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowPaymentSuccess(false)}
+                  className="text-secondary/40 hover:text-secondary transition-colors flex-shrink-0"
+                >
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
         {/* Header Record */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

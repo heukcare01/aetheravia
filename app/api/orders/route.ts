@@ -7,6 +7,7 @@ import OrderModel, { OrderItem } from "@/lib/models/OrderModel";
 import ProductModel from "@/lib/models/ProductModel";
 import UserModel from "@/lib/models/UserModel";
 import ReferralSettingsModel from "@/lib/models/ReferralSettingsModel";
+import SiteSettingsModel from "@/lib/models/SiteSettingsModel";
 import { emitAdminEvent } from "@/lib/eventBus";
 import {
   sanitizeRequestBody,
@@ -15,15 +16,23 @@ import {
 } from "@/lib/security";
 import { round2 } from "@/lib/utils";
 
-// Utility: calculate prices
-const calcPrices = (orderItems: OrderItem[]) => {
+// Utility: calculate prices using admin-configurable pricing
+const calcPrices = (
+  orderItems: OrderItem[],
+  pricing: { shippingPrice: number; freeShippingThreshold: number; taxRate: number }
+) => {
   const itemsPrice = round2(
     orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
   );
-  // Shipping Policy: Free above 2000, else 200
-  const shippingPrice = round2(itemsPrice > 2000 ? 0 : 200);
-  // Tax Policy: 18%
-  const taxPrice = round2(Number(0.18 * itemsPrice));
+  // Shipping: free above threshold, else configured flat rate
+  const shippingPrice = round2(
+    pricing.freeShippingThreshold > 0 && itemsPrice > pricing.freeShippingThreshold
+      ? 0
+      : pricing.shippingPrice
+  );
+  // Tax: admin-configured percentage
+  const taxRate = pricing.taxRate / 100;
+  const taxPrice = round2(Number(taxRate * itemsPrice));
   const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
   return { itemsPrice, shippingPrice, taxPrice, totalPrice };
 };
@@ -125,7 +134,15 @@ export const POST = auth(async (req: any) => {
       });
     }
 
-    const { itemsPrice, taxPrice, shippingPrice, totalPrice } = calcPrices(dbOrderItems);
+    // Fetch admin-configured pricing
+    let siteSettings = await SiteSettingsModel.findOne({}).lean() as any;
+    const pricing = {
+      shippingPrice: siteSettings?.shippingPrice ?? 200,
+      freeShippingThreshold: siteSettings?.freeShippingThreshold ?? 2000,
+      taxRate: siteSettings?.taxRate ?? 18,
+    };
+
+    const { itemsPrice, taxPrice, shippingPrice, totalPrice } = calcPrices(dbOrderItems, pricing);
     
     // ----------------------------------------------------
     // Loyalty Tier Discounts
@@ -146,7 +163,7 @@ export const POST = auth(async (req: any) => {
       effectiveShippingPrice = 0;
     }
     
-    let effectiveTaxPrice = round2(Number(0.18 * effectiveItemsPrice));
+    let effectiveTaxPrice = round2(Number((pricing.taxRate / 100) * effectiveItemsPrice));
     let finalTotalPrice = round2(effectiveItemsPrice + effectiveShippingPrice + effectiveTaxPrice);
     
     let couponInfo = null;

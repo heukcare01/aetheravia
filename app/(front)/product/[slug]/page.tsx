@@ -121,17 +121,6 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
             </h1>
           </div>
 
-          {/* Tags (right after name, like Aqualogica) */}
-          {product.tags && product.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {product.tags.map((tag: string, idx: number) => (
-                <span key={idx} className="bg-surface-variant/30 border border-outline-variant/30 text-on-surface-variant px-2.5 py-0.5 rounded-full text-[11px] font-medium tracking-wide">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
-
           {/* Price */}
           <p className="text-2xl font-body font-light text-on-surface">{formatPrice(product.price)}</p>
 

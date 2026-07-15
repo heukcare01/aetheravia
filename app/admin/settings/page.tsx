@@ -14,6 +14,9 @@ export default function AdminSettingsPage() {
     whatsappNumber: '',
     supportEmail: '',
     shopAddress: '',
+    shippingPrice: 200,
+    freeShippingThreshold: 2000,
+    taxRate: 18,
   });
 
   useEffect(() => {
@@ -23,6 +26,9 @@ export default function AdminSettingsPage() {
         whatsappNumber: data.whatsappNumber || '',
         supportEmail: data.supportEmail || '',
         shopAddress: data.shopAddress || '',
+        shippingPrice: data.shippingPrice ?? 200,
+        freeShippingThreshold: data.freeShippingThreshold ?? 2000,
+        taxRate: data.taxRate ?? 18,
       });
     }
   }, [data]);
@@ -86,6 +92,21 @@ export default function AdminSettingsPage() {
               <p className="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Address</p>
               <p className="text-sm font-semibold line-clamp-2">{data?.shopAddress || '—'}</p>
               <p className="text-[10px] opacity-40 mt-1">Footer, contact page</p>
+            </div>
+            <div className="bg-base-200/50 rounded-lg p-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Shipping Cost</p>
+              <p className="text-sm font-semibold">₹{data?.shippingPrice ?? 200}</p>
+              <p className="text-[10px] opacity-40 mt-1">Applied when order below free threshold</p>
+            </div>
+            <div className="bg-base-200/50 rounded-lg p-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Free Shipping Above</p>
+              <p className="text-sm font-semibold">₹{data?.freeShippingThreshold ?? 2000}</p>
+              <p className="text-[10px] opacity-40 mt-1">Orders above this get free shipping</p>
+            </div>
+            <div className="bg-base-200/50 rounded-lg p-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Tax Rate</p>
+              <p className="text-sm font-semibold">{data?.taxRate ?? 18}%</p>
+              <p className="text-[10px] opacity-40 mt-1">Applied on items price</p>
             </div>
           </div>
         </div>
@@ -168,14 +189,93 @@ export default function AdminSettingsPage() {
               </label>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div className="flex justify-end pt-2">
-            <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
-              {saving ? <span className="loading loading-spinner loading-xs" /> : null}
-              Save Settings
-            </button>
+      {/* Pricing & Logistics */}
+      <div className="card bg-base-100 border shadow-sm">
+        <div className="card-body p-6 space-y-6">
+          <h2 className="text-lg font-bold flex items-center gap-2">💰 Pricing & Logistics</h2>
+          <p className="text-sm opacity-60 -mt-3">
+            Control shipping costs, free shipping threshold, and tax rate. Changes will apply to all new orders.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label className="label">
+                <span className="label-text font-medium">Shipping Price (₹)</span>
+              </label>
+              <input
+                type="number"
+                min="0"
+                step="1"
+                className="input input-bordered w-full"
+                placeholder="200"
+                value={form.shippingPrice}
+                onChange={(e) => setForm((f) => ({ ...f, shippingPrice: Number(e.target.value) }))}
+              />
+              <label className="label">
+                <span className="label-text-alt opacity-60">
+                  Flat shipping fee charged when order is below the free shipping threshold
+                </span>
+              </label>
+            </div>
+
+            <div>
+              <label className="label">
+                <span className="label-text font-medium">Free Shipping Above (₹)</span>
+              </label>
+              <input
+                type="number"
+                min="0"
+                step="1"
+                className="input input-bordered w-full"
+                placeholder="2000"
+                value={form.freeShippingThreshold}
+                onChange={(e) => setForm((f) => ({ ...f, freeShippingThreshold: Number(e.target.value) }))}
+              />
+              <label className="label">
+                <span className="label-text-alt opacity-60">
+                  Orders above this amount get free shipping. Set to 0 to always charge shipping.
+                </span>
+              </label>
+            </div>
+
+            <div>
+              <label className="label">
+                <span className="label-text font-medium">Tax Rate (%)</span>
+              </label>
+              <input
+                type="number"
+                min="0"
+                max="100"
+                step="0.1"
+                className="input input-bordered w-full"
+                placeholder="18"
+                value={form.taxRate}
+                onChange={(e) => setForm((f) => ({ ...f, taxRate: Number(e.target.value) }))}
+              />
+              <label className="label">
+                <span className="label-text-alt opacity-60">
+                  Tax percentage applied on items price (e.g. 18 for GST 18%)
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div className="alert alert-info py-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span className="text-xs">Changes to pricing will apply to all new orders. Existing orders will not be affected.</span>
           </div>
         </div>
+      </div>
+
+      {/* Save Button */}
+      <div className="flex justify-end">
+        <button className="btn btn-primary btn-lg" onClick={handleSave} disabled={saving}>
+          {saving ? <span className="loading loading-spinner loading-xs" /> : null}
+          Save All Settings
+        </button>
       </div>
     </div>
   );

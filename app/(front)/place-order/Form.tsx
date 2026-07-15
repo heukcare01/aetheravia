@@ -100,8 +100,8 @@ const Form = () => {
 
             if (verifyResponse.ok) {
               clear();
-              toast.success('Order Placed Successfully');
-              router.push(`/order/${orderId}`);
+              toast.success('Payment Successful! Order Confirmed');
+              router.push(`/order/${orderId}?payment=success`);
             } else {
               toast.error('Signature validation failed');
             }

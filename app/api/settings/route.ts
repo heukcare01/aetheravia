@@ -19,6 +19,10 @@ export async function GET() {
       whatsappNumber: settings.whatsappNumber || settings.supportPhone,
       supportEmail: settings.supportEmail,
       shopAddress: settings.shopAddress,
+      // Pricing & Logistics
+      shippingPrice: settings.shippingPrice ?? 200,
+      freeShippingThreshold: settings.freeShippingThreshold ?? 2000,
+      taxRate: settings.taxRate ?? 18,
     });
   } catch (error) {
     console.error('Error fetching site settings:', error);
@@ -27,6 +31,9 @@ export async function GET() {
       whatsappNumber: '+91-XXXX-XXXXXX',
       supportEmail: 'aethravia@gmail.com',
       shopAddress: '',
+      shippingPrice: 200,
+      freeShippingThreshold: 2000,
+      taxRate: 18,
     });
   }
 }
