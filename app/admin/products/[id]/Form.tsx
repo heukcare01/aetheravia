@@ -23,6 +23,7 @@ interface ProductFormData {
   brand: string;
   countInStock: number | string;
   description: string;
+  tags: string;
 }
 
 export default function ProductEditForm({ productId }: { productId: string }) {
@@ -51,7 +52,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
 
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<ProductFormData>({
     defaultValues: {
-      name: '', slug: '', price: '', image: '', images: [], category: '', brand: '', countInStock: '', description: ''
+      name: '', slug: '', price: '', image: '', images: [], category: '', brand: '', countInStock: '', description: '', tags: ''
     },
   });
 
@@ -68,6 +69,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
     setValue('brand', product.brand || '');
     setValue('countInStock', product.countInStock as any);
     setValue('description', product.description || '');
+    setValue('tags', product.tags ? product.tags.join(', ') : '');
     setValue('images', product.images || (product.image ? [product.image] : []));
   }, [product, setValue]);
 
@@ -129,6 +131,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
       ...formData,
       price: Number(formData.price),
       countInStock: Number(formData.countInStock),
+      tags: formData.tags ? formData.tags.split(',').map(t => t.trim()).filter(Boolean) : [],
     };
     await updateProduct(payload as any);
   };
@@ -196,6 +199,9 @@ export default function ProductEditForm({ productId }: { productId: string }) {
 
               <Field id='price' label='Price' type='number' required />
               <Field id='countInStock' label='Count In Stock' type='number' required />
+              <div className='col-span-1 md:col-span-2'>
+                <Field id='tags' label='Tags (comma separated)' />
+              </div>
             </div>
             <div className='space-y-1'>
               <label className='text-xs font-semibold uppercase tracking-wide opacity-70' htmlFor='description'>Description</label>

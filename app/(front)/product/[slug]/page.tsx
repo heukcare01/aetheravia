@@ -124,6 +124,17 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
           {/* Price */}
           <p className="text-2xl font-body font-light text-on-surface">{formatPrice(product.price)}</p>
 
+          {/* Tags */}
+          {product.tags && product.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {product.tags.map((tag: string, idx: number) => (
+                <span key={idx} className="bg-surface-variant/30 border border-outline-variant/30 text-on-surface-variant px-2.5 py-0.5 rounded-full text-[11px] font-medium tracking-wide">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
             {product.countInStock > 0 && (
@@ -141,20 +152,7 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
             <WishlistButton product={convertDocToObj(product)} />
           </div>
 
-          {/* Ingredient Chips */}
-          {product.ingredients && product.ingredients.length > 0 ? (
-            <div className="flex flex-wrap gap-2 pt-2">
-              {product.ingredients.map((ingredient: string, idx: number) => (
-                <span key={idx} className="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-[11px] font-medium tracking-wide">
-                  {ingredient}
-                </span>
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-wrap gap-2 pt-2">
-              <span className="text-on-surface-variant text-xs italic">Ingredients will be listed soon</span>
-            </div>
-          )}
+
 
           {/* Available Offers */}
           <AvailableOffers productId={product._id?.toString() || ''} />
