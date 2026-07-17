@@ -132,7 +132,10 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
                </div>
             )}
           </div>
-          <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-primary flex items-center justify-center rounded-xl shadow-lg border-2 border-surface cursor-pointer hover:scale-110 transition-transform">
+          <div 
+            className="absolute -bottom-2 -right-2 w-10 h-10 bg-primary flex items-center justify-center rounded-xl shadow-lg border-2 border-surface cursor-pointer hover:scale-110 transition-transform"
+            onClick={() => fileRef.current?.click()}
+          >
             <Edit3 size={18} className="text-on-primary" />
           </div>
           <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleAvatarUpload(f); }} />
@@ -167,73 +170,6 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-10">
         {/* Left Side: Interactive & Stats */}
         <div className="lg:col-span-8 space-y-12">
-          
-          {/* Ongoing Ritual Journey */}
-          <section className="bg-surface-container-low/80 backdrop-blur-md border border-surface-variant/40 rounded-3xl p-8 shadow-sm hover:shadow-md transition-all">
-            <div className="flex justify-between items-center mb-10">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                  <Package size={20} />
-                </div>
-                <h2 className="font-headline text-2xl font-bold text-primary tracking-tight italic">Ongoing Ritual Journey</h2>
-              </div>
-              {latestOrder && (
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-secondary bg-surface-container-high px-4 py-2 rounded-lg">
-                  Manifest #{latestOrder._id.slice(-8).toUpperCase()}
-                </span>
-              )}
-            </div>
-
-            <div className="relative px-2">
-              <div className="h-1.5 w-full bg-surface-variant/30 rounded-full mb-6">
-                <motion.div 
-                  initial={{ width: 0 }}
-                  animate={{ width: latestOrder?.isDelivered ? '100%' : latestOrder?.isPaid ? '60%' : '20%' }}
-                  transition={{ duration: 1.5, ease: "easeOut" }}
-                  className="h-full bg-primary rounded-full relative"
-                >
-                  <div className="absolute -right-2.5 -top-2 w-5 h-5 bg-primary rounded-full border-4 border-surface shadow-lg"></div>
-                </motion.div>
-              </div>
-              <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-outline">
-                <div className={`flex flex-col items-start gap-2 ${!latestOrder?.isPaid ? 'text-primary' : 'opacity-60'}`}>
-                  <span>Preparation</span>
-                  <div className={`w-1.5 h-1.5 rounded-full ${!latestOrder?.isPaid ? 'bg-primary' : 'bg-surface-variant'}`}></div>
-                </div>
-                <div className={`flex flex-col items-center gap-2 ${latestOrder?.isPaid && !latestOrder?.isDelivered ? 'text-primary' : 'opacity-60'}`}>
-                  <span>En Route</span>
-                  <div className={`w-1.5 h-1.5 rounded-full ${latestOrder?.isPaid && !latestOrder?.isDelivered ? 'bg-primary' : 'bg-surface-variant'}`}></div>
-                </div>
-                <div className={`flex flex-col items-end gap-2 ${latestOrder?.isDelivered ? 'text-primary' : 'opacity-60'}`}>
-                  <span>Arriving Sanctuary</span>
-                  <div className={`w-1.5 h-1.5 rounded-full ${latestOrder?.isDelivered ? 'bg-primary' : 'bg-surface-variant'}`}></div>
-                </div>
-              </div>
-            </div>
-
-            {latestOrder && latestOrder.orderItems?.[0] && (
-              <div className="mt-10 flex items-center gap-6 p-5 bg-white/50 backdrop-blur-sm rounded-2xl border border-primary/5 group">
-                <div className="relative w-20 h-20 overflow-hidden rounded-xl bg-surface-container-high">
-                  <Image 
-                    src={latestOrder.orderItems[0].image} 
-                    alt={latestOrder.orderItems[0].name} 
-                    fill 
-                    className="object-cover group-hover:scale-110 transition-transform duration-500" 
-                  />
-                </div>
-                <div className="flex-1">
-                  <p className="font-headline font-bold text-on-surface text-lg">{latestOrder.orderItems[0].name}</p>
-                  <p className="text-xs text-secondary mt-1 flex items-center gap-2">
-                    <Clock size={12} />
-                    Expected arrival: {new Date(new Date(latestOrder.createdAt).getTime() + 5*24*60*60*1000).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' })}
-                  </p>
-                </div>
-                <Link href={`/order/${latestOrder._id}`} className="p-3 rounded-xl border border-primary/20 hover:bg-primary hover:text-on-primary transition-all">
-                  <ArrowRight size={18} />
-                </Link>
-              </div>
-            )}
-          </section>
 
           {/* Subscription / Recurring Rituals Sanctuary */}
           <section>

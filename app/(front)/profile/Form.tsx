@@ -12,6 +12,7 @@ type Inputs = {
   email: string;
   password: string;
   confirmPassword: string;
+  dateOfBirth: string;
 };
 
 const Form = () => {
@@ -29,6 +30,7 @@ const Form = () => {
       name: '',
       email: '',
       password: '',
+      dateOfBirth: '',
     },
   });
 
@@ -42,6 +44,10 @@ const Form = () => {
         const data = await res.json();
         if (data?.name) setValue('name', data.name);
         if (data?.email) setValue('email', data.email);
+        if (data?.dateOfBirth) {
+          const d = new Date(data.dateOfBirth);
+          if (!isNaN(d.getTime())) setValue('dateOfBirth', d.toISOString().split('T')[0]);
+        }
       } catch {
         // ignore prefill errors
       }
@@ -58,7 +64,7 @@ const Form = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, dateOfBirth: form.dateOfBirth || undefined }),
       });
       if (res.status === 200) {
         toast.success('Identity record updated');
@@ -118,6 +124,22 @@ const Form = () => {
               placeholder="email@heritage.com"
             />
             {errors.email?.message && <p className="text-[10px] text-error font-bold uppercase tracking-widest mt-1">{errors.email.message}</p>}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold uppercase tracking-widest text-secondary block pl-1" htmlFor="dateOfBirth">
+              Date of Birth
+            </label>
+            <input
+              type="date"
+              id="dateOfBirth"
+              {...register('dateOfBirth')}
+              max={new Date().toISOString().split('T')[0]}
+              className="w-full bg-surface border-b border-outline-variant/30 px-4 py-4 font-body focus:border-primary transition-colors outline-none text-on-surface"
+            />
+            <p className="text-[9px] text-secondary/50 italic pl-1">Used for birthday bonus loyalty points.</p>
           </div>
         </div>
 

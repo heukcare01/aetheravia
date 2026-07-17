@@ -6,7 +6,7 @@ export async function awardPointsForOrder(orderId: string, userId: string, sessi
   const order = await OrderModel.findById(orderId).session(session);
   if (!order || !order.isPaid || order.pointsAwarded) return;
 
-  const pointsToEarn = Math.floor(order.totalPrice / 10);
+  const pointsToEarn = Math.floor(order.totalPrice);
   if (pointsToEarn <= 0) return;
 
   const user = await UserModel.findById(userId).session(session);

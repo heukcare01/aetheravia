@@ -9,11 +9,11 @@ interface LoyaltyData {
   tier: string;
   totalSpent: number;
   nextTierPoints: number;
-  pointsToNextTier: number;
+    pointsToNextTier: number;
   rewardsHistory: Array<{
     _id: string;
     points: number;
-    reason: string;
+    description: string;
     date: string;
   }>;
 }
@@ -68,19 +68,19 @@ export default function LoyaltyDashboard() {
   }
 
   const getTierInfo = (tier: string) => {
-    const safeTier = (tier || 'Bronze').toLowerCase();
+    const safeTier = (tier || 'Novice').toLowerCase();
     switch (safeTier) {
-      case 'bronze': return { label: 'Bronze', icon: '🥉', color: 'text-orange-700 bg-orange-50' };
-      case 'silver': return { label: 'Silver', icon: '🥈', color: 'text-stone-600 bg-stone-100' };
-      case 'gold': return { label: 'Gold', icon: '🥇', color: 'text-amber-700 bg-amber-50' };
-      case 'platinum': return { label: 'Platinum', icon: '💎', color: 'text-primary bg-primary/5' };
-      default: return { label: 'Seeker', icon: '⭐', color: 'text-secondary bg-secondary/5' };
+      case 'novice': return { label: 'Novice', icon: '🌱', color: 'text-stone-800 bg-stone-200' };
+      case 'seeker': return { label: 'Seeker', icon: '⭐', color: 'text-amber-900 bg-amber-100' };
+      case 'keeper': return { label: 'Keeper', icon: '🗝️', color: 'text-primary bg-white' };
+      case 'sage': return { label: 'Sage', icon: '👑', color: 'text-primary bg-white' };
+      default: return { label: 'Novice', icon: '🌱', color: 'text-stone-800 bg-stone-200' };
     }
   };
 
   const tierInfo = getTierInfo(data.tier);
   const progressPercentage = data.nextTierPoints > 0 
-    ? ((data.points - (data.nextTierPoints - data.pointsToNextTier)) / data.pointsToNextTier) * 100
+    ? Math.max(0, Math.min((data.points / data.nextTierPoints) * 100, 100))
     : 100;
 
   return (
@@ -165,7 +165,7 @@ export default function LoyaltyDashboard() {
                 {data.rewardsHistory.slice(0, 5).map((activity) => (
                   <tr key={activity._id} className="hover:bg-primary/[0.02] transition-colors">
                     <td className="px-8 py-6 opacity-60">{new Date(activity.date).toLocaleDateString()}</td>
-                    <td className="px-8 py-6 font-medium">{activity.reason}</td>
+                    <td className="px-8 py-6 font-medium">{activity.description}</td>
                     <td className="px-8 py-6 text-right">
                       <span className={`font-headline text-lg ${activity.points > 0 ? 'text-primary' : 'text-error'}`}>
                         {activity.points > 0 ? '+' : ''}{activity.points}
@@ -184,10 +184,10 @@ export default function LoyaltyDashboard() {
         <h3 className="font-headline text-3xl text-primary italic">Heritage Ranks</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { t: 'Bronze', p: '1 pt per ₹1', b: ['Birthday Ritual', 'Early Access'], c: 'text-orange-800' },
-            { t: 'Silver', p: '1.5 pts per ₹1', b: ['Free Logistics', 'Curated Samples'], c: 'text-stone-600' },
-            { t: 'Gold', p: '2 pts per ₹1', b: ['Priority Support', 'Exclusive Rituals'], c: 'text-amber-700' },
-            { t: 'Platinum', p: '3 pts per ₹1', b: ['Personal Curator', 'VIP Heritage Events'], c: 'text-primary' }
+            { t: 'Novice', p: '0 - 500 Pts', b: ['Welcome reward', 'Birthday surprise', 'Early product updates'], c: 'text-stone-600' },
+            { t: 'Seeker', p: '501 - 2000 Pts', b: ['5% off future purchases', 'Early access to launches', 'Priority support'], c: 'text-amber-700' },
+            { t: 'Keeper', p: '2001 - 5000 Pts', b: ['10% off purchases', 'Free shipping', 'Exclusive member offers'], c: 'text-primary' },
+            { t: 'Sage', p: '5000+ Pts', b: ['15% off purchases', 'First access to limited editions', 'VIP community benefits'], c: 'text-primary' }
           ].map((tier, i) => (
             <div key={i} className="p-8 bg-surface-container-low rounded border border-outline-variant/10 hover:border-primary/30 transition-all group">
               <h4 className={`font-headline text-2xl italic mb-1 ${tier.c}`}>{tier.t}</h4>

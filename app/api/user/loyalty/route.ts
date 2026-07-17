@@ -37,7 +37,7 @@ export async function GET() {
     // Canonical values
     const points = (user as any).loyaltyPoints || 0;
     const tier = (user as any).loyaltyTier || 'Novice';
-    const { nextTierPoints, pointsToNextTier } = getProgress(points);
+    const { nextTier, nextTierPoints, pointsToNextTier } = getProgress(points);
 
     const loyaltyHistory = (user as any).loyaltyHistory || [];
     const rewardsHistory = loyaltyHistory.map((h: any) => ({
@@ -52,6 +52,7 @@ export async function GET() {
       points,
       tier,
       totalSpent,
+      nextTier,
       nextTierPoints,
       pointsToNextTier,
       rewardsHistory,

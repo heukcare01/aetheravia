@@ -42,6 +42,9 @@ export const POST = auth(async (req: any) => {
   if (body.freeShippingThreshold !== undefined) settings.freeShippingThreshold = Number(body.freeShippingThreshold);
   if (body.taxRate !== undefined) settings.taxRate = Number(body.taxRate);
 
+  // Loyalty
+  if (body.birthdayBonusPoints !== undefined) settings.birthdayBonusPoints = Number(body.birthdayBonusPoints);
+
   await settings.save();
   return NextResponse.json({ message: 'Settings updated', settings });
 }) as any;

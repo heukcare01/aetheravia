@@ -29,7 +29,7 @@ export const GET = auth(async (req) => {
       return Response.json({ message: 'Invalid user id in session' }, { status: 400 });
     }
     const dbUser = await UserModel.findById(userId).select(
-      '_id name email isAdmin avatar createdAt updatedAt loyaltyTier loyaltyPoints personalization',
+      '_id name email isAdmin avatar dateOfBirth createdAt updatedAt loyaltyTier loyaltyPoints personalization',
     );
     if (!dbUser) {
 
@@ -48,7 +48,7 @@ export const PUT = auth(async (req) => {
     return Response.json({ message: 'Not authenticated' }, { status: 401 });
   }
   const { user } = req.auth as any;
-  const { name, email, password, avatar } = await req.json();
+  const { name, email, password, avatar, dateOfBirth } = await req.json();
   try {
     await dbConnect();
     const userId = toObjectIdString((user as any)?.id || (user as any)?._id);
@@ -92,6 +92,16 @@ export const PUT = auth(async (req) => {
     if (typeof avatar === 'string') {
       const a = avatar.trim();
       if (a) dbUser.avatar = a;
+    }
+    if (typeof dateOfBirth !== 'undefined') {
+      if (dateOfBirth === null || dateOfBirth === '') {
+        dbUser.dateOfBirth = undefined;
+      } else {
+        const parsed = new Date(dateOfBirth);
+        if (!isNaN(parsed.getTime())) {
+          dbUser.dateOfBirth = parsed;
+        }
+      }
     }
     
     await dbUser.save();

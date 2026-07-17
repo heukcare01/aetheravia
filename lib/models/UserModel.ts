@@ -6,6 +6,7 @@ export type User = {
   email: string;
   isAdmin: boolean;
   avatar?: string;
+  dateOfBirth?: Date;
   savedAddresses?: Array<{
     _id: string;
     fullName: string;
@@ -100,6 +101,7 @@ const UserSchema = new mongoose.Schema(
     },
     isAdmin: { type: Boolean, required: true, default: false },
     avatar: { type: String },
+    dateOfBirth: { type: Date },
     savedAddresses: { type: [SavedAddressSchema], default: [] },
     savedCoupons: { type: [String], default: [] },
     loyaltyPoints: { type: Number, default: 0 },

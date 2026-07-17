@@ -3,18 +3,20 @@ import dbConnect from '@/lib/dbConnect';
 import User from '@/lib/models/UserModel';
 import { requireAdminSession } from '@/lib/requireAdminSession';
 import { emitAdminEvent } from '@/lib/eventBus';
+import { getTier } from '@/lib/loyalty';
 
 // GET: List all users' loyalty info
 export async function GET() {
   await dbConnect();
   await requireAdminSession();
-  const users = await User.find({}, 'name email loyaltyPoints loyaltyTier').lean();
+  const users = await User.find({}, 'name email loyaltyPoints loyaltyTier dateOfBirth').lean();
   return NextResponse.json(users.map(u => ({
     _id: u._id,
     name: u.name,
     email: u.email,
     loyaltyPoints: (u as any).loyaltyPoints || 0,
-    loyaltyTier: (u as any).loyaltyTier || 'Novice'
+    loyaltyTier: (u as any).loyaltyTier || 'Novice',
+    dateOfBirth: (u as any).dateOfBirth || null,
   })));
 }
 
@@ -32,13 +34,14 @@ export async function PUT(req: NextRequest) {
     const prevPoints = user.loyaltyPoints || 0;
     const delta = points - prevPoints;
     user.loyaltyPoints = points;
-    if (tier) user.loyaltyTier = tier;
+    // Auto-calculate the correct tier based on points, or use manual override if provided
+    user.loyaltyTier = tier || getTier(points);
     if (delta !== 0) {
-      user.loyaltyHistory.push({ type: 'adjust', points: delta, description: 'Admin manual set', date: new Date() });
+      user.loyaltyHistory.push({ type: 'adjust', points: delta, description: 'Admin manual adjustment', date: new Date() });
     }
     await user.save();
     emitAdminEvent({ ts: Date.now(), type: 'loyalty.updated', userId: String(user._id), points: user.loyaltyPoints, tier: user.loyaltyTier, delta });
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, tier: user.loyaltyTier });
   } catch (err: any) {
     console.error('Admin loyalty PUT error:', err);
     return NextResponse.json({ error: err?.message || 'Internal Error' }, { status: 500 });

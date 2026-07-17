@@ -10,6 +10,7 @@ export type SiteSettings = {
   shippingPrice: number;
   freeShippingThreshold: number;
   taxRate: number;
+  birthdayBonusPoints: number;
 };
 
 const siteSettingsSchema = new mongoose.Schema(
@@ -26,6 +27,7 @@ const siteSettingsSchema = new mongoose.Schema(
     shippingPrice: { type: Number, default: 200 }, // Default shipping cost in INR
     freeShippingThreshold: { type: Number, default: 2000 }, // Free shipping above this amount
     taxRate: { type: Number, default: 18 }, // Tax percentage (e.g. 18 = 18%)
+    birthdayBonusPoints: { type: Number, default: 100 }, // Points awarded on user's birthday
   },
   { timestamps: true }
 );

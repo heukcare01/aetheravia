@@ -63,14 +63,18 @@ export default function LoyaltyPage() {
               
               <div className="text-center md:text-right flex flex-col items-center md:items-end">
                 <p className="text-xs font-bold text-secondary uppercase tracking-[0.3em] mb-4">Current Progress</p>
-                <div className="w-full h-2 bg-primary/5 rounded-full overflow-hidden mb-4">
+                <div className="w-full h-2 bg-primary/5 rounded-full overflow-hidden mb-4 relative">
                    <motion.div 
                      initial={{ width: 0 }}
-                     animate={{ width: '45%' }}
-                     className="h-full bg-primary"
+                     animate={{ width: loyaltyData?.nextTierPoints ? `${Math.max(0, Math.min((loyaltyData.points / loyaltyData.nextTierPoints) * 100, 100))}%` : '100%' }}
+                     className="absolute top-0 left-0 h-full bg-primary"
                    />
                 </div>
-                <p className="text-[10px] text-secondary/60 font-medium">Next Tier: <span className="text-primary font-bold">Seeker</span> (350 points to go)</p>
+                {loyaltyData?.nextTier ? (
+                  <p className="text-[10px] text-secondary/60 font-medium">Next Tier: <span className="text-primary font-bold">{loyaltyData.nextTier}</span> ({loyaltyData.pointsToNextTier.toLocaleString()} points to go)</p>
+                ) : (
+                  <p className="text-[10px] text-secondary/60 font-medium">You have reached the highest tier!</p>
+                )}
               </div>
             </div>
           </motion.div>
