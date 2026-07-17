@@ -2,8 +2,8 @@
 
 import { ChevronDown, ShoppingCart, Heart } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { signOut, signIn, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import useCartService from '@/lib/hooks/useCartStore';
@@ -28,6 +28,11 @@ const Menu = ({ showSearch = true, showAccount = true }: { showSearch?: boolean;
     const elem = document.activeElement as HTMLElement;
     if (elem) elem.blur();
   };
+
+  const avatar = (session?.user as any)?.avatar;
+  const initials = session?.user?.name
+    ? session.user.name.charAt(0).toUpperCase()
+    : 'U';
 
   return (
     <ul className='flex gap-2'>
@@ -70,8 +75,23 @@ const Menu = ({ showSearch = true, showAccount = true }: { showSearch?: boolean;
           {status === 'authenticated' && session?.user ? (
             <li>
               <div className='dropdown dropdown-end dropdown-bottom'>
-                <label tabIndex={0} className='flex items-center gap-2 text-base font-medium text-black hover:text-white transition-all duration-300 py-2 px-5 rounded-full hover:bg-primary cursor-pointer' suppressHydrationWarning>
-                  {session.user.name}
+                <label tabIndex={0} className='flex items-center gap-2 text-base font-medium text-black hover:text-white transition-all duration-300 py-2 px-3 rounded-full hover:bg-primary cursor-pointer' suppressHydrationWarning>
+                  {/* Avatar bubble — shows profile pic if set, otherwise initials */}
+                  <div className="w-8 h-8 rounded-full overflow-hidden bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
+                    {avatar ? (
+                      <Image
+                        src={avatar}
+                        alt={session.user.name || 'User'}
+                        width={32}
+                        height={32}
+                        className="w-full h-full object-cover"
+                        unoptimized={avatar.startsWith('/storage/')}
+                      />
+                    ) : (
+                      <span className="text-sm font-bold text-primary">{initials}</span>
+                    )}
+                  </div>
+                  <span className="hidden sm:inline">{session.user.name}</span>
                   <ChevronDown size={16} />
                 </label>
                 <ul

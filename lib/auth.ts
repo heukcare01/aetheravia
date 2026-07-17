@@ -56,6 +56,7 @@ export const config = {
                 email: user.email,
                 name: user.name,
                 isAdmin: user.isAdmin,
+                avatar: user.avatar || null,
               };
             }
           }
@@ -83,7 +84,7 @@ export const config = {
     error: '/error',
   },
   callbacks: {
-    async jwt({ user, token }: any) {
+    async jwt({ user, token, trigger, session }: any) {
       // If user is signing in, add user data to token
       if (user) {
         const idStr = typeof user._id === 'string' 
@@ -96,6 +97,14 @@ export const config = {
           email: user.email,
           name: user.name,
           isAdmin: user.isAdmin,
+          avatar: (user as any).avatar || null,
+        };
+      }
+      // Handle session updates (e.g. after avatar upload via update())
+      if (trigger === 'update' && session?.user) {
+        token.user = {
+          ...token.user,
+          ...session.user,
         };
       }
       return token;
@@ -108,6 +117,7 @@ export const config = {
           email: token.user.email,
           name: token.user.name,
           isAdmin: token.user.isAdmin,
+          avatar: token.user.avatar || null,
         };
       }
       return session;

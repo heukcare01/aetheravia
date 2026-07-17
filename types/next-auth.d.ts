@@ -5,12 +5,14 @@ declare module "next-auth" {
     user: {
       _id?: string | null;
       isAdmin?: boolean;
+      avatar?: string | null;
     } & DefaultSession["user"];
   }
 
   interface User extends DefaultUser {
     _id?: string;
     isAdmin?: boolean;
+    avatar?: string | null;
   }
 }
 
@@ -21,6 +23,7 @@ declare module "next/server" {
         _id?: string;
         id?: string;
         isAdmin?: boolean;
+        avatar?: string | null;
       } & DefaultSession["user"];
       [key: string]: any;
     };

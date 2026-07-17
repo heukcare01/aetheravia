@@ -1,8 +1,9 @@
-import { v2 as cloudinary } from 'cloudinary';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
 
 import { auth } from '@/lib/auth';
 import dbConnect from '@/lib/dbConnect';
 import UserModel from '@/lib/models/UserModel';
+import { s3Client, BUCKET_NAME, getPublicUrl } from '@/lib/s3Client';
 
 export const runtime = 'nodejs';
 
@@ -35,41 +36,27 @@ export const POST = auth(async (req: any) => {
       return Response.json({ message: 'Image must be 4MB or smaller' }, { status: 400 });
     }
 
-    // Configure Cloudinary
-    const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-    const apiKey = process.env.CLOUDINARY_KEY;
-    const apiSecret = process.env.CLOUDINARY_SECRET;
-    if (!cloudName || !apiKey || !apiSecret) {
-      return Response.json({ message: 'Cloudinary not configured' }, { status: 500 });
-    }
-  cloudinary.config({ cloud_name: cloudName, api_key: apiKey, api_secret: apiSecret });
+    // Upload to MinIO using the project's existing S3 client
+    const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+    const fileKey = `avatars/${uid}/${Date.now()}.${ext}`;
 
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    const upload = () =>
-      new Promise<{ secure_url: string }>((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          {
-            folder: `Aethravia/avatars/${uid}`,
-            resource_type: 'image',
-            overwrite: true,
-            transformation: [{ width: 512, height: 512, crop: 'limit' }],
-          },
-          (err, result) => {
-            if (err || !result?.secure_url) return reject(err || new Error('Upload failed'));
-            resolve({ secure_url: result.secure_url });
-          },
-        );
-        stream.end(buffer);
-      });
+    await s3Client.send(new PutObjectCommand({
+      Bucket: BUCKET_NAME,
+      Key: fileKey,
+      Body: buffer,
+      ContentType: file.type || 'image/jpeg',
+    }));
 
-    const { secure_url } = await upload();
+    // getPublicUrl returns /storage/... which is proxied by Next.js rewrites to MinIO
+    const publicUrl = getPublicUrl(fileKey);
 
     await dbConnect();
-    await UserModel.findByIdAndUpdate(uid, { avatar: secure_url });
+    await UserModel.findByIdAndUpdate(uid, { avatar: publicUrl });
 
-    return Response.json({ url: secure_url }, { status: 200 });
+    return Response.json({ url: publicUrl }, { status: 200 });
   } catch (err: any) {
     console.error('POST /api/auth/profile/avatar error:', err);
     return Response.json({ message: err?.message || 'Internal Server Error' }, { status: 500 });

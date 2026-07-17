@@ -10,7 +10,6 @@ import {
   Package, 
   Settings, 
   Plus, 
-  ShoppingCart, 
   Mail, 
   MapPin, 
   Activity, 
@@ -72,6 +71,10 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
 
   const { data: orders } = useSWR<OrderLite[]>('/api/orders/mine', fetcher);
   const latestOrder = orders?.[0];
+
+  // Fetch saved addresses to show the primary delivery location
+  const { data: addresses } = useSWR<any[]>('/api/auth/profile/addresses', fetcher);
+  const primaryAddress = addresses?.[0];
   
   // Fetch recommended products
   const { data: recommendedData } = useSWR('/api/products/search?sort=rating', fetcher);
@@ -268,11 +271,11 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
                   </div>
                   <div className="flex gap-3">
                     <Link href={`/product/${order.orderItems[0].slug}`} className="flex-1 text-[10px] font-bold uppercase tracking-[0.2em] py-3 text-center border border-primary/10 rounded-xl hover:bg-primary/5 transition-colors">
-                      View Ritual
+                      View Product
                     </Link>
-                    <button className="flex-1 text-[10px] font-bold uppercase tracking-[0.2em] py-3 bg-primary/5 text-primary rounded-xl hover:bg-primary hover:text-on-primary transition-all">
-                      Quick Refill
-                    </button>
+                    <Link href={`/product/${order.orderItems[0].slug}`} className="flex-1 text-[10px] font-bold uppercase tracking-[0.2em] py-3 bg-primary/5 text-primary rounded-xl hover:bg-primary hover:text-on-primary transition-all text-center">
+                      Buy Again
+                    </Link>
                   </div>
                 </div>
               ))}
@@ -314,40 +317,6 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
             </div>
           </section>
 
-          {/* Quick-Reorder Vault */}
-          <section className="bg-white border border-surface-variant/30 rounded-3xl p-8 shadow-sm">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="font-headline text-2xl font-bold text-primary italic">The Vault</h2>
-              <Link href="/shop" className="text-[9px] font-bold uppercase tracking-[0.3em] text-secondary hover:text-primary transition-colors">Archive</Link>
-            </div>
-            <div className="space-y-3">
-              {Array.isArray(orders) && (
-                orders.flatMap(o => o.orderItems || []).slice(0, 3).map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 group p-2 hover:bg-primary/5 rounded-xl transition-all cursor-pointer">
-                    <div className="relative w-12 h-12 bg-surface-container-high rounded-lg overflow-hidden shadow-inner">
-                      <Image 
-                        src={item.image} 
-                        alt={item.name} 
-                        fill 
-                        className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100" 
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[11px] font-bold text-on-surface leading-tight group-hover:text-primary transition-colors truncate">{item.name}</p>
-                      <p className="text-[9px] text-secondary mt-0.5 font-medium italic opacity-60">Archive Record</p>
-                    </div>
-                    <button className="w-8 h-8 flex items-center justify-center border border-primary/10 rounded-full bg-white shadow-sm hover:bg-primary hover:text-on-primary transition-all hover:scale-110 flex-shrink-0">
-                      <ShoppingCart size={14} />
-                    </button>
-                  </div>
-                ))
-              )}
-              
-              {(!orders || orders.length === 0) && (
-                <div className="text-center py-8 opacity-40 italic font-headline">The vault is currently empty.</div>
-              )}
-            </div>
-          </section>
 
           {/* Quick Account Details / Your Sanctuary */}
           <section className="bg-surface-container-low/40 rounded-3xl p-8 border border-surface-variant/20">
@@ -430,10 +399,10 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
                     </span>
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-outline opacity-60">Sanctuary Location</span>
+                    <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-outline opacity-60">Primary Address</span>
                     <span className="text-on-surface font-headline italic font-bold text-lg flex items-center gap-2">
                       <MapPin size={16} className="text-primary/40" />
-                      {latestOrder ? 'Lotus Gardens, Delhi' : 'Not Established'}
+                      {primaryAddress ? `${primaryAddress.city}, ${primaryAddress.country || 'India'}` : 'Not established'}
                     </span>
                   </div>
                   <button 
