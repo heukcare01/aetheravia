@@ -33,6 +33,7 @@ export default function ProductReviews({
   const [reviews, setReviews] = useState<Review[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedMedia, setSelectedMedia] = useState<{ type: 'image' | 'video', url: string } | null>(null);
 
   const fetchReviews = () => {
     setLoading(true);
@@ -164,80 +165,46 @@ export default function ProductReviews({
                       </p>
                     </div>
 
-                    {/* Images */}
-                    {review.images && review.images.length > 0 && (
-                      <div className="flex md:flex-col gap-2 shrink-0 md:w-24 overflow-x-auto pb-2 md:pb-0">
-                        {review.images.map((src, idx) => (
-                          <a
-                            key={idx}
-                            href={src}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden border border-outline-variant/20 block hover:opacity-80 transition-opacity flex-shrink-0"
+                    {/* Images and Videos */}
+                    {((review.images && review.images.length > 0) || (review.videos && review.videos.length > 0)) && (
+                      <div className="flex md:flex-col gap-2 shrink-0 md:w-24 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+                        {review.images?.map((src, idx) => (
+                          <div
+                            key={`img-${idx}`}
+                            onClick={() => setSelectedMedia({ type: 'image', url: src })}
+                            className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden border border-outline-variant/20 block hover:opacity-80 transition-opacity flex-shrink-0 cursor-pointer"
                           >
                             <img
                               src={src}
                               alt={`Review image by ${review.name}`}
                               className="w-full h-full object-cover"
                             />
-                          </a>
+                          </div>
                         ))}
 
-                        {/* Videos */}
-                        {review.videos && review.videos.map((src, idx) => (
+                        {review.videos?.map((src, idx) => (
                           <div
                             key={`v-${idx}`}
                             className="w-20 md:w-24 rounded-xl overflow-hidden border border-outline-variant/20 flex-shrink-0 relative bg-black group cursor-pointer"
                             style={{ height: '5rem' }}
-                            onClick={(e) => {
-                              const vid = (e.currentTarget as HTMLDivElement).querySelector('video');
-                              if (vid) vid.paused ? vid.play() : vid.pause();
-                            }}
+                            onClick={() => setSelectedMedia({ type: 'video', url: src })}
                           >
                             <video
                               src={src}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover opacity-80"
                               muted
                               playsInline
                               preload="metadata"
-                              loop
                             />
-                            <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-colors">
-                              <span className="material-symbols-outlined text-white text-2xl drop-shadow">play_circle</span>
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
+                              <span className="material-symbols-outlined text-white text-2xl drop-shadow-lg">play_circle</span>
                             </div>
                           </div>
                         ))}
                       </div>
                     )}
 
-                    {/* Videos only (when no images) */}
-                    {(!review.images || review.images.length === 0) && review.videos && review.videos.length > 0 && (
-                      <div className="flex md:flex-col gap-2 shrink-0 md:w-24 overflow-x-auto pb-2 md:pb-0">
-                        {review.videos.map((src, idx) => (
-                          <div
-                            key={`v-${idx}`}
-                            className="w-20 md:w-24 rounded-xl overflow-hidden border border-outline-variant/20 flex-shrink-0 relative bg-black group cursor-pointer"
-                            style={{ height: '5rem' }}
-                            onClick={(e) => {
-                              const vid = (e.currentTarget as HTMLDivElement).querySelector('video');
-                              if (vid) vid.paused ? vid.play() : vid.pause();
-                            }}
-                          >
-                            <video
-                              src={src}
-                              className="w-full h-full object-cover"
-                              muted
-                              playsInline
-                              preload="metadata"
-                              loop
-                            />
-                            <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-colors">
-                              <span className="material-symbols-outlined text-white text-2xl drop-shadow">play_circle</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    {/* Removed duplicate video block since it's merged above */}
                   </div>
                 </div>
               ))}
@@ -250,6 +217,44 @@ export default function ProductReviews({
           )}
         </div>
       </div>
+
+      {/* Media Popup Modal */}
+      {selectedMedia && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 md:p-12 animate-in fade-in duration-200"
+          onClick={() => setSelectedMedia(null)}
+        >
+          <button 
+            className="absolute top-6 right-6 text-white/70 hover:text-white bg-black/50 hover:bg-black/80 rounded-full p-2 transition-all"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedMedia(null);
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+          
+          <div 
+            className="relative max-w-5xl w-full max-h-[85vh] flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {selectedMedia.type === 'image' ? (
+              <img 
+                src={selectedMedia.url} 
+                alt="Enlarged review media" 
+                className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+              />
+            ) : (
+              <video 
+                src={selectedMedia.url} 
+                controls 
+                autoPlay 
+                className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl bg-black"
+              />
+            )}
+          </div>
+        </div>
+      )}
     </section>
   );
 }

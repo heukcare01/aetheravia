@@ -51,6 +51,7 @@ export default function Testimonials({
   const [remote, setRemote] = useState<Testimonial[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedMedia, setSelectedMedia] = useState<{ type: 'image' | 'video', url: string } | null>(null);
 
   useEffect(() => {
     if (items && items.length) return; // external data provided
@@ -109,54 +110,35 @@ export default function Testimonials({
                   className="card shadow-md transition hover:shadow-xl h-full"
                   style={{ backgroundColor: '#9F5035', color: 'white' }}
                 >
-                  <div className="card-body gap-3">
-                    {typeof t.rating === "number" && <Stars value={t.rating} />}
-                    <p className="text-sm md:text-base leading-relaxed opacity-95">&ldquo;{t.quote}&rdquo;</p>
-
-                    {/* Review Images */}
-                    {t.images && t.images.length > 0 && (
-                      <div className="flex gap-2 mt-2 flex-wrap">
-                        {t.images.slice(0, 3).map((src, idx) => (
-                          <a
-                            key={idx}
-                            href={src}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-14 h-14 rounded-lg overflow-hidden border border-white/20 flex-shrink-0 hover:opacity-80 transition-opacity"
+                  <div className="card-body gap-3 flex flex-col p-6">
+                    {/* Media Gallery at the top */}
+                    {((t.images && t.images.length > 0) || (t.videos && t.videos.length > 0)) && (
+                      <div className="flex gap-3 mb-2 overflow-x-auto pb-2 snap-x scrollbar-hide -mx-6 px-6">
+                        {t.images?.map((src, idx) => (
+                          <div
+                            key={`img-${idx}`}
+                            onClick={() => setSelectedMedia({ type: 'image', url: src })}
+                            className="h-40 md:h-48 aspect-[4/5] flex-shrink-0 snap-center rounded-xl overflow-hidden border border-white/20 cursor-pointer hover:opacity-90 transition-opacity"
                           >
                             <img src={src} alt={`Review image ${idx + 1}`} className="w-full h-full object-cover" />
-                          </a>
-                        ))}
-                        {t.images.length > 3 && (
-                          <div className="w-14 h-14 rounded-lg bg-black/30 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                            +{t.images.length - 3}
                           </div>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Review Videos */}
-                    {t.videos && t.videos.length > 0 && (
-                      <div className="flex gap-2 mt-2 flex-wrap">
-                        {t.videos.slice(0, 2).map((src, idx) => (
+                        ))}
+                        
+                        {t.videos?.map((src, idx) => (
                           <div
-                            key={idx}
-                            className="w-20 h-14 rounded-lg overflow-hidden border border-white/20 flex-shrink-0 relative bg-black group cursor-pointer"
-                            onClick={(e) => {
-                              const vid = (e.currentTarget as HTMLDivElement).querySelector('video');
-                              if (vid) vid.paused ? vid.play() : vid.pause();
-                            }}
+                            key={`vid-${idx}`}
+                            onClick={() => setSelectedMedia({ type: 'video', url: src })}
+                            className="h-40 md:h-48 aspect-[4/5] flex-shrink-0 snap-center rounded-xl overflow-hidden border border-white/20 cursor-pointer relative bg-black group"
                           >
                             <video
                               src={src}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover opacity-80"
                               muted
                               playsInline
                               preload="metadata"
-                              loop
                             />
-                            <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/0 transition-colors">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-6 h-6 drop-shadow">
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-10 h-10 drop-shadow-lg">
                                 <path d="M8 5v14l11-7z"/>
                               </svg>
                             </div>
@@ -164,6 +146,9 @@ export default function Testimonials({
                         ))}
                       </div>
                     )}
+
+                    {typeof t.rating === "number" && <Stars value={t.rating} />}
+                    <p className="text-sm md:text-base leading-relaxed opacity-95 flex-grow">&ldquo;{t.quote}&rdquo;</p>
 
                     <div className="mt-2 border-t border-white/20 pt-3 flex items-center justify-between">
                       <div>
@@ -182,6 +167,44 @@ export default function Testimonials({
           <CarouselPrevious className="-left-3 md:-left-4" />
           <CarouselNext className="-right-3 md:-right-4" />
         </SCarousel>
+      )}
+
+      {/* Media Popup Modal */}
+      {selectedMedia && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 md:p-12 animate-in fade-in duration-200"
+          onClick={() => setSelectedMedia(null)}
+        >
+          <button 
+            className="absolute top-6 right-6 text-white/70 hover:text-white bg-black/50 hover:bg-black/80 rounded-full p-2 transition-all"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedMedia(null);
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+          
+          <div 
+            className="relative max-w-5xl w-full max-h-[85vh] flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {selectedMedia.type === 'image' ? (
+              <img 
+                src={selectedMedia.url} 
+                alt="Enlarged review media" 
+                className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+              />
+            ) : (
+              <video 
+                src={selectedMedia.url} 
+                controls 
+                autoPlay 
+                className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl bg-black"
+              />
+            )}
+          </div>
+        </div>
       )}
     </section>
   );
