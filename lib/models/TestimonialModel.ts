@@ -10,6 +10,7 @@ export type Testimonial = {
   published?: boolean;
   order?: number;
   images?: string[];
+  videos?: string[];
   productId?: string;
   userId?: string;
   isVerifiedPurchase?: boolean;
@@ -25,6 +26,7 @@ const testimonialSchema = new mongoose.Schema(
     published: { type: Boolean, default: true },
     order: { type: Number, default: 0 },
     images: { type: [String], default: [] },
+    videos: { type: [String], default: [] },
     productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     isVerifiedPurchase: { type: Boolean, default: false },

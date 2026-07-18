@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import { Star, Upload, X, ImageIcon, CheckCircle } from 'lucide-react';
+import { Star, Upload, X, ImageIcon, Video, CheckCircle } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -18,44 +18,80 @@ export default function ReviewForm({ productId, productName, onReviewSubmitted }
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [quote, setQuote] = useState('');
+
+  // Images
   const [images, setImages] = useState<File[]>([]);
-  const [previews, setPreviews] = useState<string[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+
+  // Videos
+  const [videos, setVideos] = useState<File[]>([]);
+  const [videoPreviews, setVideoPreviews] = useState<string[]>([]);
+
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
 
   const MAX_IMAGES = 5;
+  const MAX_VIDEOS = 2;
 
-  const addFiles = useCallback((files: FileList | File[]) => {
-    const arr = Array.from(files);
-    const validImages = arr.filter((f) => f.type.startsWith('image/'));
-    const remaining = MAX_IMAGES - images.length;
-    const toAdd = validImages.slice(0, remaining);
-
-    if (toAdd.length === 0) return;
-
+  // ── Image handlers ──────────────────────────────────────────────
+  const addImages = useCallback((files: FileList | File[]) => {
+    const arr = Array.from(files).filter((f) => f.type.startsWith('image/'));
+    const toAdd = arr.slice(0, MAX_IMAGES - images.length);
+    if (!toAdd.length) return;
     setImages((prev) => [...prev, ...toAdd]);
     toAdd.forEach((file) => {
       const reader = new FileReader();
-      reader.onload = (e) => {
-        setPreviews((prev) => [...prev, e.target?.result as string]);
-      };
+      reader.onload = (e) => setImagePreviews((prev) => [...prev, e.target?.result as string]);
       reader.readAsDataURL(file);
     });
   }, [images.length]);
 
   const removeImage = (idx: number) => {
     setImages((prev) => prev.filter((_, i) => i !== idx));
-    setPreviews((prev) => prev.filter((_, i) => i !== idx));
+    setImagePreviews((prev) => prev.filter((_, i) => i !== idx));
+  };
+
+  // ── Video handlers ──────────────────────────────────────────────
+  const addVideos = useCallback((files: FileList | File[]) => {
+    const arr = Array.from(files).filter((f) => f.type.startsWith('video/'));
+    const toAdd = arr.slice(0, MAX_VIDEOS - videos.length);
+    if (!toAdd.length) return;
+
+    // Size check: 50MB per video
+    for (const v of toAdd) {
+      if (v.size > 50 * 1024 * 1024) {
+        toast.error(`"${v.name}" exceeds 50MB limit`);
+        return;
+      }
+    }
+
+    setVideos((prev) => [...prev, ...toAdd]);
+    toAdd.forEach((file) => {
+      const url = URL.createObjectURL(file);
+      setVideoPreviews((prev) => [...prev, url]);
+    });
+  }, [videos.length]);
+
+  const removeVideo = (idx: number) => {
+    URL.revokeObjectURL(videoPreviews[idx]);
+    setVideos((prev) => prev.filter((_, i) => i !== idx));
+    setVideoPreviews((prev) => prev.filter((_, i) => i !== idx));
   };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setDragOver(false);
-    addFiles(e.dataTransfer.files);
+    const files = Array.from(e.dataTransfer.files);
+    const imgFiles = files.filter((f) => f.type.startsWith('image/'));
+    const vidFiles = files.filter((f) => f.type.startsWith('video/'));
+    if (imgFiles.length) addImages(imgFiles);
+    if (vidFiles.length) addVideos(vidFiles);
   };
 
+  // ── Submit ──────────────────────────────────────────────────────
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!rating) return toast.error('Please select a rating');
@@ -64,28 +100,33 @@ export default function ReviewForm({ productId, productName, onReviewSubmitted }
 
     setSubmitting(true);
     try {
-      // 1. Upload images first
       let imageUrls: string[] = [];
-      if (images.length > 0) {
+      let videoUrls: string[] = [];
+
+      // Upload images + videos together
+      if (images.length > 0 || videos.length > 0) {
         const formData = new FormData();
         images.forEach((img) => formData.append('files', img));
+        videos.forEach((vid) => formData.append('videos', vid));
+
         const uploadRes = await fetch('/api/reviews/upload', {
           method: 'POST',
           body: formData,
         });
         if (!uploadRes.ok) {
           const err = await uploadRes.json();
-          throw new Error(err.error || 'Image upload failed');
+          throw new Error(err.error || 'Upload failed');
         }
         const uploadData = await uploadRes.json();
         imageUrls = uploadData.urls || [];
+        videoUrls = uploadData.videoUrls || [];
       }
 
-      // 2. Submit review
+      // Submit review
       const res = await fetch('/api/reviews', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId, rating, quote: quote.trim(), images: imageUrls }),
+        body: JSON.stringify({ productId, rating, quote: quote.trim(), images: imageUrls, videos: videoUrls }),
       });
 
       if (!res.ok) {
@@ -181,16 +222,16 @@ export default function ReviewForm({ productId, productName, onReviewSubmitted }
         <p className="text-xs text-on-surface-variant/60 text-right">{quote.length}/1000</p>
       </div>
 
-      {/* Image Upload */}
+      {/* Photo + Video Upload */}
       <div className="space-y-3">
         <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">
-          Add Photos (up to {MAX_IMAGES})
+          Add Photos &amp; Videos
         </label>
 
-        {/* Previews */}
-        {previews.length > 0 && (
+        {/* Image Previews */}
+        {imagePreviews.length > 0 && (
           <div className="flex flex-wrap gap-3">
-            {previews.map((src, idx) => (
+            {imagePreviews.map((src, idx) => (
               <div key={idx} className="relative w-20 h-20 rounded-lg overflow-hidden border border-outline-variant/20">
                 <Image src={src} alt={`Preview ${idx + 1}`} fill className="object-cover" />
                 <button
@@ -205,8 +246,40 @@ export default function ReviewForm({ productId, productName, onReviewSubmitted }
           </div>
         )}
 
+        {/* Video Previews */}
+        {videoPreviews.length > 0 && (
+          <div className="flex flex-wrap gap-3">
+            {videoPreviews.map((src, idx) => (
+              <div key={idx} className="relative w-32 h-24 rounded-lg overflow-hidden border border-outline-variant/20 bg-black">
+                <video
+                  src={src}
+                  className="w-full h-full object-cover"
+                  muted
+                  playsInline
+                  preload="metadata"
+                />
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="bg-black/40 rounded-full p-1">
+                    <Video size={16} className="text-white" />
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeVideo(idx)}
+                  className="absolute top-1 right-1 bg-black/60 rounded-full p-0.5 text-white hover:bg-black/80 transition-colors"
+                >
+                  <X size={12} />
+                </button>
+                <p className="absolute bottom-1 left-1 text-[10px] text-white/80 bg-black/40 px-1 rounded">
+                  {videos[idx]?.name?.slice(0, 12)}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* Drop Zone */}
-        {images.length < MAX_IMAGES && (
+        {(images.length < MAX_IMAGES || videos.length < MAX_VIDEOS) && (
           <div
             className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all ${
               dragOver
@@ -216,23 +289,49 @@ export default function ReviewForm({ productId, productName, onReviewSubmitted }
             onDrop={handleDrop}
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
             onDragLeave={() => setDragOver(false)}
-            onClick={() => fileInputRef.current?.click()}
           >
-            <ImageIcon className="mx-auto mb-2 text-on-surface-variant/40" size={24} />
+            <div className="flex justify-center gap-3 mb-2">
+              <ImageIcon className="text-on-surface-variant/40" size={22} />
+              <Video className="text-on-surface-variant/40" size={22} />
+            </div>
             <p className="text-xs text-on-surface-variant">
-              Drag & drop photos here, or <span className="text-primary font-medium">click to browse</span>
+              Drag &amp; drop here, or{' '}
+              <span
+                className="text-primary font-medium cursor-pointer"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                add photos
+              </span>
+              {' '}or{' '}
+              <span
+                className="text-primary font-medium cursor-pointer"
+                onClick={() => videoInputRef.current?.click()}
+              >
+                add a video
+              </span>
             </p>
-            <p className="text-[11px] text-on-surface-variant/50 mt-1">JPG, PNG up to 5MB each</p>
+            <p className="text-[11px] text-on-surface-variant/50 mt-1">
+              Photos: JPG, PNG up to 5MB · Videos: MP4, MOV up to 50MB (max {MAX_VIDEOS})
+            </p>
           </div>
         )}
 
+        {/* Hidden inputs */}
         <input
           ref={fileInputRef}
           type="file"
           accept="image/*"
           multiple
           className="hidden"
-          onChange={(e) => e.target.files && addFiles(e.target.files)}
+          onChange={(e) => e.target.files && addImages(e.target.files)}
+        />
+        <input
+          ref={videoInputRef}
+          type="file"
+          accept="video/mp4,video/webm,video/quicktime,video/mov"
+          multiple
+          className="hidden"
+          onChange={(e) => e.target.files && addVideos(e.target.files)}
         />
       </div>
 

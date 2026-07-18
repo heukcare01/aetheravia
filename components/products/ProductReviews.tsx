@@ -12,6 +12,7 @@ type Review = {
   role?: string;
   city?: string;
   images?: string[];
+  videos?: string[];
   isVerifiedPurchase?: boolean;
   createdAt: string;
 };
@@ -180,6 +181,60 @@ export default function ProductReviews({
                               className="w-full h-full object-cover"
                             />
                           </a>
+                        ))}
+
+                        {/* Videos */}
+                        {review.videos && review.videos.map((src, idx) => (
+                          <div
+                            key={`v-${idx}`}
+                            className="w-20 md:w-24 rounded-xl overflow-hidden border border-outline-variant/20 flex-shrink-0 relative bg-black group cursor-pointer"
+                            style={{ height: '5rem' }}
+                            onClick={(e) => {
+                              const vid = (e.currentTarget as HTMLDivElement).querySelector('video');
+                              if (vid) vid.paused ? vid.play() : vid.pause();
+                            }}
+                          >
+                            <video
+                              src={src}
+                              className="w-full h-full object-cover"
+                              muted
+                              playsInline
+                              preload="metadata"
+                              loop
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-colors">
+                              <span className="material-symbols-outlined text-white text-2xl drop-shadow">play_circle</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Videos only (when no images) */}
+                    {(!review.images || review.images.length === 0) && review.videos && review.videos.length > 0 && (
+                      <div className="flex md:flex-col gap-2 shrink-0 md:w-24 overflow-x-auto pb-2 md:pb-0">
+                        {review.videos.map((src, idx) => (
+                          <div
+                            key={`v-${idx}`}
+                            className="w-20 md:w-24 rounded-xl overflow-hidden border border-outline-variant/20 flex-shrink-0 relative bg-black group cursor-pointer"
+                            style={{ height: '5rem' }}
+                            onClick={(e) => {
+                              const vid = (e.currentTarget as HTMLDivElement).querySelector('video');
+                              if (vid) vid.paused ? vid.play() : vid.pause();
+                            }}
+                          >
+                            <video
+                              src={src}
+                              className="w-full h-full object-cover"
+                              muted
+                              playsInline
+                              preload="metadata"
+                              loop
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-colors">
+                              <span className="material-symbols-outlined text-white text-2xl drop-shadow">play_circle</span>
+                            </div>
+                          </div>
                         ))}
                       </div>
                     )}

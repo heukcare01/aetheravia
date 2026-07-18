@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import ProductItems, { ProductItemsSkeleton } from '@/components/products/ProductItems';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import FeaturedIngredients from '@/components/shop/FeaturedIngredients';
 
 export const metadata: Metadata = {
   title: 'Aethravia | The Artisanal Archive',
@@ -23,10 +24,6 @@ const ShopPage = async (props: {
     { name: 'Face Wash', icon: 'face', slug: 'Face Wash' }
   ];
 
-  const featuredIngredients = [
-    'Multani Mitti',
-    'Reetha (Soapnut)'
-  ];
 
   return (
     <div className='min-h-screen bg-surface font-body text-on-surface relative overflow-hidden'>
@@ -84,47 +81,7 @@ const ShopPage = async (props: {
             </div>
 
             {/* Featured Ingredients Section */}
-            <div className="space-y-6">
-              <div className="flex items-center justify-between px-4">
-                <h3 className="text-[10px] uppercase tracking-[0.3em] text-secondary/40 font-bold">Featured Ingredients</h3>
-                {currentQuery !== 'all' && (
-                  <Link 
-                    href={currentCategory === 'all' ? '/shop' : `/shop?category=${encodeURIComponent(currentCategory)}`}
-                    className="text-[10px] text-primary underline underline-offset-4 font-bold"
-                  >
-                    Clear
-                  </Link>
-                )}
-              </div>
-              <div className="flex flex-col space-y-5 px-4">
-                {featuredIngredients.map((ingredient) => {
-                  const isActive = currentQuery === ingredient;
-                  return (
-                    <Link 
-                      key={ingredient} 
-                      href={isActive 
-                        ? (currentCategory === 'all' ? '/shop' : `/shop?category=${encodeURIComponent(currentCategory)}`)
-                        : `/shop?q=${encodeURIComponent(ingredient)}${currentCategory !== 'all' ? `&category=${encodeURIComponent(currentCategory)}` : ''}`
-                      }
-                      className="flex items-center gap-4 cursor-pointer group"
-                    >
-                      <div className={`w-5 h-5 border rounded flex items-center justify-center transition-colors ${
-                        isActive ? 'border-primary bg-primary/5' : 'border-outline/30 group-hover:border-primary'
-                      }`}>
-                        <div className={`w-2.5 h-2.5 bg-primary rounded-sm transition-opacity ${
-                          isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-10'
-                        }`}></div>
-                      </div>
-                      <span className={`text-sm transition-colors ${
-                        isActive ? 'text-primary font-bold' : 'text-secondary/80 group-hover:text-primary'
-                      }`}>
-                        {ingredient}
-                      </span>
-                    </Link>
-                  )
-                })}
-              </div>
-            </div>
+            <FeaturedIngredients />
 
             {/* Ritual Guide Block */}
             <div className="bg-surface-container-low p-10 rounded-xl relative overflow-hidden group shadow-sm mt-32">

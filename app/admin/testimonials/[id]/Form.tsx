@@ -22,8 +22,10 @@ export default function TestimonialForm({ id }: { id: string }) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [images, setImages] = useState<string[]>([]);
+  const [videos, setVideos] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<T>();
 
@@ -37,6 +39,7 @@ export default function TestimonialForm({ id }: { id: string }) {
     setValue('published', data.published ?? true);
     setValue('order', data.order ?? 0);
     setImages(data.images || []);
+    setVideos(data.videos || []);
   }, [data, setValue]);
 
   if (error) return error.message;
@@ -68,8 +71,38 @@ export default function TestimonialForm({ id }: { id: string }) {
     }
   };
 
+  const handleVideoUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const remaining = 2 - videos.length;
+    if (remaining <= 0) {
+      toast.error('Maximum 2 videos allowed');
+      return;
+    }
+    const filesToUpload = Array.from(files).slice(0, remaining);
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      filesToUpload.forEach((file) => formData.append('videos', file));
+      const res = await fetch('/api/reviews/upload', { method: 'POST', body: formData });
+      if (!res.ok) throw new Error('Video upload failed');
+      const result = await res.json();
+      const urls: string[] = result.videoUrls || [];
+      setVideos((prev) => [...prev, ...urls]);
+      toast.success(`${urls.length} video(s) uploaded`);
+    } catch (e: any) {
+      toast.error(e.message || 'Video upload failed');
+    } finally {
+      setUploading(false);
+      if (videoInputRef.current) videoInputRef.current.value = '';
+    }
+  };
+
   const removeImage = (idx: number) => {
     setImages((prev) => prev.filter((_, i) => i !== idx));
+  };
+
+  const removeVideo = (idx: number) => {
+    setVideos((prev) => prev.filter((_, i) => i !== idx));
   };
 
   const onSubmit = async (form: T) => {
@@ -79,7 +112,7 @@ export default function TestimonialForm({ id }: { id: string }) {
       const res = await fetch(`/api/admin/testimonials/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, images }),
+        body: JSON.stringify({ ...form, images, videos }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json?.message || 'Failed to update');
@@ -182,6 +215,44 @@ export default function TestimonialForm({ id }: { id: string }) {
           </div>
         </div>
 
+          {/* Video Upload Section */}
+          <div className='md:flex'>
+            <label className='label md:w-1/5'>Videos</label>
+            <div className='md:w-4/5 space-y-3'>
+              {videos.length > 0 && (
+                <div className='flex flex-wrap gap-3'>
+                  {videos.map((url, idx) => (
+                    <div key={idx} className='relative group w-32 h-20 rounded-lg overflow-hidden border border-base-300 bg-black'>
+                      <video src={url} className='w-full h-full object-cover' muted playsInline preload='metadata' />
+                      <button
+                        type='button'
+                        onClick={() => removeVideo(idx)}
+                        className='absolute top-1 right-1 w-5 h-5 bg-error text-error-content rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity'
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {videos.length < 2 && (
+                <div>
+                  <input
+                    ref={videoInputRef}
+                    type='file'
+                    accept='video/mp4,video/webm,video/quicktime'
+                    multiple
+                    className='file-input file-input-bordered file-input-sm w-full max-w-md'
+                    onChange={(e) => handleVideoUpload(e.target.files)}
+                    disabled={uploading}
+                  />
+                  <p className='text-xs opacity-60 mt-1'>
+                    {uploading ? 'Uploading...' : `Up to ${2 - videos.length} more video(s). MP4/MOV up to 50MB each.`}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
         <button type='submit' className='btn btn-primary' disabled={saving || uploading}>
           {saving && <span className='loading loading-spinner'></span>}
           Save

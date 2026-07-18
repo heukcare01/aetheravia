@@ -62,6 +62,7 @@ const AdminLayout = ({
     {
       title: 'Editorial',
       items: [
+        { key: 'reviews', label: 'Reviews', href: '/admin/reviews', icon: 'rate_review' },
         { key: 'testimonials', label: 'Testimonials', href: '/admin/testimonials', icon: 'chat' },
         { key: 'settings', label: 'Settings', href: '/admin/settings', icon: 'settings' },
       ]

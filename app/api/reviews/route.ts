@@ -57,6 +57,7 @@ export async function GET(request: NextRequest) {
         role: r.role,
         city: r.city,
         images: r.images || [],
+        videos: r.videos || [],
         isVerifiedPurchase: r.isVerifiedPurchase || false,
         createdAt: r.createdAt,
       })),
@@ -84,7 +85,7 @@ export async function POST(request: NextRequest) {
     await dbConnect();
 
     const body = await request.json();
-    const { productId, rating, quote, images } = body;
+    const { productId, rating, quote, images, videos } = body;
 
     if (!quote || !rating) {
       return NextResponse.json({ error: 'Rating and review text are required' }, { status: 400 });
@@ -126,6 +127,7 @@ export async function POST(request: NextRequest) {
       role: isVerifiedPurchase ? 'Verified Buyer' : 'Customer',
       published: true, // Auto-publish per user preference
       images: Array.isArray(images) ? images.slice(0, 5) : [],
+      videos: Array.isArray(videos) ? videos.slice(0, 2) : [],
       productId: productId || undefined,
       userId: session.user.id,
       isVerifiedPurchase,
@@ -141,6 +143,7 @@ export async function POST(request: NextRequest) {
         quote: review.quote,
         rating: review.rating,
         images: review.images,
+        videos: review.videos,
         isVerifiedPurchase: review.isVerifiedPurchase,
         createdAt: review.createdAt,
       },

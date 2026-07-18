@@ -19,6 +19,7 @@ type Testimonial = {
   rating?: number; // 1..5
   quote: string;
   images?: string[];
+  videos?: string[];
   isVerifiedPurchase?: boolean;
 };
 
@@ -114,7 +115,7 @@ export default function Testimonials({
 
                     {/* Review Images */}
                     {t.images && t.images.length > 0 && (
-                      <div className="flex gap-2 mt-2">
+                      <div className="flex gap-2 mt-2 flex-wrap">
                         {t.images.slice(0, 3).map((src, idx) => (
                           <a
                             key={idx}
@@ -131,6 +132,36 @@ export default function Testimonials({
                             +{t.images.length - 3}
                           </div>
                         )}
+                      </div>
+                    )}
+
+                    {/* Review Videos */}
+                    {t.videos && t.videos.length > 0 && (
+                      <div className="flex gap-2 mt-2 flex-wrap">
+                        {t.videos.slice(0, 2).map((src, idx) => (
+                          <div
+                            key={idx}
+                            className="w-20 h-14 rounded-lg overflow-hidden border border-white/20 flex-shrink-0 relative bg-black group cursor-pointer"
+                            onClick={(e) => {
+                              const vid = (e.currentTarget as HTMLDivElement).querySelector('video');
+                              if (vid) vid.paused ? vid.play() : vid.pause();
+                            }}
+                          >
+                            <video
+                              src={src}
+                              className="w-full h-full object-cover"
+                              muted
+                              playsInline
+                              preload="metadata"
+                              loop
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/0 transition-colors">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-6 h-6 drop-shadow">
+                                <path d="M8 5v14l11-7z"/>
+                              </svg>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     )}
 
