@@ -4,6 +4,7 @@ export type User = {
   _id: string;
   name: string;
   email: string;
+  phone?: string;
   isAdmin: boolean;
   avatar?: string;
   dateOfBirth?: Date;
@@ -94,6 +95,9 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+    },
+    phone: {
+      type: String,
     },
     password: {
       type: String,

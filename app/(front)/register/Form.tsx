@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 type Inputs = {
   name: string;
   email: string;
+  phone: string;
   password: string;
   otp: string;
 };
@@ -26,6 +27,8 @@ const Form = () => {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const [countdown, setCountdown] = useState(0);
+
   const {
     register,
     handleSubmit,
@@ -36,12 +39,22 @@ const Form = () => {
     defaultValues: {
       name: '',
       email: '',
+      phone: '',
       password: '',
       otp: '',
     },
   });
 
   const email = watch('email');
+  const phone = watch('phone');
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (countdown > 0) {
+      timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [countdown]);
 
   useEffect(() => {
     // Capture referral code and store in cookie
@@ -64,6 +77,7 @@ const Form = () => {
         body: JSON.stringify({
           name: data.name,
           email: data.email,
+          phone: data.phone,
           password: data.password,
         }),
       });
@@ -71,8 +85,9 @@ const Form = () => {
       const result = await res.json();
 
       if (res.ok) {
-        toast.success('Verification code sent to your email');
+        toast.success('Verification code sent to your WhatsApp');
         setStep(2);
+        setCountdown(60);
       } else {
         toast.error(result.message || result.error?.message || 'Failed to send OTP');
       }
@@ -91,6 +106,7 @@ const Form = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: data.email,
+          phone: data.phone,
           otp: data.otp,
         }),
       });
@@ -207,6 +223,21 @@ const Form = () => {
                   </div>
 
                   <div className="space-y-1.5">
+                    <label className="block text-[9px] font-bold text-on-surface-variant uppercase tracking-widest ml-1" htmlFor="phone">WHATSAPP NUMBER</label>
+                    <input 
+                      {...register('phone', { 
+                        required: 'WhatsApp Number is required',
+                        pattern: { value: /^\+?[1-9]\d{1,14}$/, message: 'Enter a valid number with country code (e.g. +91...)' }
+                      })}
+                      className="w-full px-4 py-3 bg-surface-container-low border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 transition-all duration-300 placeholder:text-outline/30 rounded-t-sm text-sm" 
+                      id="phone" 
+                      placeholder="+91 9876543210" 
+                      type="tel"
+                    />
+                    {errors.phone && <p className="text-error text-[9px] font-bold mt-1 ml-1">{errors.phone.message}</p>}
+                  </div>
+
+                  <div className="space-y-1.5">
                     <label className="block text-[9px] font-bold text-on-surface-variant uppercase tracking-widest ml-1" htmlFor="password">PASSWORD</label>
                     <div className="relative">
                       <input 
@@ -265,7 +296,7 @@ const Form = () => {
                   </button>
                   <h1 className="text-3xl lg:text-4xl font-headline text-on-surface tracking-tight leading-tight">Secure your account</h1>
                   <p className="text-secondary font-body font-light text-base leading-relaxed opacity-70">
-                    Verify it's you. We've sent a 6-digit code to <span className="text-primary font-semibold">{email}</span>.
+                    Verify it's you. We've sent a 6-digit code to your WhatsApp at <span className="text-primary font-semibold">{phone}</span>.
                   </p>
                 </div>
 
@@ -304,10 +335,18 @@ const Form = () => {
                   <p className="text-secondary font-body text-[11px] opacity-60">
                     Didn't receive the code? 
                     <button 
-                      onClick={() => sendOtp(getValues())} 
-                      className="text-primary font-bold ml-2 hover:underline decoration-primary/20 transition-all uppercase tracking-widest text-[9px]"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (countdown === 0) sendOtp(getValues());
+                      }} 
+                      disabled={countdown > 0}
+                      className={`font-bold ml-2 uppercase tracking-widest text-[9px] transition-all ${
+                        countdown > 0 
+                          ? 'text-secondary opacity-50 cursor-not-allowed' 
+                          : 'text-primary hover:underline decoration-primary/20'
+                      }`}
                     >
-                      Resend Code
+                      {countdown > 0 ? `Resend in ${countdown}s` : 'Resend Code'}
                     </button>
                   </p>
                 </div>

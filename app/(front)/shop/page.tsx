@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import ProductItems, { ProductItemsSkeleton } from '@/components/products/ProductItems';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import FeaturedIngredients from '@/components/shop/FeaturedIngredients';
+import FeaturedIngredients, { INGREDIENTS } from '@/components/shop/FeaturedIngredients';
 
 export const metadata: Metadata = {
   title: 'Aethravia | The Artisanal Archive',
@@ -11,11 +11,13 @@ export const metadata: Metadata = {
 };
 
 const ShopPage = async (props: {
-  searchParams: Promise<{ category?: string; q?: string }>
+  searchParams: Promise<{ category?: string; q?: string; ingredient?: string }>
 }) => {
   const searchParams = await props.searchParams;
   const currentCategory = searchParams.category || 'all';
   const currentQuery = searchParams.q || 'all';
+  const currentIngredientSlug = searchParams.ingredient;
+  const activeIngredientData = INGREDIENTS.find(i => i.slug === currentIngredientSlug);
 
   const categories = [
     { name: 'All Products', icon: 'grid_view', slug: 'all' },
@@ -100,6 +102,28 @@ const ShopPage = async (props: {
 
           {/* Main Product Area */}
           <div className="lg:col-span-9">
+            
+            {/* Active Ingredient Banner */}
+            {activeIngredientData && (
+              <div className="mb-12 rounded-2xl overflow-hidden bg-surface-container-low border border-primary/10 shadow-sm animate-in fade-in slide-in-from-top-4 duration-700">
+                <div className="relative w-full aspect-[21/9] md:aspect-[3/1]">
+                  <img 
+                    src={activeIngredientData.image} 
+                    alt={activeIngredientData.name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 p-8 md:p-12">
+                    <span className="text-primary-container font-label text-[10px] uppercase tracking-[0.3em] font-bold block mb-3 opacity-90">Featured Ingredient</span>
+                    <h2 className="text-3xl md:text-5xl font-headline text-white mb-4">{activeIngredientData.name}</h2>
+                    <p className="text-white/80 font-body max-w-2xl text-sm md:text-base leading-relaxed italic border-l-2 border-primary/50 pl-4">
+                      {activeIngredientData.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <Suspense key={`${currentCategory}-${currentQuery}`} fallback={<ProductItemsSkeleton qty={6} layout="grid" />}>
               <ProductItems 
                 layout="grid" 

@@ -3,17 +3,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import UserModel from '@/lib/models/UserModel';
 import RegisterVerificationModel from '@/lib/models/RegisterVerificationModel';
-import { emailService } from '@/lib/notifications/email';
+import { whatsappService } from '@/lib/notifications/whatsapp';
 import { enhancedSecurity } from '@/lib/enhanced-security';
 import RegistrationErrorHandler from '@/lib/registration-errors';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, email, password } = body;
+    const { name, email, phone, password } = body;
 
     // 1. Basic Validation
-    if (!name || !email || !password) {
+    if (!name || !email || !phone || !password) {
       return NextResponse.json(
         { message: 'All fields are required' },
         { status: 400 }
@@ -69,6 +69,8 @@ export async function POST(request: NextRequest) {
       { email: email.toLowerCase() },
       {
         name: name.trim(),
+        email: email.toLowerCase(),
+        phone: phone.trim(),
         password: hashedPassword,
         otp: hashedOtp,
         otpExpiry: otpExpiry,
@@ -76,12 +78,19 @@ export async function POST(request: NextRequest) {
       { upsert: true, new: true }
     );
 
-    // 6. Send OTP Email
-    await emailService.sendRegisterOtp(email, otp);
+    // 6. Send OTP via WhatsApp
+    const isSent = await whatsappService.sendOtp(phone, otp);
+
+    if (!isSent) {
+      return NextResponse.json(
+        { message: 'Failed to send WhatsApp message. Please check the number.' },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({
       success: true,
-      message: 'Verification code sent to your email'
+      message: 'Verification code sent to your WhatsApp'
     });
 
   } catch (error: any) {

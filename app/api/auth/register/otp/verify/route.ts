@@ -70,6 +70,7 @@ export async function POST(request: NextRequest) {
     const newUser = new UserModel({
       name: pendingUser.name,
       email: pendingUser.email.toLowerCase(),
+      phone: pendingUser.phone,
       password: pendingUser.password,
       isAdmin: false,
       referralCode: crypto.randomBytes(4).toString('hex'), // Generate referral code for new user
