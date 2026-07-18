@@ -79,11 +79,11 @@ export async function POST(request: NextRequest) {
     );
 
     // 6. Send OTP via WhatsApp
-    const isSent = await whatsappService.sendOtp(phone, otp);
+    const result = await whatsappService.sendOtp(phone, otp);
 
-    if (!isSent) {
+    if (!result.success) {
       return NextResponse.json(
-        { message: 'Failed to send WhatsApp message. Please check the number.' },
+        { message: `WhatsApp Error: ${result.error || 'Failed to send WhatsApp message.'}` },
         { status: 500 }
       );
     }

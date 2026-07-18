@@ -15,15 +15,15 @@ export class WhatsAppService {
     return !!this.token && !!this.phoneNumberId && !!this.templateName;
   }
 
-  async sendOtp(phone: string, otp: string): Promise<boolean> {
+  async sendOtp(phone: string, otp: string): Promise<{ success: boolean; error?: any }> {
     if (!this.isConfigured()) {
       console.warn('WhatsApp API not configured. Skipping WhatsApp OTP.');
       // Fallback for development if keys aren't set
       if (process.env.NODE_ENV === 'development') {
         console.log(`[DEV OTP] Would have sent ${otp} to ${phone} via WhatsApp`);
-        return true;
+        return { success: true };
       }
-      return false;
+      return { success: false, error: 'WhatsApp keys are not configured on the server.' };
     }
 
     try {
@@ -113,19 +113,19 @@ export class WhatsAppService {
           const fallbackData = await fallbackResponse.json();
           if (!fallbackResponse.ok) {
             console.error('WhatsApp Fallback API Error:', fallbackData);
-            return false;
+            return { success: false, error: fallbackData?.error?.message || 'Fallback failed' };
           }
-          return true;
+          return { success: true };
         }
 
         console.error('WhatsApp API Error:', data);
-        return false;
+        return { success: false, error: data?.error?.message || 'WhatsApp API failed' };
       }
 
-      return true;
-    } catch (error) {
+      return { success: true };
+    } catch (error: any) {
       console.error('Error sending WhatsApp message:', error);
-      return false;
+      return { success: false, error: error.message || String(error) };
     }
   }
 }
