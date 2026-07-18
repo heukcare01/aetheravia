@@ -20,10 +20,10 @@ export const INGREDIENTS = [
 export default function FeaturedIngredients() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const currentIngredient = searchParams.get('ingredient');
+  const currentIngredient = searchParams?.get('ingredient');
 
   const toggleIngredient = (slug: string) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams?.toString() || '');
     if (currentIngredient === slug) {
       params.delete('ingredient');
     } else {
