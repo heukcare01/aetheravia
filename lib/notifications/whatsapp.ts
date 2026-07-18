@@ -33,69 +33,65 @@ export class WhatsAppService {
 
       const url = `https://graph.facebook.com/v19.0/${this.phoneNumberId}/messages`;
       
-      const payload = {
-        messaging_product: 'whatsapp',
-        to: cleanPhone,
-        type: 'template',
-        template: {
-          name: this.templateName,
-          language: {
-            code: 'en_US', // Standard language code for templates, adjust if necessary
+      let lastError: any = null;
+
+      // Try different English language codes since users often pick one randomly
+      const languageCodes = ['en_US', 'en', 'en_GB'];
+
+      for (const lang of languageCodes) {
+        const payload = {
+          messaging_product: 'whatsapp',
+          to: cleanPhone,
+          type: 'template',
+          template: {
+            name: this.templateName,
+            language: { code: lang },
+            components: [
+              {
+                type: 'body',
+                parameters: [{ type: 'text', text: otp }],
+              },
+              {
+                type: 'button',
+                sub_type: 'url',
+                index: '0',
+                parameters: [{ type: 'text', text: otp }],
+              },
+            ],
           },
-          components: [
-            {
-              type: 'body',
-              parameters: [
-                {
-                  type: 'text',
-                  text: otp,
-                },
-              ],
-            },
-            {
-              type: 'button',
-              sub_type: 'url',
-              index: '0',
-              parameters: [
-                {
-                  type: 'text',
-                  text: otp,
-                },
-              ],
-            },
-          ],
-        },
-      };
+        };
 
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${this.token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (!response.ok) {
-        // Sometimes the button component causes an error if the template doesn't have a button.
-        // Let's retry with just the body component if it fails.
-        if (data.error && data.error.message.includes('component')) {
-          console.warn('Retrying WhatsApp message without button component...');
+        if (response.ok) {
+          return { success: true };
+        }
+
+        lastError = data?.error?.message;
+
+        // If the error is about a missing component, try without the button component
+        if (lastError && lastError.includes('component')) {
+          console.warn(`Retrying ${lang} without button component...`);
           const fallbackPayload = {
             messaging_product: 'whatsapp',
             to: cleanPhone,
             type: 'template',
             template: {
               name: this.templateName,
-              language: { code: 'en_US' },
+              language: { code: lang },
               components: [
                 {
                   type: 'body',
-                  parameters: [
-                    { type: 'text', text: otp }
-                  ]
+                  parameters: [{ type: 'text', text: otp }]
                 }
               ]
             }
@@ -111,18 +107,21 @@ export class WhatsAppService {
           });
 
           const fallbackData = await fallbackResponse.json();
-          if (!fallbackResponse.ok) {
-            console.error('WhatsApp Fallback API Error:', fallbackData);
-            return { success: false, error: fallbackData?.error?.message || 'Fallback failed' };
+          if (fallbackResponse.ok) {
+            return { success: true };
           }
-          return { success: true };
+          lastError = fallbackData?.error?.message;
         }
 
-        console.error('WhatsApp API Error:', data);
-        return { success: false, error: data?.error?.message || 'WhatsApp API failed' };
+        // If it's a translation/language error, the loop will continue to try the next language code.
+        // If it's something else (like invalid number), we should probably break out early, but looping 3 times is harmless.
+        if (lastError && !lastError.includes('translation')) {
+          break; // Not a language issue, stop trying
+        }
       }
 
-      return { success: true };
+      console.error('WhatsApp API Error:', lastError);
+      return { success: false, error: lastError || 'WhatsApp API failed' };
     } catch (error: any) {
       console.error('Error sending WhatsApp message:', error);
       return { success: false, error: error.message || String(error) };
