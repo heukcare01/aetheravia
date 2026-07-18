@@ -3,7 +3,8 @@ import { Suspense } from 'react';
 import ProductItems, { ProductItemsSkeleton } from '@/components/products/ProductItems';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import FeaturedIngredients, { INGREDIENTS } from '@/components/shop/FeaturedIngredients';
+import FeaturedIngredients from '@/components/shop/FeaturedIngredients';
+import { INGREDIENTS } from '@/lib/constants/ingredients';
 
 export const metadata: Metadata = {
   title: 'Aethravia | The Artisanal Archive',
