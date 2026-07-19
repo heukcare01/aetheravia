@@ -193,6 +193,9 @@ export default function Reviews() {
           <h1 className="text-2xl font-bold">Product Reviews</h1>
           <p className="text-sm opacity-70">Manage reviews for all products. Edit, moderate, and view customer details.</p>
         </div>
+        <Link href="/admin/reviews/new" className="btn btn-primary btn-sm gap-2 mt-2 sm:mt-0">
+          <span className="material-symbols-outlined text-sm">add</span> Add Review
+        </Link>
       </div>
 
       {/* Stats Cards */}

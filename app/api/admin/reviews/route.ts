@@ -3,6 +3,7 @@ import dbConnect from '@/lib/dbConnect';
 import TestimonialModel from '@/lib/models/TestimonialModel';
 import ProductModel from '@/lib/models/ProductModel';
 import UserModel from '@/lib/models/UserModel';
+import { emitAdminEvent } from '@/lib/eventBus';
 
 export const dynamic = 'force-dynamic';
 
@@ -89,4 +90,39 @@ export const GET = auth(async (req: any) => {
   });
 
   return Response.json({ reviews: enriched, products: allProducts });
+}) as any;
+
+// POST: Create a new review as admin
+export const POST = auth(async (req: any) => {
+  if (!req.auth || !req.auth.user?.isAdmin) {
+    return Response.json({ message: 'unauthorized' }, { status: 401 });
+  }
+
+  try {
+    await dbConnect();
+    const data = await req.json();
+
+    const review = await TestimonialModel.create({
+      name: data.name,
+      quote: data.quote,
+      role: data.role || '',
+      city: data.city || '',
+      rating: data.rating || 5,
+      published: data.published ?? true,
+      productId: data.productId || null,
+      images: data.images || [],
+      videos: data.videos || [],
+    });
+
+    emitAdminEvent({
+      ts: Date.now(),
+      type: 'review.created',
+      reviewId: String(review._id),
+    });
+
+    return Response.json({ message: 'Review created successfully', review });
+  } catch (err: any) {
+    console.error('[Admin API] Error creating review:', err);
+    return Response.json({ message: err.message }, { status: 500 });
+  }
 }) as any;

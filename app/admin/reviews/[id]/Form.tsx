@@ -6,6 +6,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
 
 type FormValues = {
   name: string;
@@ -18,7 +19,13 @@ type FormValues = {
 };
 
 export default function ReviewEditForm({ id }: { id: string }) {
-  const { data, error } = useSWR(`/api/admin/reviews/${id}`);
+  const isNew = id === 'new';
+  // Only fetch if not new
+  const { data, error, isLoading } = useSWR(isNew ? null : `/api/admin/reviews/${id}`);
+  
+  // Also fetch products for the dropdown if we're creating new
+  const { data: productsData } = useSWR(isNew ? '/api/admin/reviews' : null);
+  
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [images, setImages] = useState<string[]>([]);
@@ -35,6 +42,12 @@ export default function ReviewEditForm({ id }: { id: string }) {
   } = useForm<FormValues>();
 
   useEffect(() => {
+    if (isNew) {
+      setValue('rating', 5);
+      setValue('published', true);
+      setValue('order', 0);
+      return;
+    }
     if (!data) return;
     setValue('name', data.name);
     setValue('quote', data.quote);
@@ -43,12 +56,13 @@ export default function ReviewEditForm({ id }: { id: string }) {
     setValue('rating', data.rating ?? 5);
     setValue('published', data.published ?? true);
     setValue('order', data.order ?? 0);
+    if (data.productId) setValue('productId' as any, data.productId);
     setImages(data.images || []);
     setVideos(data.videos || []);
-  }, [data, setValue]);
+  }, [data, setValue, isNew]);
 
   if (error) return <div className="text-error">{error.message || 'Failed to load'}</div>;
-  if (!data) return <div className="animate-pulse space-y-3"><div className="h-8 w-40 bg-base-200 rounded" /><div className="h-64 bg-base-200 rounded" /></div>;
+  if (!isNew && (isLoading || !data)) return <div className="animate-pulse space-y-3"><div className="h-8 w-40 bg-base-200 rounded" /><div className="h-64 bg-base-200 rounded" /></div>;
 
   // ── Image upload ───────────────────────────────────────────
   const handleImageUpload = async (files: FileList | null) => {
@@ -100,18 +114,24 @@ export default function ReviewEditForm({ id }: { id: string }) {
   const removeVideo = (idx: number) => setVideos((prev) => prev.filter((_, i) => i !== idx));
 
   // ── Save ───────────────────────────────────────────────────
-  const onSubmit = async (form: FormValues) => {
+  const onSubmit = async (form: FormValues & { productId?: string }) => {
     setSaving(true);
-    const toastId = toast.loading('Saving...');
+    const toastId = toast.loading(isNew ? 'Creating review...' : 'Saving...');
     try {
-      const res = await fetch(`/api/admin/reviews/${id}`, {
-        method: 'PUT',
+      const url = isNew ? '/api/admin/reviews' : `/api/admin/reviews/${id}`;
+      const method = isNew ? 'POST' : 'PUT';
+      
+      const payload = { ...form, images, videos };
+      if (!payload.productId) delete payload.productId; // don't send empty string
+
+      const res = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, images, videos }),
+        body: JSON.stringify(payload),
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json?.message || 'Failed to update');
-      toast.success('Review updated', { id: toastId });
+      if (!res.ok) throw new Error(json?.message || 'Failed to save');
+      toast.success(isNew ? 'Review created' : 'Review updated', { id: toastId });
       router.push('/admin/reviews');
     } catch (e: any) {
       toast.error(e?.message || 'Update failed', { id: toastId });
@@ -123,7 +143,7 @@ export default function ReviewEditForm({ id }: { id: string }) {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Edit Review</h1>
+        <h1 className="text-2xl font-bold">{isNew ? 'Add Review' : 'Edit Review'}</h1>
         <Link href="/admin/reviews" className="btn btn-ghost btn-sm">
           ← Back to Reviews
         </Link>
@@ -196,6 +216,24 @@ export default function ReviewEditForm({ id }: { id: string }) {
               <label className="label md:w-1/4" htmlFor="published">Published</label>
               <div className="md:w-3/4">
                 <input id="published" type="checkbox" className="toggle" {...register('published')} />
+              </div>
+            </div>
+
+            {/* Product Link (only really changeable easily here if new, or you could allow changing it anytime. Let's allow anytime) */}
+            <div className="md:flex">
+              <label className="label md:w-1/4" htmlFor="productId">Linked Product</label>
+              <div className="md:w-3/4">
+                <select id="productId" className="select select-bordered w-full max-w-md" {...register('productId' as any)}>
+                  <option value="">General Review (No specific product)</option>
+                  {(isNew ? productsData?.products : [data?.product].filter(Boolean)).map((p: any) => (
+                    <option key={p._id} value={p._id}>{p.name}</option>
+                  ))}
+                  {/* If editing, we just show the linked product to avoid complex re-fetching. But for new, we show all */}
+                  {!isNew && data?.product && (
+                     <option value="" disabled className="italic">To link a different product, recreate the review.</option>
+                  )}
+                </select>
+                {isNew && <p className="text-xs opacity-60 mt-1">If linking to a product, this review will appear on its page.</p>}
               </div>
             </div>
 
@@ -300,6 +338,7 @@ export default function ReviewEditForm({ id }: { id: string }) {
         </div>
 
         {/* ── Sidebar Info (1/3) ─────────────────────────── */}
+        {!isNew && (
         <div className="space-y-6">
           {/* User Info Card */}
           {data.user ? (
@@ -431,6 +470,7 @@ export default function ReviewEditForm({ id }: { id: string }) {
             </div>
           </div>
         </div>
+        )}
       </div>
     </div>
   );
