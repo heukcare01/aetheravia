@@ -1,17 +1,23 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { User } from '@/lib/models/UserModel';
-import { formatId } from '@/lib/utils';
+
+// We won't use the overly truncated formatId anymore
+const formatFullId = (id: string) => {
+  if (!id) return '';
+  return `${id.slice(0, 6)}...${id.slice(-4)}`;
+};
 
 export default function Users() {
   const { data: users, error, isLoading, mutate } = useSWR(`/api/admin/users`);
-  // Realtime updates via SSE (reuse existing admin events stream)
   const esRef = useRef<EventSource | null>(null);
+  
   useEffect(() => {
     const es = new EventSource('/api/admin/realtime');
     esRef.current = es;
@@ -20,7 +26,7 @@ export default function Users() {
       try {
         const evt = JSON.parse(e.data);
         if (evt.type === 'user.updated' || evt.type === 'user.deleted') {
-          mutate(); // refetch users
+          mutate();
         }
       } catch {}
     };
@@ -36,8 +42,8 @@ export default function Users() {
       toast.error('Nothing to export');
       return;
     }
-    const headers = ['id','name','email','isAdmin'];
-    const rows = filtered.map(u => [u._id, escapeCsv(u.name||''), escapeCsv(u.email||''), u.isAdmin ? 'YES' : 'NO']);
+    const headers = ['id','name','email','phone','isAdmin'];
+    const rows = filtered.map(u => [u._id, escapeCsv(u.name||''), escapeCsv(u.email||''), escapeCsv(u.phone||''), u.isAdmin ? 'YES' : 'NO']);
     const csv = [headers.join(','), ...rows.map(r=>r.join(','))].join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -55,6 +61,7 @@ export default function Users() {
     }
     return value;
   }
+
   const { trigger: deleteUser, isMutating: deleting } = useSWRMutation(
     `/api/admin/users`,
     async (url, { arg }: { arg: { userId: string } }) => {
@@ -71,7 +78,7 @@ export default function Users() {
       const res = await fetch(`/api/admin/users/${arg.userId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isAdmin: arg.isAdmin, name: arg.isAdmin ? undefined : undefined, email: undefined }),
+        body: JSON.stringify({ isAdmin: arg.isAdmin }),
       });
       if (!res.ok) {
         const d = await res.json();
@@ -104,7 +111,11 @@ export default function Users() {
     if (!users) return [];
     return users.filter((u: User) => {
       const s = search.toLowerCase();
-      const matches = !s || u.name?.toLowerCase().includes(s) || u.email?.toLowerCase().includes(s) || formatId(u._id).toLowerCase().includes(s);
+      const matches = !s || 
+                      u.name?.toLowerCase().includes(s) || 
+                      u.email?.toLowerCase().includes(s) || 
+                      u.phone?.toLowerCase().includes(s) ||
+                      u._id.toLowerCase().includes(s);
       const roleOk = roleFilter === 'all' || (roleFilter === 'admin' ? u.isAdmin : !u.isAdmin);
       return matches && roleOk;
     });
@@ -124,76 +135,92 @@ export default function Users() {
   }
   function handleToggleAdmin(u: User) {
     const next = !u.isAdmin;
-    // optimistic update
-  mutate((prev: any) => prev?.map((p: User) => p._id === u._id ? { ...p, isAdmin: next } : p), { revalidate: false });
+    mutate((prev: any) => prev?.map((p: User) => p._id === u._id ? { ...p, isAdmin: next } : p), { revalidate: false });
     updateUserQuick({ userId: u._id, isAdmin: next });
   }
 
   const LoadingSkeleton = (
-    <div className="space-y-3 animate-pulse">
-      <div className="h-8 bg-base-200 rounded w-40" />
-      <div className="grid gap-3 sm:grid-cols-3">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="h-20 bg-base-200 rounded" />
+    <div className="space-y-4 animate-pulse">
+      <div className="h-10 bg-base-200 rounded w-48" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="h-40 bg-base-200 rounded-3xl" />
         ))}
       </div>
-      <div className="h-64 bg-base-200 rounded" />
+      <div className="h-96 bg-base-200 rounded-3xl" />
     </div>
   );
 
-  if (error) return <div className="p-4 text-error">Failed to load users.</div>;
+  if (error) return <div className="p-8 text-error font-bold text-center border border-error/20 rounded-xl bg-error/5">Failed to load users.</div>;
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className='text-2xl font-bold tracking-tight'>Users</h1>
-        <div className="flex flex-wrap gap-2 items-center">
-          <div className="stats shadow hidden md:grid">
-            <div className="stat p-3">
-              <div className="stat-title">Total</div>
-              <div className="stat-value text-base">{stats.total}</div>
+    <div className="space-y-8 max-w-7xl mx-auto pb-12">
+      {/* Header & Stats */}
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight mb-2">User Directory</h1>
+          <p className="text-sm text-base-content/60">Manage your members, administrators, and their records.</p>
+        </div>
+        
+        <div className="flex flex-wrap gap-4 items-center">
+          <div className="stats shadow-sm border border-base-200 hidden sm:flex">
+            <div className="stat px-4 py-2">
+              <div className="stat-title text-xs">Total</div>
+              <div className="stat-value text-lg">{stats.total}</div>
             </div>
-            <div className="stat p-3">
-              <div className="stat-title">Admins</div>
-              <div className="stat-value text-base text-primary">{stats.admins}</div>
-            </div>
-            <div className="stat p-3">
-              <div className="stat-title">Members</div>
-              <div className="stat-value text-base">{stats.members}</div>
+            <div className="stat px-4 py-2">
+              <div className="stat-title text-xs">Admins</div>
+              <div className="stat-value text-lg text-primary">{stats.admins}</div>
             </div>
           </div>
-          <div className="join">
-            <button className={`btn btn-xs sm:btn-sm join-item ${view==='table'?'btn-primary':''}`} onClick={()=>setView('table')}>Table</button>
-            <button className={`btn btn-xs sm:btn-sm join-item ${view==='cards'?'btn-primary':''}`} onClick={()=>setView('cards')}>Cards</button>
+          
+          <div className="join border border-base-300 rounded-lg overflow-hidden">
+            <button className={`btn btn-sm join-item ${view==='table'?'bg-primary text-primary-content hover:bg-primary-focus':'bg-base-100'}`} onClick={()=>setView('table')}>
+              Table
+            </button>
+            <button className={`btn btn-sm join-item ${view==='cards'?'bg-primary text-primary-content hover:bg-primary-focus':'bg-base-100'}`} onClick={()=>setView('cards')}>
+              Cards
+            </button>
           </div>
-          <button onClick={exportCsv} className="btn btn-xs sm:btn-sm btn-outline">Export CSV</button>
-          {selected.length > 0 && (
-            <button onClick={bulkDelete} className="btn btn-xs sm:btn-sm btn-error">Delete Selected ({selected.length})</button>
-          )}
+          
+          <button onClick={exportCsv} className="btn btn-sm btn-outline gap-2">
+            ↓ Export CSV
+          </button>
         </div>
       </div>
 
-      <div className="card bg-base-100 border border-base-300 shadow-sm">
-        <div className="card-body p-4 sm:p-5 gap-4">
-          <div className="flex flex-col sm:flex-row gap-4 sm:items-end">
-            <div className="sm:w-64">
-              <label className="label p-0 mb-1 text-xs uppercase tracking-wide">Search</label>
-              <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Name, email or id" className="input input-sm input-bordered w-full" />
+      {/* Filters & Actions */}
+      <div className="card bg-base-100 border border-base-200 shadow-sm">
+        <div className="card-body p-4 sm:p-6">
+          <div className="flex flex-col md:flex-row gap-4 md:items-end">
+            <div className="flex-1 md:max-w-xs">
+              <label className="label py-1"><span className="label-text text-xs uppercase font-bold tracking-wider opacity-70">Search Directory</span></label>
+              <input 
+                value={search} 
+                onChange={e=>setSearch(e.target.value)} 
+                placeholder="Name, email, phone or ID..." 
+                className="input input-sm input-bordered w-full" 
+              />
             </div>
-            <div className="sm:w-40">
-              <label className="label p-0 mb-1 text-xs uppercase tracking-wide">Role</label>
+            
+            <div className="w-full md:w-48">
+              <label className="label py-1"><span className="label-text text-xs uppercase font-bold tracking-wider opacity-70">Role Filter</span></label>
               <select value={roleFilter} onChange={e=>setRoleFilter(e.target.value as any)} className="select select-sm select-bordered w-full">
-                <option value='all'>All</option>
-                <option value='admin'>Admins</option>
-                <option value='user'>Members</option>
+                <option value='all'>All Roles</option>
+                <option value='admin'>Administrators</option>
+                <option value='user'>Standard Members</option>
               </select>
             </div>
-            <div className="flex gap-2 flex-wrap items-center text-xs opacity-60">
-              <span><strong>{filtered.length}</strong> showing</span>
-              <span className="hidden sm:inline">•</span>
-              <span>{stats.admins} admin(s)</span>
-              <span className="hidden sm:inline">•</span>
-              <span>{stats.members} member(s)</span>
+            
+            <div className="flex-1 flex justify-end items-center gap-3">
+              <div className="text-xs font-medium bg-base-200 px-3 py-1.5 rounded-full">
+                Showing {filtered.length} of {users?.length || 0}
+              </div>
+              {selected.length > 0 && (
+                <button onClick={bulkDelete} className="btn btn-sm btn-error shadow-sm gap-2">
+                  🗑 Delete ({selected.length})
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -202,87 +229,143 @@ export default function Users() {
       {isLoading && LoadingSkeleton}
 
       {!isLoading && filtered.length === 0 && (
-        <div className="p-8 border border-dashed border-base-300 rounded text-center text-sm space-y-2">
-          <div>🙈 No users found with current filters.</div>
-          {search && <button className="btn btn-xs" onClick={()=>setSearch('')}>Clear search</button>}
+        <div className="p-16 border-2 border-dashed border-base-300 rounded-3xl text-center flex flex-col items-center gap-3">
+          <span className="text-5xl">🙈</span>
+          <p className="font-bold text-lg">No users found</p>
+          <p className="text-sm text-base-content/60">Try adjusting your search or filters.</p>
+          {search && <button className="btn btn-sm btn-outline mt-2" onClick={()=>setSearch('')}>Clear Search</button>}
         </div>
       )}
 
+      {/* Table View */}
       {!isLoading && filtered.length > 0 && view === 'table' && (
-        <div className='overflow-x-auto rounded border border-base-300'>
-          <table className='table table-sm md:table-md'>
-            <thead>
-              <tr className="bg-base-200/60">
-                <th className="w-6"><input type="checkbox" className="checkbox checkbox-xs" checked={allSelected} onChange={toggleSelectAll} /></th>
-                <th className="w-24">ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th className="text-center w-20">Admin</th>
-                <th className="w-28 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((user: User) => (
-                <tr key={user._id} className={"hover " + (selected.includes(user._id) ? 'bg-primary/5' : '')}>
-                  <td><input type="checkbox" className="checkbox checkbox-xs" checked={selected.includes(user._id)} onChange={()=>toggleSelect(user._id)} /></td>
-                  <td className="font-mono text-xs">{formatId(user._id)}</td>
-                  <td className="max-w-[160px] md:max-w-none truncate">{user.name}</td>
-                  <td className="max-w-[200px] md:max-w-none truncate">{user.email}</td>
-                  <td className="text-center">
-                    <button onClick={()=>handleToggleAdmin(user)} className={`badge badge-xs md:badge-sm cursor-pointer ${user.isAdmin ? 'badge-primary' : 'badge-ghost'}`}>{user.isAdmin ? 'YES' : 'NO'}</button>
-                  </td>
-                  <td className="text-right">
-                    <div className="flex gap-1 justify-end">
-                      <Link href={`/admin/users/${user._id}`} className='btn btn-ghost btn-xs md:btn-sm'>Edit</Link>
-                      <button disabled={deleting} onClick={() => handleDelete(user._id)} className='btn btn-ghost btn-xs md:btn-sm'>Del</button>
-                    </div>
-                  </td>
+        <div className="bg-base-100 rounded-2xl border border-base-200 shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="table">
+              <thead className="bg-base-200/50 text-base-content">
+                <tr>
+                  <th className="w-12"><input type="checkbox" className="checkbox checkbox-sm" checked={allSelected} onChange={toggleSelectAll} /></th>
+                  <th>User Info</th>
+                  <th>Contact</th>
+                  <th>ID</th>
+                  <th>Role</th>
+                  <th className="text-right">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filtered.map((user: User) => (
+                  <tr key={user._id} className={`hover transition-colors ${selected.includes(user._id) ? 'bg-primary/5' : ''}`}>
+                    <td>
+                      <input type="checkbox" className="checkbox checkbox-sm" checked={selected.includes(user._id)} onChange={()=>toggleSelect(user._id)} />
+                    </td>
+                    <td>
+                      <div className="flex items-center gap-3">
+                        <div className="avatar">
+                          <div className="w-10 h-10 rounded-full border border-base-300 bg-base-200 flex items-center justify-center">
+                            {user.avatar ? (
+                              <Image src={user.avatar} alt={user.name} width={40} height={40} className="w-full h-full object-cover" unoptimized />
+                            ) : (
+                              <span className="text-sm font-bold text-primary">{user.name?.charAt(0).toUpperCase() || 'U'}</span>
+                            )}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="font-bold text-sm">{user.name}</div>
+                          <div className="text-xs text-base-content/50">Joined {new Date((user as any).createdAt || Date.now()).toLocaleDateString('en-IN')}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="text-sm">{user.email}</div>
+                      <div className="text-xs text-base-content/50 mt-0.5">{user.phone || 'No phone'}</div>
+                    </td>
+                    <td>
+                      <div className="font-mono text-xs bg-base-200 px-2 py-1 rounded inline-block" title={user._id}>
+                        {formatFullId(user._id)}
+                      </div>
+                    </td>
+                    <td>
+                      <button 
+                        onClick={()=>handleToggleAdmin(user)} 
+                        className={`badge badge-sm font-semibold border-0 ${user.isAdmin ? 'badge-primary text-primary-content' : 'bg-base-200 text-base-content/70'}`}
+                      >
+                        {user.isAdmin ? 'Admin' : 'Member'}
+                      </button>
+                    </td>
+                    <td className="text-right">
+                      <div className="flex gap-2 justify-end">
+                        <Link href={`/admin/users/${user._id}`} className="btn btn-sm btn-ghost hover:bg-primary/10 hover:text-primary">View Full Profile</Link>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
+      {/* Cards View */}
       {!isLoading && filtered.length > 0 && view === 'cards' && (
-        <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4Snap snap-y'>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filtered.map((u: User) => (
-            <div key={u._id} className={`p-6 bg-white/40 backdrop-blur-md border border-primary/10 rounded-[2rem] shadow-sm relative group transition-all hover:bg-white/60 ${selected.includes(u._id) ? 'ring-2 ring-primary bg-white/80' : ''}`}>
-              <div className="absolute top-4 right-4">
-                <input type="checkbox" className="checkbox checkbox-sm checkbox-primary" checked={selected.includes(u._id)} onChange={()=>toggleSelect(u._id)} />
+            <div 
+              key={u._id} 
+              className={`card bg-base-100 border transition-all duration-200 shadow-sm hover:shadow-md ${selected.includes(u._id) ? 'border-primary ring-1 ring-primary' : 'border-base-200'}`}
+            >
+              <div className="absolute top-4 right-4 z-10">
+                <input type="checkbox" className="checkbox checkbox-sm" checked={selected.includes(u._id)} onChange={()=>toggleSelect(u._id)} />
               </div>
               
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">
-                    {u.name?.charAt(0).toUpperCase() || 'U'}
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-[9px] font-label font-bold text-gray-300 uppercase tracking-widest mb-0.5">Identity</div>
-                    <div className="font-bold text-sm text-primary truncate" title={u.name}>{u.name}</div>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <div>
-                    <div className="text-[9px] font-label font-bold text-gray-300 uppercase tracking-widest mb-0.5">Credentials</div>
-                    <div className="text-xs break-all leading-tight text-gray-600 line-clamp-1" title={u.email}>{u.email}</div>
-                    <div className="text-[10px] font-mono text-gray-300 mt-1 uppercase">ID: {formatId(u._id)}</div>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-2 border-t border-primary/5">
-                    <div className="flex flex-col">
-                      <div className="text-[9px] font-label font-bold text-gray-300 uppercase tracking-widest">Privileges</div>
-                      <button onClick={()=>handleToggleAdmin(u)} className={`text-[10px] font-bold uppercase tracking-wider mt-1 ${u.isAdmin ? 'text-primary' : 'text-gray-400'}`}>
-                        {u.isAdmin ? '🛡️ Administrator' : '👤 Standard Member'}
-                      </button>
+              <div className="card-body p-6">
+                <div className="flex flex-col items-center text-center gap-3 mb-2">
+                  <div className="avatar">
+                    <div className="w-16 h-16 rounded-full border-4 border-base-100 shadow-sm bg-base-200 flex items-center justify-center">
+                      {u.avatar ? (
+                        <Image src={u.avatar} alt={u.name} width={64} height={64} className="w-full h-full object-cover" unoptimized />
+                      ) : (
+                        <span className="text-2xl font-bold text-primary">{u.name?.charAt(0).toUpperCase() || 'U'}</span>
+                      )}
                     </div>
                   </div>
+                  <div>
+                    <h3 className="font-bold text-lg leading-tight truncate w-48 mx-auto" title={u.name}>{u.name}</h3>
+                    <button 
+                      onClick={()=>handleToggleAdmin(u)}
+                      className={`badge badge-sm mt-2 border-0 font-medium ${u.isAdmin ? 'badge-primary' : 'bg-base-200 text-base-content/60'}`}
+                    >
+                      {u.isAdmin ? '🛡 Administrator' : '👤 Member'}
+                    </button>
+                  </div>
                 </div>
 
-                <div className="flex gap-2 pt-2">
-                  <Link href={`/admin/users/${u._id}`} className='flex-1 py-2 text-center text-[10px] font-bold uppercase tracking-widest bg-primary/5 text-primary rounded-xl hover:bg-primary/10 transition-colors'>Edit Record</Link>
-                  <button disabled={deleting} onClick={()=>handleDelete(u._id)} className='px-4 py-2 text-[10px] font-bold uppercase tracking-widest bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors'>Del</button>
+                <div className="space-y-3 mt-4 py-4 border-t border-b border-base-200/60">
+                  <div className="flex items-start gap-2">
+                    <span className="text-base-content/40 mt-0.5">✉️</span>
+                    <span className="text-sm truncate" title={u.email}>{u.email}</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-base-content/40 mt-0.5">📱</span>
+                    <span className="text-sm">{u.phone || <span className="text-base-content/40 italic">No phone added</span>}</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-base-content/40 mt-0.5">🆔</span>
+                    <span className="text-xs font-mono bg-base-200 px-1.5 py-0.5 rounded text-base-content/70" title={u._id}>{formatFullId(u._id)}</span>
+                  </div>
+                </div>
+
+                <div className="flex gap-3 pt-2 mt-auto">
+                  <Link href={`/admin/users/${u._id}`} className="btn btn-sm btn-primary flex-1 shadow-sm shadow-primary/20">
+                    View Profile
+                  </Link>
+                  <button 
+                    disabled={deleting} 
+                    onClick={()=>handleDelete(u._id)} 
+                    className="btn btn-sm btn-square btn-outline btn-error"
+                    title="Delete User"
+                  >
+                    🗑
+                  </button>
                 </div>
               </div>
             </div>

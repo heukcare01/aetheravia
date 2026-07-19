@@ -60,7 +60,7 @@ type Props = {
 const fetcher = (url: string) => fetch(url, { credentials: 'include' }).then(res => res.json());
 
 export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
-  const avatar = (user?.avatar && typeof user.avatar === "string" && user.avatar) || "/images/banner/banner1.jpg";
+  const avatar = (user?.avatar && typeof user.avatar === "string" && user.avatar) || null;
   const [name, setName] = useState(user?.name || "");
   const [email, setEmail] = useState(user?.email || "");
   const [saving, setSaving] = useState(false);
@@ -117,15 +117,19 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
       <header className="relative z-10 flex flex-col md:flex-row items-center md:items-center gap-8 mb-16">
         <div className="relative group">
           <div 
-            className="w-32 h-32 rounded-2xl overflow-hidden bg-surface-container-high border-2 border-primary/10 relative cursor-pointer shadow-2xl transition-all duration-500 hover:border-primary/30"
+            className="w-32 h-32 rounded-2xl overflow-hidden bg-surface-container-high border-2 border-primary/10 relative cursor-pointer shadow-2xl transition-all duration-500 hover:border-primary/30 flex items-center justify-center"
             onClick={() => fileRef.current?.click()}
           >
-            <Image 
-              src={avatar} 
-              alt={name} 
-              fill 
-              className="object-cover grayscale mix-blend-multiply opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" 
-            />
+            {avatar ? (
+              <Image 
+                src={avatar} 
+                alt={name} 
+                fill 
+                className="object-cover grayscale mix-blend-multiply opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" 
+              />
+            ) : (
+              <span className="text-6xl font-bold text-primary/40 font-headline italic">{name.charAt(0).toUpperCase() || 'U'}</span>
+            )}
             {uploading && (
                <div className="absolute inset-0 bg-primary/20 backdrop-blur-sm flex items-center justify-center">
                  <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin" />
