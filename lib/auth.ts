@@ -84,21 +84,39 @@ export const config = {
     error: '/error',
   },
   callbacks: {
-    async jwt({ user, token, trigger, session }: any) {
+    async jwt({ user, token, trigger, session, account }: any) {
       // If user is signing in, add user data to token
       if (user) {
-        const idStr = typeof user._id === 'string' 
-          ? user._id 
-          : user._id?.toString() || user.id;
+        await dbConnect();
+        // Always fetch the latest user from DB to ensure we get the correct MongoDB _id
+        // because GoogleProvider returns the Google Account ID in user.id
+        const dbUser = await UserModel.findOne({ email: user.email });
         
-        token.user = {
-          id: idStr,
-          _id: idStr,
-          email: user.email,
-          name: user.name,
-          isAdmin: user.isAdmin,
-          avatar: (user as any).avatar || null,
-        };
+        if (dbUser) {
+          const idStr = dbUser._id.toString();
+          token.user = {
+            id: idStr,
+            _id: idStr,
+            email: dbUser.email,
+            name: dbUser.name,
+            isAdmin: dbUser.isAdmin,
+            avatar: dbUser.avatar || null,
+          };
+        } else {
+          // Fallback if somehow not in DB yet
+          const idStr = typeof user._id === 'string' 
+            ? user._id 
+            : user._id?.toString() || user.id;
+          
+          token.user = {
+            id: idStr,
+            _id: idStr,
+            email: user.email,
+            name: user.name,
+            isAdmin: user.isAdmin,
+            avatar: (user as any).avatar || user.image || null,
+          };
+        }
       }
       // Handle session updates (e.g. after avatar upload via update())
       if (trigger === 'update' && session?.user) {

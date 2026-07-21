@@ -33,6 +33,7 @@ export const GET = auth(async (...args: any) => {
       numReviews: 0,
       tags: [],
       tagBannerImage: '',
+      isSignature: false,
     });
   }
 
@@ -81,6 +82,7 @@ export const PUT = auth(async (...args: any) => {
     sizes,
     tags,
     tagBannerImage,
+    isSignature,
   } = await req.json();
 
   try {
@@ -100,6 +102,7 @@ export const PUT = auth(async (...args: any) => {
         sizes,
         tags,
         tagBannerImage,
+        isSignature,
       });
       const createdProduct = await newProduct.save();
       return Response.json(createdProduct);
@@ -119,6 +122,7 @@ export const PUT = auth(async (...args: any) => {
       product.sizes = sizes;
       product.tags = tags;
       product.tagBannerImage = tagBannerImage;
+      product.isSignature = isSignature;
 
       const updatedProduct = await product.save();
       return Response.json(updatedProduct);

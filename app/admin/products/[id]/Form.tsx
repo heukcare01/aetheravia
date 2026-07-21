@@ -24,6 +24,7 @@ interface ProductFormData {
   countInStock: number | string;
   description: string;
   tags: string;
+  isSignature: boolean;
 }
 
 export default function ProductEditForm({ productId }: { productId: string }) {
@@ -34,6 +35,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
   const [reviewImages, setReviewImages] = useState<string[]>([]);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+  const [isNewCategory, setIsNewCategory] = useState(false);
 
   const { trigger: updateProduct, isMutating: isUpdating } = useSWRMutation(
     `/api/admin/products/${productId}`,
@@ -52,7 +54,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
 
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<ProductFormData>({
     defaultValues: {
-      name: '', slug: '', price: '', image: '', images: [], category: '', brand: '', countInStock: '', description: '', tags: ''
+      name: '', slug: '', price: '', image: '', images: [], category: '', brand: '', countInStock: '', description: '', tags: '', isSignature: false
     },
   });
 
@@ -71,6 +73,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
     setValue('description', product.description || '');
     setValue('tags', product.tags ? product.tags.join(', ') : '');
     setValue('images', product.images || (product.image ? [product.image] : []));
+    setValue('isSignature', product.isSignature || false);
   }, [product, setValue]);
 
 
@@ -132,6 +135,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
       price: Number(formData.price),
       countInStock: Number(formData.countInStock),
       tags: formData.tags ? formData.tags.split(',').map(t => t.trim()).filter(Boolean) : [],
+      isSignature: formData.isSignature,
     };
     await updateProduct(payload as any);
   };
@@ -177,29 +181,70 @@ export default function ProductEditForm({ productId }: { productId: string }) {
               
               <div className='space-y-1'>
                 <label className='text-xs font-semibold uppercase tracking-wide opacity-70' htmlFor='category'>Category</label>
-                <input
-                  id='category'
-                  list='category-options'
-                  {...register('category', { required: 'Category is required' })}
-                  className='input input-bordered input-sm w-full'
-                  placeholder='Select or type category'
-                  autoComplete='off'
-                />
-                <datalist id='category-options'>
-                  <option value='Signature'>Signature</option>
-                  <option value='Body Wash'>Body Wash</option>
-                  <option value='Face Wash'>Face Wash</option>
-                  <option value='Body Scrub'>Body Scrub</option>
-                  {categories?.filter(c => !['Signature', 'Body Wash', 'Face Wash', 'Body Scrub'].includes(c)).map(c => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                </datalist>
+                {!isNewCategory ? (() => {
+                  const { onChange: rhfOnChange, ...registerRest } = register('category', { required: 'Category is required' });
+                  return (
+                  <select
+                    id='category'
+                    className='select select-bordered select-sm w-full'
+                    {...registerRest}
+                    onChange={(e) => {
+                      if (e.target.value === 'ADD_NEW') {
+                        setIsNewCategory(true);
+                        setValue('category', '');
+                      } else {
+                        rhfOnChange(e);
+                      }
+                    }}
+                  >
+                    <option value="" disabled>Select category</option>
+                    <option value='Signature'>Signature</option>
+                    <option value='Body Wash'>Body Wash</option>
+                    <option value='Face Wash'>Face Wash</option>
+                    <option value='Body Scrub'>Body Scrub</option>
+                    <option value='Combo'>Combo</option>
+                    {categories?.filter(c => !['Signature', 'Body Wash', 'Face Wash', 'Body Scrub', 'Combo'].includes(c)).map(c => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                    <option value="ADD_NEW">+ Add New Category...</option>
+                  </select>
+                  );
+                })() : (
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Type new category"
+                      className="input input-bordered input-sm w-full"
+                      {...register('category', { required: 'Category is required' })}
+                      autoFocus
+                    />
+                    <button 
+                      type="button" 
+                      className="btn btn-sm btn-ghost" 
+                      onClick={() => {
+                        setIsNewCategory(false);
+                        setValue('category', '');
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
                 {errors.category?.message && <p className='text-error text-xs'>{errors.category.message}</p>}
               </div>
 
               <Field id='price' label='Price' type='number' required />
               <Field id='countInStock' label='Count In Stock' type='number' required />
-              <div className='col-span-1 md:col-span-2'>
+              
+              <div className='space-y-1'>
+                <label className='text-xs font-semibold uppercase tracking-wide opacity-70'>Collections</label>
+                <label className="label cursor-pointer justify-start gap-4 border rounded-lg px-4 py-1.5 h-8">
+                  <span className="label-text">Signature Collection</span> 
+                  <input type="checkbox" className="toggle toggle-primary toggle-sm" {...register('isSignature')} />
+                </label>
+              </div>
+
+              <div className='col-span-1 md:col-span-1'>
                 <Field id='tags' label='Tags (comma separated)' />
               </div>
             </div>

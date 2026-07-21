@@ -21,7 +21,9 @@ const ProductItems = async ({
   let products: any[] = [];
 
   try {
-    if ((category && category !== 'all') || (q && q !== 'all')) {
+    if (category === 'signature_collection_special_flag') {
+      products = await productService.getSignature();
+    } else if ((category && category !== 'all') || (q && q !== 'all')) {
       const res = await productService.getByQuery({
         q: q,
         category: category,
@@ -42,6 +44,8 @@ const ProductItems = async ({
   }
 
   if (products.length === 0) {
+    // In slider layout (shop page category rows), hide entirely when empty
+    if (layout === 'slider') return null;
     return (
       <div className='rounded-lg bg-base-300 p-6 text-center text-gray-500'>
         No products yet.

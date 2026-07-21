@@ -16,6 +16,12 @@ const getFeatured = cache(async (): Promise<Product[]> => {
   return products as unknown as Product[];
 });
 
+const getSignature = cache(async (): Promise<Product[]> => {
+  await dbConnect();
+  const products = await ProductModel.find({ isSignature: true }).sort({ createdAt: -1 }).lean();
+  return products as unknown as Product[];
+});
+
 const getBySlug = cache(async (slug: string): Promise<Product | null> => {
   await dbConnect();
   const product = await ProductModel.findOne({ slug }).lean();
@@ -122,6 +128,7 @@ const getCategories = cache(async (): Promise<string[]> => {
 const productService = {
   getLatest,
   getFeatured,
+  getSignature,
   getBySlug,
   getByQuery,
   getCategories,

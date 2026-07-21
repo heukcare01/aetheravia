@@ -5,6 +5,7 @@ import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import FeaturedIngredients from '@/components/shop/FeaturedIngredients';
 import { INGREDIENTS } from '@/lib/constants/ingredients';
+import productService from '@/lib/services/productService';
 
 export const metadata: Metadata = {
   title: 'Aethravia | The Artisanal Archive',
@@ -20,11 +21,34 @@ const ShopPage = async (props: {
   const currentIngredientSlug = searchParams.ingredient;
   const activeIngredientData = INGREDIENTS.find(i => i.slug === currentIngredientSlug);
 
+  const fetchedCategories = await productService.getCategories();
+  
+  const getIconForCategory = (cat: string) => {
+    const iconMap: Record<string, string> = {
+      'body wash': 'waves',
+      'face wash': 'face',
+      'body scrub': 'texture',
+      'combo': 'redeem',
+      'signature': 'auto_awesome',
+    };
+    const l = cat.toLowerCase();
+    if (iconMap[l]) return iconMap[l];
+    // Fuzzy fallback for custom categories
+    if (l.includes('face') || l.includes('serum') || l.includes('cream')) return 'face';
+    if (l.includes('wash') || l.includes('cleanser')) return 'waves';
+    if (l.includes('scrub') || l.includes('exfoliat')) return 'texture';
+    if (l.includes('combo') || l.includes('kit') || l.includes('bundle')) return 'redeem';
+    if (l.includes('hair') || l.includes('oil')) return 'water_drop';
+    return 'spa';
+  };
+
   const categories = [
     { name: 'All Products', icon: 'grid_view', slug: 'all' },
-    { name: 'Body Wash', icon: 'waves', slug: 'Body Wash' },
-    { name: 'Body Scrub', icon: 'texture', slug: 'Body Scrub' },
-    { name: 'Face Wash', icon: 'face', slug: 'Face Wash' }
+    ...fetchedCategories.map(c => ({
+      name: c,
+      icon: getIconForCategory(c),
+      slug: c
+    }))
   ];
 
 
@@ -125,15 +149,39 @@ const ShopPage = async (props: {
               </div>
             )}
 
-            <Suspense key={`${currentCategory}-${currentQuery}`} fallback={<ProductItemsSkeleton qty={6} layout="grid" />}>
-              <ProductItems 
-                layout="grid" 
-                title={currentQuery !== 'all' ? currentQuery.split(' (')[0] : (currentCategory === 'all' ? 'Signature' : currentCategory)}
-                highlight={currentQuery !== 'all' ? 'Featured' : (currentCategory === 'all' ? 'Harvest' : 'Collection')} 
-                category={currentCategory}
-                q={currentQuery}
-              />
-            </Suspense>
+            {currentCategory === 'all' && currentQuery === 'all' ? (
+              <div className="space-y-24">
+                <Suspense fallback={<ProductItemsSkeleton qty={4} layout="slider" />}>
+                  <ProductItems 
+                    layout="slider" 
+                    title="Signature"
+                    highlight="Collection"
+                    category="signature_collection_special_flag"
+                  />
+                </Suspense>
+                
+                {fetchedCategories.map(cat => (
+                  <Suspense key={cat} fallback={<ProductItemsSkeleton qty={4} layout="slider" />}>
+                    <ProductItems 
+                      layout="slider" 
+                      title={cat}
+                      highlight="Products"
+                      category={cat}
+                    />
+                  </Suspense>
+                ))}
+              </div>
+            ) : (
+              <Suspense key={`${currentCategory}-${currentQuery}`} fallback={<ProductItemsSkeleton qty={6} layout="grid" />}>
+                <ProductItems 
+                  layout="grid" 
+                  title={currentQuery !== 'all' ? currentQuery.split(' (')[0] : currentCategory}
+                  highlight={currentQuery !== 'all' ? 'Featured' : 'Collection'} 
+                  category={currentCategory}
+                  q={currentQuery}
+                />
+              </Suspense>
+            )}
 
             {/* Bento-Style Lifestyle Blocks */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-32">

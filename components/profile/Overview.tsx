@@ -57,7 +57,10 @@ type Props = {
   onSaveAbout?: (payload: { name?: string; email?: string; avatar?: string }) => Promise<void>;
 };
 
-const fetcher = (url: string) => fetch(url, { credentials: 'include' }).then(res => res.json());
+const fetcher = (url: string) => fetch(url, { credentials: 'include' }).then(res => {
+  if (!res.ok) return []; // Return empty for errors so SWR doesn't throw on profile subdata
+  return res.json();
+});
 
 export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
   const avatar = (user?.avatar && typeof user.avatar === "string" && user.avatar) || null;
@@ -186,22 +189,58 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
                 Refill Essentials
               </Link>
             </div>
+
+            {/* Latest Order Highlight */}
+            {latestOrder && latestOrder.orderItems?.length > 0 && (
+              <div className="mb-8 bg-primary/5 border border-primary/15 rounded-2xl p-6 hover:shadow-xl transition-all group">
+                <div className="flex items-center gap-2 mb-4">
+                  <Package size={16} className="text-primary" />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary">Latest Order</span>
+                  <span className="text-[10px] text-secondary opacity-60 ml-auto">{new Date(latestOrder.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                </div>
+                <div className="flex gap-5">
+                  <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-surface-container-low shadow-inner shrink-0">
+                    <Image
+                      src={latestOrder.orderItems[0]?.image || '/images/products/spa-arrangement-with-cremes.jpg'}
+                      alt={latestOrder.orderItems[0]?.name || 'Order Item'}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-headline font-bold text-on-surface leading-snug truncate">{latestOrder.orderItems[0]?.name || 'Order Item'}</h4>
+                    {latestOrder.orderItems.length > 1 && (
+                      <p className="text-[10px] text-secondary opacity-60 mt-1">+ {latestOrder.orderItems.length - 1} more item{latestOrder.orderItems.length > 2 ? 's' : ''}</p>
+                    )}
+                    <div className="flex items-center gap-4 mt-3">
+                      <span className={`text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-full ${latestOrder.isDelivered ? 'bg-green-100 text-green-700' : latestOrder.isPaid ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'}`}>
+                        {latestOrder.isDelivered ? 'Delivered' : latestOrder.isPaid ? 'In Transit' : 'Processing'}
+                      </span>
+                      <span className="text-sm font-bold text-primary">{formatPrice(latestOrder.totalPrice)}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Recently ordered items acting as "subscriptions" for UI purposes */}
-              {(orders?.slice(1, 3) || []).map((order, idx) => (
+              {/* Previously ordered items as frequent rituals */}
+              {(orders || [])
+                .filter(order => order.orderItems && order.orderItems.length > 0)
+                .slice(1, 3)
+                .map((order, idx) => (
                 <div key={order._id} className="bg-surface-container-lowest border border-surface-variant/30 rounded-2xl p-6 hover:shadow-xl transition-all group hover:-translate-y-1">
                   <div className="flex gap-5 mb-6">
                     <div className="relative w-24 h-24 rounded-xl overflow-hidden bg-surface-container-low shadow-inner">
                       <Image 
-                        src={order.orderItems[0].image} 
-                        alt={order.orderItems[0].name} 
+                        src={order.orderItems[0]?.image || '/images/products/spa-arrangement-with-cremes.jpg'} 
+                        alt={order.orderItems[0]?.name || 'Order Item'} 
                         fill 
                         className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700" 
                       />
                     </div>
                     <div className="flex-1 pt-1">
-                      <h4 className="font-headline font-bold text-on-surface leading-snug group-hover:text-primary transition-colors">{order.orderItems[0].name}</h4>
+                      <h4 className="font-headline font-bold text-on-surface leading-snug group-hover:text-primary transition-colors">{order.orderItems[0]?.name || 'Order Item'}</h4>
                       <p className="text-[10px] text-secondary mt-1.5 italic font-medium uppercase tracking-widest opacity-60">Frequent Ritual</p>
                       <p className="text-xs font-bold text-primary mt-3 flex items-center gap-1.5">
                         <History size={12} />
@@ -210,17 +249,17 @@ export default function Overview({ user, onUpdateAvatar, onSaveAbout }: Props) {
                     </div>
                   </div>
                   <div className="flex gap-3">
-                    <Link href={`/product/${order.orderItems[0].slug}`} className="flex-1 text-[10px] font-bold uppercase tracking-[0.2em] py-3 text-center border border-primary/10 rounded-xl hover:bg-primary/5 transition-colors">
+                    <Link href={`/product/${order.orderItems[0]?.slug || '#'}`} className="flex-1 text-[10px] font-bold uppercase tracking-[0.2em] py-3 text-center border border-primary/10 rounded-xl hover:bg-primary/5 transition-colors">
                       View Product
                     </Link>
-                    <Link href={`/product/${order.orderItems[0].slug}`} className="flex-1 text-[10px] font-bold uppercase tracking-[0.2em] py-3 bg-primary/5 text-primary rounded-xl hover:bg-primary hover:text-on-primary transition-all text-center">
+                    <Link href={`/product/${order.orderItems[0]?.slug || '#'}`} className="flex-1 text-[10px] font-bold uppercase tracking-[0.2em] py-3 bg-primary/5 text-primary rounded-xl hover:bg-primary hover:text-on-primary transition-all text-center">
                       Buy Again
                     </Link>
                   </div>
                 </div>
               ))}
               
-              {(!orders || orders.length < 2) && (
+              {(!orders || orders.filter(o => o.orderItems?.length > 0).length < 2) && (
                 <div className="md:col-span-2 py-12 border-2 border-dashed border-primary/10 rounded-3xl flex flex-col items-center justify-center text-center px-8">
                   <Sparkles size={32} className="text-primary/30 mb-4" />
                   <p className="text-secondary font-headline italic text-lg">Establish your first heritage rituals to populate your archive.</p>

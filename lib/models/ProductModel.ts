@@ -19,6 +19,7 @@ export type Product = {
   ingredients?: string[];
   tags?: string[];
   tagBannerImage?: string;
+  isSignature?: boolean;
 };
 
 const productSchema = new mongoose.Schema(
@@ -41,6 +42,7 @@ const productSchema = new mongoose.Schema(
     ingredients: { type: [String], default: [] },
     tags: { type: [String], default: [] },
     tagBannerImage: { type: String, default: '' },
+    isSignature: { type: Boolean, default: false },
   },
   {
     timestamps: true,
