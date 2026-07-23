@@ -10,6 +10,7 @@ import ProductItems, { ProductItemsSkeleton } from '@/components/products/Produc
 import TrustBarModern from '@/components/home/TrustBarModern';
 import TrustBar from '@/components/footer/TrustBar';
 import Testimonials from '@/components/testimonials/Testimonials';
+import productService from '@/lib/services/productService';
 
 export const metadata: Metadata = {
   title: {
@@ -18,32 +19,37 @@ export const metadata: Metadata = {
   description: 'Grounded elegance for the modern heritage seeker. Discover artisanal skin rituals crafted from Multani Mitti and Reetha.',
 };
 
-const HomePage = () => {
+const HomePage = async () => {
+  const categories = await productService.getCategories();
+
   return (
     <div className='flex flex-col bg-surface'>
       {/* Hero Section: Ancient Wisdom */}
       <HeroModern />
 
-
-
-      {/* Top Rated & New Arrivals Sliders */}
+      {/* Product Sections */}
       <section className="py-12 md:py-24 w-full space-y-16 md:space-y-32">
+        {/* Signature Collection — pulls from isSignature toggle */}
         <Suspense fallback={<ProductItemsSkeleton qty={4} layout="slider" />}>
           <ProductItems 
             layout="slider" 
             title="Signature" 
-            highlight="Favorites" 
+            highlight="Collection" 
+            category="signature_collection_special_flag"
           />
         </Suspense>
 
-        <Suspense fallback={<ProductItemsSkeleton qty={4} layout="slider" />}>
-          <ProductItems 
-            layout="slider" 
-            title="Recent" 
-            highlight="Harvest" 
-            sort="latest"
-          />
-        </Suspense>
+        {/* Each category gets its own row so ALL products are visible */}
+        {categories.map(cat => (
+          <Suspense key={cat} fallback={<ProductItemsSkeleton qty={4} layout="slider" />}>
+            <ProductItems 
+              layout="slider" 
+              title={cat}
+              highlight="Products"
+              category={cat}
+            />
+          </Suspense>
+        ))}
       </section>
 
       {/* Key Ingredients: The Elemental Three */}
@@ -73,4 +79,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
