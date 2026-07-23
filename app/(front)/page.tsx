@@ -40,16 +40,23 @@ const HomePage = async () => {
         </Suspense>
 
         {/* Each category gets its own row so ALL products are visible */}
-        {categories.map(cat => (
-          <Suspense key={cat} fallback={<ProductItemsSkeleton qty={4} layout="slider" />}>
-            <ProductItems 
-              layout="slider" 
-              title={cat}
-              highlight="Products"
-              category={cat}
-            />
-          </Suspense>
-        ))}
+        {(() => {
+          const preferredOrder = ['Body Wash', 'Face Wash', 'Body Scrub', 'Combo'];
+          const sorted = [
+            ...preferredOrder.filter(c => categories.includes(c)),
+            ...categories.filter(c => !preferredOrder.includes(c)),
+          ];
+          return sorted.map(cat => (
+            <Suspense key={cat} fallback={<ProductItemsSkeleton qty={4} layout="slider" />}>
+              <ProductItems 
+                layout="slider" 
+                title={cat}
+                highlight="Products"
+                category={cat}
+              />
+            </Suspense>
+          ));
+        })()}
       </section>
 
       {/* Key Ingredients: The Elemental Three */}
