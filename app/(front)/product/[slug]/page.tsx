@@ -167,6 +167,23 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
         </div>
       </section>
 
+      {/* Product Infographic Image */}
+      {(product.category === 'Face Wash' || product.category === 'Body Wash') && (
+        <section className="mt-16 md:mt-24 max-w-screen-md mx-auto px-6 md:px-12">
+          <div className="rounded-2xl overflow-hidden shadow-lg border border-outline-variant/10">
+            <Image
+              src={product.category === 'Face Wash' ? '/images/products/facewash-info.jpeg' : '/images/products/bodywash-info.jpeg'}
+              alt={`${product.category === 'Face Wash' ? 'Face Wash' : 'Body Wash'} - Product Details & Benefits`}
+              width={800}
+              height={2000}
+              className="w-full h-auto object-contain"
+              quality={90}
+              priority={false}
+            />
+          </div>
+        </section>
+      )}
+
       {/* Detailed Content Tabs */}
       <ProductTabs description={product.description} ingredients={product.ingredients} productName={product.name} category={product.category} />
 
